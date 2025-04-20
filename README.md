@@ -33,3 +33,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [Leaflet Documentation](https://leafletjs.com/reference.html) - dokumentace knihovny Leaflet
+
+## Licence
+
+Tento projekt je šířen pod licencí MIT. Části využívající knihovnu Leaflet podléhají licenci BSD 2-Clause (viz níže).
+
+Podrobné znění licencí najdete v souboru LICENSE.
