@@ -9,10 +9,10 @@ import L from 'leaflet';
 
 // Základní vlastnosti ikony
 const iconOptions = {
-  iconSize: [25, 41],       // velikost ikony
-  iconAnchor: [12, 41],     // bod, kterým se ikona připojí k poloze značky
-  popupAnchor: [1, -34],    // bod, od kterého se má zobrazit popup
-  shadowSize: [41, 41]      // velikost stínu
+  iconSize: [25, 41] as L.PointExpression,       // velikost ikony
+  iconAnchor: [12, 41] as L.PointExpression,     // bod, kterým se ikona připojí k poloze značky
+  popupAnchor: [1, -34] as L.PointExpression,    // bod, od kterého se má zobrazit popup
+  shadowSize: [41, 41] as L.PointExpression      // velikost stínu
 };
 
 // Ikona pro spalovny v provozu (zelená)
@@ -53,9 +53,11 @@ export const getIncineratorIcon = (operational: boolean, planned: boolean = fals
   }
 };
 
-export default {
+const mapIcons = {
   operationalIcon,
   plannedIcon,
   nonOperationalIcon,
   getIncineratorIcon
 };
+
+export default mapIcons;
