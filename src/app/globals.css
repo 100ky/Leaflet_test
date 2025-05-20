@@ -1,26 +1,23 @@
+/* Globální styly aplikace */
 @import "tailwindcss";
 
+/* Definice základních barevných proměnných */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Barva pozadí (světlý režim) */
+  --foreground: #171717; /* Barva textu (světlý režim) */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Tmavý režim podle nastavení systému */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* Barva pozadí (tmavý režim) */
+    --foreground: #ededed; /* Barva textu (tmavý režim) */
   }
 }
 
+/* Základní styly pro tělo stránky */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background); /* Použití proměnné pro pozadí */
+  color: var(--foreground); /* Použití proměnné pro text */
+  font-family: Arial, Helvetica, sans-serif; /* Výchozí písmo */
 }

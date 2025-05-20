@@ -15,6 +15,7 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 import { Incinerator, BuildingType } from '@/types';
 import { getIncineratorIcon } from './mapIcons';
+import L from 'leaflet';
 
 const mapStyle = {
   height: '600px',
@@ -106,6 +107,28 @@ function ResetZoomControl({ defaultZoom }: { defaultZoom: number }) {
         </button>
       </div>
     </div>
+  );
+}
+
+// Pomocná komponenta pro Marker s podporou dvojkliku
+function MarkerWithDoubleClick({ incinerator, icon, children }: { incinerator: Incinerator, icon: L.Icon, children: React.ReactNode }) {
+  const map = useMap();
+
+  // Handler pro dvojklik
+  const handleDoubleClick = () => {
+    map.setView([incinerator.location.lat, incinerator.location.lng], 15, { animate: true });
+  };
+
+  return (
+    <Marker
+      position={[incinerator.location.lat, incinerator.location.lng]}
+      icon={icon}
+      eventHandlers={{
+        dblclick: handleDoubleClick,
+      }}
+    >
+      {children}
+    </Marker>
   );
 }
 
@@ -228,9 +251,9 @@ const Map = ({ incinerators }: MapProps) => {
           const icon = getIncineratorIcon(incinerator.operational, isPlanned);
           
           return (
-            <Marker 
+            <MarkerWithDoubleClick
               key={incinerator.id}
-              position={[incinerator.location.lat, incinerator.location.lng]}
+              incinerator={incinerator}
               icon={icon}
             >
               <Popup>
@@ -249,7 +272,7 @@ const Map = ({ incinerators }: MapProps) => {
                   )}
                 </div>
               </Popup>
-            </Marker>
+            </MarkerWithDoubleClick>
           );
         })}
       </MapContainer>
@@ -262,4 +285,4 @@ const Map = ({ incinerators }: MapProps) => {
   );
 };
 
-export default Map;""
+export default Map;
