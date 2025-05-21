@@ -64,3 +64,10 @@ export interface GeoJSONPolygon {
   type: 'Polygon';
   coordinates: number[][][];
 }
+
+// Rozhraní pro geokódovací služby
+export interface GeocodingService {
+  geocodeAddress(address: string): Promise<{ lat: number; lng: number }>;
+
+  reverseGeocode(lat: number, lng: number): Promise<string>;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nominatim Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .result {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            margin-right: 10px;
+        }
+        #map { 
+            height: 400px; 
+            width: 100%;
+            margin-top: 20px;
+        }
+        .coordinates {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Test souřadnic SAKO Brno</h1>
+    
+    <div>
+        <input type="text" id="searchQuery" value="SAKO Brno spalovna" placeholder="Hledaný výraz...">
+        <button onclick="searchNominatim()">Hledat</button>
+    </div>
+    
+    <div class="result" id="result">
+        <p>Stávající souřadnice v aplikaci:</p>
+        <p class="coordinates">Lat: 49.1891, Lng: 16.6563</p>
+    </div>
+    
+    <div id="map"></div>
+
+    <script>
+        // Inicializace mapy
+        const map = L.map('map').setView([49.1891, 16.6563], 15);
+        
+        // Přidání OpenStreetMap podkladu
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Přidání markeru stávajících souřadnic
+        const currentMarker = L.marker([49.1891, 16.6563]).addTo(map);
+        currentMarker.bindPopup("<b>SAKO Brno - aktuální souřadnice</b><br>Lat: 49.1891, Lng: 16.6563").openPopup();
+        
+        let nominatimMarker = null;
+        
+        function searchNominatim() {
+            const query = document.getElementById('searchQuery').value;
+            const resultDiv = document.getElementById('result');
+            
+            // Přidání informace o probíhajícím hledání
+            resultDiv.innerHTML = '<p>Vyhledávání...</p>';
+            
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`, {
+                headers: {
+                    'User-Agent': 'LeafletTestApp/1.0'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const place = data[0];
+                    const lat = parseFloat(place.lat);
+                    const lon = parseFloat(place.lon);
+                    
+                    // Zobrazení výsledků
+                    resultDiv.innerHTML = `
+                        <p>Stávající souřadnice v aplikaci:</p>
+                        <p class="coordinates">Lat: 49.1891, Lng: 16.6563</p>
+                        <hr>
+                        <p>Výsledky z Nominatim API:</p>
+                        <p class="coordinates">Lat: ${lat}, Lng: ${lon}</p>
+                        <p>Název: ${place.display_name}</p>
+                        <p>Type: ${place.type}, Importance: ${place.importance}</p>
+                        <p>OSM ID: ${place.osm_id}, OSM Type: ${place.osm_type}</p>
+                        <p>Vzdálenost mezi body: <span id="distance">počítám...</span></p>
+                    `;
+                    
+                    // Přidání markeru výsledku z Nominatim
+                    if (nominatimMarker) {
+                        map.removeLayer(nominatimMarker);
+                    }
+                    nominatimMarker = L.marker([lat, lon], {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        })
+                    }).addTo(map);
+                    nominatimMarker.bindPopup(`<b>SAKO Brno - Nominatim</b><br>Lat: ${lat}, Lng: ${lon}`).openPopup();
+                    
+                    // Nastavení zobrazení pro oba markery
+                    const bounds = L.latLngBounds([
+                        [49.1891, 16.6563],
+                        [lat, lon]
+                    ]);
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                    
+                    // Vypočítat vzdálenost
+                    const distanceInMeters = calculateDistance(49.1891, 16.6563, lat, lon);
+                    document.getElementById('distance').textContent = `${distanceInMeters.toFixed(1)} metrů`;
+                } else {
+                    resultDiv.innerHTML = '<p>Nebyly nalezeny žádné výsledky</p>';
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<p>Chyba při vyhledávání: ${error.message}</p>`;
+            });
+        }
+        
+        // Haversine formula pro výpočet vzdálenosti
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // Poloměr Země v metrech
+            const φ1 = lat1 * Math.PI / 180;
+            const φ2 = lat2 * Math.PI / 180;
+            const Δφ = (lat2 - lat1) * Math.PI / 180;
+            const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+
+            return distance;
+        }
+        
+        // Automatické spuštění vyhledávání při načtení stránky
+        window.onload = searchNominatim;
+    </script>
+</body>
+</html>

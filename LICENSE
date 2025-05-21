@@ -46,3 +46,9 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---
+
+OpenStreetMap data is © OpenStreetMap contributors and is available under the Open Database License (ODbL). For more information, visit https://www.openstreetmap.org/copyright.
+
+This project uses Nominatim API, which is subject to the Nominatim Usage Policy. For details, see https://operations.osmfoundation.org/policies/nominatim/.

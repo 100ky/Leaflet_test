@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test souřadnic spaloven</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        .result {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .difference {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test souřadnic spaloven - SAKO Brno</h1>
+
+    <div class="result" id="result">
+        <p class="loading">Načítání dat z Nominatim API...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const resultDiv = document.getElementById('result');
+
+            // Aktuální souřadnice dle dat aplikace
+            const currentCoordinates = {
+                'ZEVO Malešice': { lat: 50.079655, lng: 14.5405696 },
+                'SAKO Brno': { lat: 49.1891, lng: 16.6563 },
+                'TERMIZO Liberec': { lat: 50.7626, lng: 15.0562 },
+                'ZEVO Chotíkov': { lat: 49.7973, lng: 13.2877 },
+                'Plánovaná spalovna Ostrava': { lat: 49.8283, lng: 18.2652 },
+                'ZEVO Plzeň': { lat: 49.7572, lng: 13.3635 },
+                'ECOREC Martin': { lat: 49.0662, lng: 18.9272 }
+            };
+
+            // Funkce pro volání API
+            async function checkCoordinates(name) {
+                try {
+                    const response = await fetch(`/api/nominatim?q=${encodeURIComponent(name + ' spalovna')}`);
+                    const result = await response.json();
+
+                    if (result.success && result.data && result.data.length > 0) {
+                        const nominatimData = result.data[0];
+                        const lat = parseFloat(nominatimData.lat);
+                        const lng = parseFloat(nominatimData.lon);
+
+                        const current = currentCoordinates[name];
+                        const distance = calculateDistance(
+                            current.lat, current.lng,
+                            lat, lng
+                        );
+
+                        return {
+                            name,
+                            current,
+                            nominatim: { lat, lng },
+                            display_name: nominatimData.display_name,
+                            distance: distance,
+                            raw: nominatimData
+                        };
+                    } else {
+                        return {
+                            name,
+                            current: currentCoordinates[name],
+                            nominatim: null,
+                            display_name: 'Nenalezeno',
+                            distance: null,
+                            error: 'Žádné výsledky'
+                        };
+                    }
+                } catch (error) {
+                    console.error(`Error checking ${name}:`, error);
+                    return {
+                        name,
+                        current: currentCoordinates[name],
+                        nominatim: null,
+                        display_name: 'Chyba',
+                        distance: null,
+                        error: error.toString()
+                    };
+                }
+            }
+
+            // Funkce pro výpočet vzdálenosti mezi souřadnicemi v metrech
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371e3; // poloměr Země v metrech
+                const φ1 = lat1 * Math.PI / 180;
+                const φ2 = lat2 * Math.PI / 180;
+                const Δφ = (lat2 - lat1) * Math.PI / 180;
+                const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+                const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const d = R * c; // vzdálenost v metrech
+
+                return d;
+            }
+
+            // Zahájení kontroly pro SAKO Brno
+            async function init() {
+                const name = 'SAKO Brno';
+                resultDiv.innerHTML = `<p class="loading">Kontroluji souřadnice pro ${name}...</p>`;
+
+                const result = await checkCoordinates(name);
+                let html = `<h2>Výsledky pro ${name}</h2>`;
+
+                if (result.nominatim) {
+                    html += `
+                        <p><strong>Aktuální souřadnice v aplikaci:</strong> 
+                           ${result.current.lat.toFixed(6)}, ${result.current.lng.toFixed(6)}</p>
+                        <p><strong>Souřadnice dle Nominatim API:</strong> 
+                           ${result.nominatim.lat.toFixed(6)}, ${result.nominatim.lng.toFixed(6)}</p>
+                        <p class="difference"><strong>Rozdíl:</strong> ${result.distance.toFixed(1)} metrů</p>
+                        <p><strong>Nalezený objekt:</strong> ${result.display_name}</p>
+                        
+                        <h3>Možné důvody nesouladu:</h3>
+                        <ul>
+                            <li>Souřadnice v aplikaci mohou označovat konkrétní budovu v areálu, zatímco Nominatim vrací středový bod celého areálu</li>
+                            <li>Areál SAKO Brno může být rozlehlý, a proto se středový bod liší od preferovaného umístění markeru</li>
+                            <li>Manuální zpřesnění souřadnic může být provedeno pro lepší zobrazení na mapě</li>
+                            <li>Pokud je rozdíl velký, jedná se pravděpodobně o chybné souřadnice v jednom ze zdrojů</li>
+                        </ul>
+                        
+                        <h3>Podrobné informace z Nominatim:</h3>
+                        <table>
+                            <tr>
+                                <th>Vlastnost</th>
+                                <th>Hodnota</th>
+                            </tr>
+                            <tr>
+                                <td>OSM Type</td>
+                                <td>${result.raw.osm_type || 'Neuvedeno'}</td>
+                            </tr>
+                            <tr>
+                                <td>OSM ID</td>
+                                <td>${result.raw.osm_id || 'Neuvedeno'}</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>${result.raw.type || 'Neuvedeno'}</td>
+                            </tr>
+                            <tr>
+                                <td>Importance</td>
+                                <td>${result.raw.importance?.toFixed(6) || 'Neuvedeno'}</td>
+                            </tr>
+                        </table>
+                        
+                        <button class="btn" onclick="window.open('https://www.openstreetmap.org/?mlat=${result.nominatim.lat}&mlon=${result.nominatim.lng}#map=17/${result.nominatim.lat}/${result.nominatim.lng}', '_blank')">
+                            Zobrazit na OpenStreetMap
+                        </button>
+                        <button class="btn" onclick="window.open('https://www.google.com/maps?q=${result.nominatim.lat},${result.nominatim.lng}', '_blank')">
+                            Zobrazit na Google Maps
+                        </button>
+                    `;
+                } else {
+                    html += `
+                        <p><strong>Aktuální souřadnice v aplikaci:</strong> 
+                           ${result.current.lat.toFixed(6)}, ${result.current.lng.toFixed(6)}</p>
+                        <p class="error">Nepodařilo se získat souřadnice z Nominatim API: ${result.error}</p>
+                    `;
+                }
+
+                resultDiv.innerHTML = html;
+            }
+
+            // Spustit kontrolu
+            init();
+        });
+    </script>
+</body>
+
+</html>
