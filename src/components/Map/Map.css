@@ -1,8 +1,3 @@
-/* Skrýt vyhledávací boxy v pravém horním rohu */
-.leaflet-control-geocoder {
-    display: none !important;
-}
-
 /* Skrýt další nepotřebné ovládací prvky */
 .leaflet-top.leaflet-right {
     display: none !important;
