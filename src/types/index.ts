@@ -9,6 +9,7 @@ export interface Incinerator {
     lat: number;              // Zeměpisná šířka (latitude)
     lng: number;              // Zeměpisná délka (longitude)
   };
+  streetAddress?: string;     // Přidáno: adresa spalovny
   description?: string;       // Popis spalovny (volitelný)
   capacity?: number;          // Kapacita v tunách za rok (volitelná)
   operational: boolean;       // Provozní stav (true = v provozu, false = mimo provoz)
