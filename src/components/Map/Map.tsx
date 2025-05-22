@@ -1,29 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Incinerator, BuildingType } from '@/types';
+import { getIncineratorIcon } from './mapIcons';
+import L from 'leaflet';
+import SearchBox from './SearchBox';
+import { Card, Badge, MapContainer as UIMapContainer } from '@/components/ui/UIComponents';
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
-  useMapEvents,
   GeoJSON,
-  useMap
-} from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-import 'leaflet-defaulticon-compatibility';
-import { Incinerator, BuildingType } from '@/types';
-import { getIncineratorIcon } from './mapIcons';
-import L from 'leaflet';
-import SearchBox from './SearchBox';
-
-const mapStyle = {
-  height: '600px',
-  width: '100%',
-};
-
-const DEFAULT_ZOOM = 7;
+  LeafletCSS,
+  DEFAULT_MAP_STYLE
+} from './LeafletComponents';
+import { useMapHook, useMapEventsHook, DEFAULT_ZOOM } from './LeafletHooks';
 
 interface MapProps {
   incinerators: Incinerator[];
@@ -31,15 +23,22 @@ interface MapProps {
 
 // Komponenta pro sledování úrovně přiblížení
 function ZoomLevelDetector({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
-  const map = useMapEvents({
+  const map = useMapEventsHook({
     zoomend: () => {
-      onZoomChange(map.getZoom());
+      if (map && typeof map.getZoom === 'function') {
+        onZoomChange(map.getZoom());
+      }
     }
   });
 
   useEffect(() => {
     // Nastavení výchozího zoomu při prvním načtení
-    onZoomChange(map.getZoom());
+    if (map && typeof map.getZoom === 'function') {
+      onZoomChange(map.getZoom());
+    } else {
+      // Fallback na výchozí zoom pokud mapa není načtena
+      onZoomChange(DEFAULT_ZOOM);
+    }
   }, [map, onZoomChange]);
 
   return null;
@@ -76,10 +75,12 @@ const propertyStyle = {
 
 // Komponenta pro resetování zoomu
 function ResetZoomControl({ defaultZoom }: { defaultZoom: number }) {
-  const map = useMap();
+  const map = useMapHook();
 
   const handleResetZoom = () => {
-    map.setZoom(defaultZoom);
+    if (map && typeof map.setZoom === 'function') {
+      map.setZoom(defaultZoom);
+    }
   };
 
   return (
@@ -113,11 +114,13 @@ function ResetZoomControl({ defaultZoom }: { defaultZoom: number }) {
 
 // Pomocná komponenta pro Marker s podporou dvojkliku
 function MarkerWithDoubleClick({ incinerator, icon, children }: { incinerator: Incinerator, icon: L.Icon, children: React.ReactNode }) {
-  const map = useMap();
+  const map = useMapHook();
 
   // Handler pro dvojklik
   const handleDoubleClick = () => {
-    map.setView([incinerator.location.lat, incinerator.location.lng], 15, { animate: true });
+    if (map && typeof map.setView === 'function') {
+      map.setView([incinerator.location.lat, incinerator.location.lng], 15, { animate: true });
+    }
   };
 
   return (
@@ -167,10 +170,15 @@ const Map = ({ incinerators }: MapProps) => {
   };
 
   const mapCenter = calculateMapCenter();
-  // Funkce již není potřeba, používáme přímo handleLocalSearch v MapSearchControl
 
   if (!isMounted) {
-    return <div style={mapStyle}></div>;
+    return (
+      <Card title="Mapa spaloven">
+        <div style={DEFAULT_MAP_STYLE} className="bg-gray-100 flex items-center justify-center text-gray-500">
+          Načítání mapy...
+        </div>
+      </Card>
+    );
   }
 
   const isPlannedIncinerator = (incinerator: Incinerator): boolean => {
@@ -181,11 +189,14 @@ const Map = ({ incinerators }: MapProps) => {
 
   // Komponenta pro vyhledávání na mapě
   function MapSearchControl() {
-    const map = useMap();
+    const map = useMapHook();
 
     const handleLocalSearch = (lat: number, lng: number) => {
-      map.setView([lat, lng], 15); // Přiblížíme mapu na úroveň 15
-    }; return (
+      if (map && typeof map.setView === 'function') {
+        map.setView([lat, lng], 15); // Přiblížíme mapu na úroveň 15
+      }
+    };
+    return (
       <div className="absolute top-2 left-2 right-2 z-[1000] bg-white p-2 rounded-md shadow-md">
         <SearchBox onSearch={handleLocalSearch} />
       </div>
@@ -193,135 +204,157 @@ const Map = ({ incinerators }: MapProps) => {
   }
 
   return (
-    <div className="map-container relative">      <MapContainer
-      center={mapCenter}
-      zoom={DEFAULT_ZOOM}
-      style={mapStyle}
-      scrollWheelZoom={true}
-    >
-      {/* Použijeme komponentu MapSearchControl pro vyhledávání */}
-      <MapSearchControl />
+    <Card title="Mapa spaloven v ČR">
+      <LeafletCSS />
 
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-
-      {/* Komponenta pro sledování úrovně přiblížení */}
-      <ZoomLevelDetector onZoomChange={setCurrentZoom} />
-
-      {/* Komponenta pro resetovací tlačítko */}
-      <ResetZoomControl defaultZoom={DEFAULT_ZOOM} />
-
-      {/* Debugovací informace - souřadnice ZEVO Malešice */}
-      {incinerators.map(incinerator => {
-        if (incinerator.name === 'ZEVO Malešice') {
-          return (
-            <div key="debug-marker" className="leaflet-bottom leaflet-left" style={{ zIndex: 1000, margin: '10px', backgroundColor: 'white', padding: '5px', borderRadius: '5px', opacity: 0.9 }}>
-              <div className="text-xs">
-                <strong>ZEVO Malešice souřadnice:</strong><br />
-                lat: {incinerator.location.lat}, lng: {incinerator.location.lng}
-              </div>
-            </div>
-          );
-        }
-        return null;
-      })}
-
-      {/* Obrysy pozemků při nižší úrovni přiblížení */}
-      {currentZoom < DETAIL_ZOOM_THRESHOLD && incinerators.map((incinerator) => {
-        if (incinerator.propertyBoundary) {
-          return (
-            <GeoJSON key={`property-${incinerator.id}`}
-              data={incinerator.propertyBoundary as unknown as GeoJSON.FeatureCollection}
-              style={propertyStyle}
-            >
-              <Popup>
-                <div>
-                  <h3>{incinerator.name} - areál</h3>
-                  <p>{incinerator.description}</p>
-                  <p><strong>Pro zobrazení jednotlivých budov přibližte mapu</strong></p>
-                  <p className="text-xs text-gray-500">Souřadnice areálu: {incinerator.location.lat}, {incinerator.location.lng}</p>
-                </div>
-              </Popup>
-            </GeoJSON>
-          );
-        }
-        return null;
-      })}
-
-      {/* Obrysy jednotlivých budov při vyšší úrovni přiblížení */}
-      {currentZoom >= DETAIL_ZOOM_THRESHOLD && incinerators.map((incinerator) => {
-        if (incinerator.buildings && incinerator.buildings.length > 0) {
-          return incinerator.buildings.map((building) => (
-            <GeoJSON
-              key={`building-${building.id}`}
-              data={building.geometry as GeoJSON.Geometry}
-              style={() => getBuildingStyle(building.type)}
-            >
-              <Popup>
-                <div>
-                  <h3>{building.name}</h3>
-                  <p>{building.description}</p>
-                  {building.details && (
-                    <>
-                      {building.details.yearBuilt && (
-                        <p>Rok výstavby: {building.details.yearBuilt}</p>
-                      )}
-                      {building.details.areaInSqMeters && (
-                        <p>Rozloha: {building.details.areaInSqMeters} m²</p>
-                      )}
-                      {building.details.function && (
-                        <p>Funkce: {building.details.function}</p>
-                      )}
-                    </>
-                  )}
-                  <p><em>Součást: {incinerator.name}</em></p>
-                </div>
-              </Popup>
-            </GeoJSON>
-          ));
-        }
-        return null;
-      })}
-
-      {/* Standardní značky spaloven */}
-      {incinerators.map((incinerator) => {
-        const isPlanned = isPlannedIncinerator(incinerator);
-        const icon = getIncineratorIcon(incinerator.operational, isPlanned);
-
-        return (
-          <MarkerWithDoubleClick
-            key={incinerator.id}
-            incinerator={incinerator}
-            icon={icon}
-          >
-            <Popup>              <div>
-              <h3>{incinerator.name}</h3>
-              <p>{incinerator.description}</p>
-              <p>Kapacita: {incinerator.capacity} tun/rok</p>
-              <p>Stav: {
-                incinerator.operational
-                  ? 'V provozu'
-                  : (isPlanned ? 'Plánovaná výstavba' : 'Mimo provoz')
-              }</p>
-              <p>Založeno: {incinerator.yearEstablished || 'Neznámo'}</p>
-              <p className="text-xs text-gray-500">Souřadnice: {incinerator.location.lat.toFixed(6)}, {incinerator.location.lng.toFixed(6)}</p>
-              {currentZoom < DETAIL_ZOOM_THRESHOLD && incinerator.buildings && (
-                <p><strong>Pro zobrazení budov přibližte mapu</strong></p>
-              )}
-            </div>
-            </Popup>
-          </MarkerWithDoubleClick>
-        );
-      })}
-    </MapContainer>
-
-      {/* Ukazatel aktuálního zoomu */}
-      <div className="absolute bottom-2 left-2 bg-white bg-opacity-70 px-2 py-1 rounded text-xs">
-        Zoom: {currentZoom}
+      <div className="mb-4 flex flex-wrap gap-2">
+        <Badge variant="success">Aktivní spalovna</Badge>
+        <Badge variant="danger">Mimo provoz</Badge>
+        <Badge variant="warning">Plánovaná spalovna</Badge>
+        <div
+          className="cursor-pointer"
+          onClick={() => setCurrentZoom((z) => z >= 12 ? 7 : 12)}
+        >
+          <Badge variant="info">
+            {currentZoom >= 12 ? 'Skrýt detaily budov' : 'Zobrazit detaily budov'}
+          </Badge>
+        </div>
       </div>
-    </div>
+
+      <UIMapContainer>
+        <div className="map-container relative">
+          <MapContainer
+            center={mapCenter}
+            zoom={DEFAULT_ZOOM}
+            style={DEFAULT_MAP_STYLE}
+            scrollWheelZoom={true}
+          >
+            {/* Použijeme komponentu MapSearchControl pro vyhledávání */}
+            <MapSearchControl />
+
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {/* Komponenta pro sledování úrovně přiblížení */}
+            <ZoomLevelDetector onZoomChange={setCurrentZoom} />
+
+            {/* Komponenta pro resetovací tlačítko */}
+            <ResetZoomControl defaultZoom={DEFAULT_ZOOM} />
+
+            {/* Debugovací informace - souřadnice ZEVO Malešice */}
+            {incinerators.map(incinerator => {
+              if (incinerator.name === 'ZEVO Malešice') {
+                return (
+                  <div key="debug-marker" className="leaflet-bottom leaflet-left" style={{ zIndex: 1000, margin: '10px', backgroundColor: 'white', padding: '5px', borderRadius: '5px', opacity: 0.9 }}>
+                    <div className="text-xs">
+                      <strong>ZEVO Malešice souřadnice:</strong><br />
+                      lat: {incinerator.location.lat}, lng: {incinerator.location.lng}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+
+            {/* Obrysy pozemků při nižší úrovni přiblížení */}
+            {currentZoom < DETAIL_ZOOM_THRESHOLD && incinerators.map((incinerator) => {
+              if (incinerator.propertyBoundary) {
+                return (
+                  <GeoJSON key={`property-${incinerator.id}`}
+                    data={incinerator.propertyBoundary as unknown as GeoJSON.FeatureCollection}
+                    style={propertyStyle}
+                  >
+                    <Popup>
+                      <div>
+                        <h3>{incinerator.name} - areál</h3>
+                        <p>{incinerator.description}</p>
+                        <p><strong>Pro zobrazení jednotlivých budov přibližte mapu</strong></p>
+                        <p className="text-xs text-gray-500">Souřadnice areálu: {incinerator.location.lat}, {incinerator.location.lng}</p>
+                      </div>
+                    </Popup>
+                  </GeoJSON>
+                );
+              }
+              return null;
+            })}
+
+            {/* Obrysy jednotlivých budov při vyšší úrovni přiblížení */}
+            {currentZoom >= DETAIL_ZOOM_THRESHOLD && incinerators.map((incinerator) => {
+              if (incinerator.buildings && incinerator.buildings.length > 0) {
+                return incinerator.buildings.map((building) => (
+                  <GeoJSON
+                    key={`building-${building.id}`}
+                    data={building.geometry as GeoJSON.Geometry}
+                    style={() => getBuildingStyle(building.type)}
+                  >
+                    <Popup>
+                      <div>
+                        <h3>{building.name}</h3>
+                        <p>{building.description}</p>
+                        {building.details && (
+                          <>
+                            {building.details.yearBuilt && (
+                              <p>Rok výstavby: {building.details.yearBuilt}</p>
+                            )}
+                            {building.details.areaInSqMeters && (
+                              <p>Rozloha: {building.details.areaInSqMeters} m²</p>
+                            )}
+                            {building.details.function && (
+                              <p>Funkce: {building.details.function}</p>
+                            )}
+                          </>
+                        )}
+                        <p><em>Součást: {incinerator.name}</em></p>
+                      </div>
+                    </Popup>
+                  </GeoJSON>
+                ));
+              }
+              return null;
+            })}
+
+            {/* Standardní značky spaloven */}
+            {incinerators.map((incinerator) => {
+              const isPlanned = isPlannedIncinerator(incinerator);
+              const icon = getIncineratorIcon(incinerator.operational, isPlanned);
+
+              return (
+                <MarkerWithDoubleClick
+                  key={incinerator.id}
+                  incinerator={incinerator}
+                  icon={icon}
+                >
+                  <Popup>
+                    <div>
+                      <h3>{incinerator.name}</h3>
+                      <p>{incinerator.description}</p>
+                      <p>Kapacita: {incinerator.capacity} tun/rok</p>
+                      <p>Stav: {
+                        incinerator.operational
+                          ? 'V provozu'
+                          : (isPlanned ? 'Plánovaná výstavba' : 'Mimo provoz')
+                      }</p>
+                      <p>Založeno: {incinerator.yearEstablished || 'Neznámo'}</p>
+                      <p className="text-xs text-gray-500">Souřadnice: {incinerator.location.lat.toFixed(6)}, {incinerator.location.lng.toFixed(6)}</p>
+                      {currentZoom < DETAIL_ZOOM_THRESHOLD && incinerator.buildings && (
+                        <p><strong>Pro zobrazení budov přibližte mapu</strong></p>
+                      )}
+                    </div>
+                  </Popup>
+                </MarkerWithDoubleClick>
+              );
+            })}
+          </MapContainer>
+
+          {/* Ukazatel aktuálního zoomu */}
+          <div className="absolute bottom-2 left-2 bg-white bg-opacity-70 px-2 py-1 rounded text-xs">
+            Zoom: {currentZoom}
+          </div>
+        </div>
+      </UIMapContainer>
+    </Card>
   );
 };
 
