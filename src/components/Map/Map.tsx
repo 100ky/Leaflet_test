@@ -11,13 +11,13 @@ import {
   useMap
 } from 'react-leaflet';
 
-// Zablokovat inicializaci vyhledávacího panelu prohlížeče v mapě
+// Zablokování inicializace vyhledávacího panelu prohlížeče v mapě
 // @see https://github.com/Leaflet/Leaflet/issues/7255
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import './Map.css'; // Import vlastních CSS stylů pro mapu
+import './Map.css';
 import { Incinerator, BuildingType } from '@/types';
 import { getIncineratorIcon } from './mapIcons';
 import L from 'leaflet';
@@ -33,7 +33,9 @@ interface MapProps {
   incinerators: Incinerator[];
 }
 
-// Komponenta pro sledování úrovně přiblížení
+/**
+ * Komponenta pro sledování úrovně přiblížení mapy
+ */
 function ZoomLevelDetector({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
   const map = useMapEvents({
     zoomend: () => {
@@ -42,14 +44,16 @@ function ZoomLevelDetector({ onZoomChange }: { onZoomChange: (zoom: number) => v
   });
 
   useEffect(() => {
-    // Nastavení výchozího zoomu při prvním načtení
+    // Inicializace výchozího zoomu
     onZoomChange(map.getZoom());
   }, [map, onZoomChange]);
 
   return null;
 }
 
-// Funkce pro získání stylu polygonu podle typu budovy
+/**
+ * Vrací styl polygonu podle typu budovy spalovny
+ */
 const getBuildingStyle = (buildingType: BuildingType) => {
   switch (buildingType) {
     case BuildingType.MainBuilding:
@@ -71,14 +75,16 @@ const getBuildingStyle = (buildingType: BuildingType) => {
 
 // Styl pro celý areál spalovny
 const propertyStyle = {
-  color: '#ff0000', // červený obrys
+  color: '#ff0000',
   weight: 4,
   opacity: 1,
   fillOpacity: 0.5,
-  fillColor: '#ff0000' // červená výplň
+  fillColor: '#ff0000'
 };
 
-// Komponenta pro resetování zoomu a návrat na výchozí pohled celé ČR
+/**
+ * Komponenta pro reset zoomu mapy na výchozí pohled
+ */
 function ResetZoomControl({ defaultZoom }: { defaultZoom: number }) {
   const map = useMap();
 

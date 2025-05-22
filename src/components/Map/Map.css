@@ -1,9 +1,13 @@
-/* Skrýt další nepotřebné ovládací prvky */
+/* 
+ * Styly pro komponentu mapy
+ */
+
+/* Skrytí nepotřebných ovládacích prvků */
 .leaflet-top.leaflet-right {
     display: none !important;
 }
 
-/* Vylepšení vzhledu mapy */
+/* Kontejner mapy */
 .map-container {
     position: relative;
     border-radius: 10px;
@@ -17,7 +21,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Vylepšení ovládacích prvků */
+/* Ovládací prvky mapy */
 .leaflet-control-zoom {
     border: none !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
@@ -46,7 +50,7 @@
     color: var(--primary) !important;
 }
 
-/* Vylepšení popup oken */
+/* Popup okna */
 .leaflet-popup-content-wrapper {
     border-radius: 10px !important;
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2) !important;

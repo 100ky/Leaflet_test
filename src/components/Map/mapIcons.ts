@@ -3,33 +3,30 @@
 import L from 'leaflet';
 
 /**
- * Vlastní ikony pro mapu spaloven
- * Používá se pro rozlišení různých typů spaloven
+ * Definice vlastních ikon pro mapu spaloven
  */
 
-// Základní vlastnosti ikony
+// Základní konfigurace pro všechny ikony
 const iconOptions = {
-  iconSize: [25, 41] as L.PointExpression,       // velikost ikony
-  iconAnchor: [12, 41] as L.PointExpression,     // bod, kterým se ikona připojí k poloze značky
-  popupAnchor: [1, -34] as L.PointExpression,    // bod, od kterého se má zobrazit popup
-  shadowSize: [41, 41] as L.PointExpression      // velikost stínu
+  iconSize: [25, 41] as L.PointExpression,
+  iconAnchor: [12, 41] as L.PointExpression,
+  popupAnchor: [1, -34] as L.PointExpression,
+  shadowSize: [41, 41] as L.PointExpression
 };
 
-// Ikona pro spalovny v provozu (zelená)
+// Ikony podle stavu spalovny
 export const operationalIcon = new L.Icon({
   iconUrl: '/images/marker-operational.png',
   shadowUrl: '/images/marker-shadow.png',
   ...iconOptions
 });
 
-// Ikona pro plánované spalovny (modrá)
 export const plannedIcon = new L.Icon({
   iconUrl: '/images/marker-planned.png',
   shadowUrl: '/images/marker-shadow.png',
   ...iconOptions
 });
 
-// Ikona pro spalovny mimo provoz (červená)
 export const nonOperationalIcon = new L.Icon({
   iconUrl: '/images/marker-nonoperational.png',
   shadowUrl: '/images/marker-shadow.png',
@@ -37,11 +34,10 @@ export const nonOperationalIcon = new L.Icon({
 });
 
 /**
- * Funkce, která vrátí správnou ikonu podle stavu spalovny
+ * Vrací odpovídající ikonu podle stavu spalovny
  * 
- * @param operational - zda je spalovna v provozu
- * @param planned - zda je spalovna plánovaná (používá se pouze pokud operational je false)
- * @returns - příslušná ikona pro Leaflet značku
+ * @param operational - je spalovna v provozu
+ * @param planned - je spalovna plánovaná
  */
 export const getIncineratorIcon = (operational: boolean, planned: boolean = false) => {
   if (operational) {
@@ -52,12 +48,3 @@ export const getIncineratorIcon = (operational: boolean, planned: boolean = fals
     return nonOperationalIcon;
   }
 };
-
-const mapIcons = {
-  operationalIcon,
-  plannedIcon,
-  nonOperationalIcon,
-  getIncineratorIcon
-};
-
-export default mapIcons;

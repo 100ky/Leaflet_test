@@ -1,7 +1,7 @@
 import { Incinerator } from '@/types';
 
 /**
- * Vzorová data spaloven v České republice
+ * Ukázková data spaloven v ČR
  */
 export const incineratorData: Incinerator[] = [
   {

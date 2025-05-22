@@ -1,52 +1,50 @@
 /**
- * Typ reprezentující spalovnu
- * Obsahuje všechny důležité informace o jednotlivých spalovnách
+ * Reprezentace spalovny se všemi jejími atributy
  */
 export interface Incinerator {
-  id: string;                 // Unikátní identifikátor spalovny
+  id: string;                 // Unikátní identifikátor
   name: string;               // Název spalovny
-  location: {                 // Geografická poloha spalovny
-    lat: number;              // Zeměpisná šířka (latitude)
-    lng: number;              // Zeměpisná délka (longitude)
+  location: {                 // Geografická poloha
+    lat: number;              // Zeměpisná šířka
+    lng: number;              // Zeměpisná délka
   };
-  streetAddress?: string;     // Přidáno: adresa spalovny
-  description?: string;       // Popis spalovny (volitelný)
-  capacity?: number;          // Kapacita v tunách za rok (volitelná)
-  operational: boolean;       // Provozní stav (true = v provozu, false = mimo provoz)
-  yearEstablished?: number;   // Rok založení/uvedení do provozu (volitelný)
-  propertyBoundary?: GeoJSONPolygon; // Obrys celého pozemku spalovny
-  buildings?: Building[];     // Budovy a části spalovny
+  streetAddress?: string;     // Adresa
+  description?: string;       // Popis
+  capacity?: number;          // Kapacita (t/rok)
+  operational: boolean;       // Provozní stav
+  yearEstablished?: number;   // Rok založení
+  propertyBoundary?: GeoJSONPolygon; // Hranice pozemku
+  buildings?: Building[];     // Budovy a části
 }
 
 /**
- * Typ pro filtrování spaloven
- * Používá se pro nastavení filtrů v uživatelském rozhraní
+ * Filtry pro zobrazení spaloven
  */
 export interface IncineratorFilters {
-  showOperational: boolean;    // Zobrazit spalovny v provozu
-  showNonOperational: boolean; // Zobrazit spalovny mimo provoz
-  minCapacity?: number;        // Minimální kapacita pro filtrování (volitelné)
-  maxCapacity?: number;        // Maximální kapacita pro filtrování (volitelné)
+  showOperational: boolean;    // Zobrazit v provozu
+  showNonOperational: boolean; // Zobrazit mimo provoz
+  minCapacity?: number;        // Minimální kapacita
+  maxCapacity?: number;        // Maximální kapacita
 }
 
 /**
- * Typ pro budovu nebo část spalovny
+ * Budova nebo část spalovny
  */
 export interface Building {
-  id: string;                // Unikátní identifikátor budovy
-  name: string;              // Název budovy/části
-  type: BuildingType;        // Typ budovy
-  description?: string;      // Popis činnosti/účelu budovy
-  geometry: GeoJSONPolygon;  // Geometrický tvar budovy 
-  details?: {                // Další volitelné informace
+  id: string;                // Identifikátor
+  name: string;              // Název
+  type: BuildingType;        // Typ
+  description?: string;      // Popis funkce
+  geometry: GeoJSONPolygon;  // Tvar
+  details?: {                // Detaily
     yearBuilt?: number;      // Rok výstavby
     areaInSqMeters?: number; // Rozloha v m²
-    function?: string;       // Hlavní funkce budovy
+    function?: string;       // Funkce
   }
 }
 
 /**
- * Typy budov nebo částí spalovny
+ * Typy částí spalovny
  */
 export enum BuildingType {
   MainBuilding = 'MAIN_BUILDING',          // Hlavní budova
@@ -59,7 +57,7 @@ export enum BuildingType {
 }
 
 /**
- * GeoJSON polygon
+ * GeoJSON polygon pro geografická data
  */
 export interface GeoJSONPolygon {
   type: 'Polygon';

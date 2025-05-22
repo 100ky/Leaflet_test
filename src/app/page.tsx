@@ -3,21 +3,18 @@
 import dynamic from 'next/dynamic';
 import incineratorData from '@/data/incinerators';
 
-// Dynamický import mapové komponenty - řeší problémy s vykreslováním na serveru (SSR)
-// Leaflet vyžaduje přístup k window objektu, který na serveru neexistuje
+// Dynamický import komponenty mapy (Leaflet vyžaduje přístup k window objektu)
 const Map = dynamic(() => import('@/components/Map/Map'), {
-  loading: () => <p>Načítání mapy...</p>, // Zobrazí se během načítání komponenty
-  ssr: false // Vypnutí vykreslování na serveru
+  loading: () => <p>Načítání mapy...</p>,
+  ssr: false // Vypnutí server-side renderingu
 });
 
 /**
- * Hlavní stránka aplikace
- * Zobrazuje nadpis, mapu spaloven a krátký popisek
+ * Hlavní stránka aplikace - zobrazuje mapu spaloven v ČR
  */
 export default function Home() {
   return (
     <>
-      {/* Záhlaví stránky */}
       <header className="sticky top-0 z-10 w-full bg-header-bg dark:bg-header-bg shadow-md border-b border-border p-4 backdrop-blur-sm">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold text-primary">
@@ -27,7 +24,7 @@ export default function Home() {
       </header>
 
       <main className="flex min-h-screen flex-col items-center py-8 px-4">
-        {/* Krátký úvod */}
+        {/* Úvod */}
         <div className="w-full max-w-5xl mb-6">
           <h2 className="text-2xl font-semibold mb-3 text-foreground">Interaktivní mapa spaloven odpadů</h2>
           <p className="text-foreground opacity-80 mb-6 max-w-3xl">
@@ -35,7 +32,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Krátká legenda */}
+        {/* Legenda */}
         <div className="w-full max-w-5xl mb-4 flex flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 rounded-full bg-secondary"></span>
