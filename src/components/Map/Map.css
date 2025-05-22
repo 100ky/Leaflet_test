@@ -7,3 +7,152 @@
 .leaflet-top.leaflet-right {
     display: none !important;
 }
+
+/* Vylepšení vzhledu mapy */
+.map-container {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    transition: box-shadow 0.3s ease;
+}
+
+.map-container:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Vylepšení ovládacích prvků */
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    transition: all 0.2s ease !important;
+}
+
+.leaflet-control-zoom:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.leaflet-control-zoom a {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    transition: all 0.2s ease;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background-color: var(--card-hover) !important;
+    color: var(--primary) !important;
+}
+
+/* Vylepšení popup oken */
+.leaflet-popup-content-wrapper {
+    border-radius: 10px !important;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2) !important;
+    padding: 0 !important;
+    overflow: hidden;
+    border: 1px solid var(--border) !important;
+    background-color: var(--card) !important;
+    transition: all 0.3s ease !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    padding: 16px 20px !important;
+    line-height: 1.5 !important;
+    font-size: 14px !important;
+    color: var(--foreground) !important;
+    min-width: 200px !important;
+}
+
+.leaflet-popup-content h3 {
+    margin: 0 0 10px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--primary) !important;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.leaflet-popup-content p {
+    margin: 6px 0 !important;
+    color: var(--foreground) !important;
+}
+
+/* Stylizace ukazatele zoomu */
+.zoom-level-indicator {
+    background-color: var(--card) !important;
+    backdrop-filter: blur(4px);
+    padding: 6px 10px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+    color: var(--foreground) !important;
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid var(--border) !important;
+    transition: all 0.3s ease !important;
+}
+
+.zoom-level-indicator:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.zoom-indicator-icon {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+/* Stylizace resetovacího tlačítka */
+.reset-zoom-button {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.reset-zoom-button:hover {
+    background-color: var(--card-hover) !important;
+    color: var(--primary) !important;
+    transform: scale(1.05);
+}
+
+/* Tmavý režim pro mapu */
+@media (prefers-color-scheme: dark) {
+    .leaflet-popup-content {
+        color: var(--foreground) !important;
+    }
+
+    .leaflet-popup-content h3 {
+        color: var(--primary) !important;
+        border-bottom-color: var(--border) !important;
+    }
+
+    .leaflet-popup-tip {
+        background-color: var(--card) !important;
+    }
+
+    .zoom-level-indicator {
+        background-color: var(--card) !important;
+        color: var(--foreground) !important;
+        border-color: var(--border) !important;
+    }
+}

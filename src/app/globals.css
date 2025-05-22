@@ -3,21 +3,137 @@
 
 /* Definice základních barevných proměnných */
 :root {
-  --background: #ffffff; /* Barva pozadí (světlý režim) */
-  --foreground: #171717; /* Barva textu (světlý režim) */
+  /* Hlavní barevné tóny */
+  --background: #f8fafc;
+  /* Světlejší barva pozadí pro lepší kontrast (světlý režim) */
+  --foreground: #1e293b;
+  /* Tmavší barva textu pro lepší čitelnost (světlý režim) */
+  --primary: #3b82f6;
+  /* Primární barva (modrá) */
+  --primary-light: #60a5fa;
+  /* Světlejší odstín primární barvy */
+  --primary-dark: #2563eb;
+  /* Tmavší odstín primární barvy */
+  --secondary: #10b981;
+  /* Sekundární barva (zelená) */
+  --secondary-light: #34d399;
+  /* Světlejší odstín sekundární barvy */
+  --secondary-dark: #059669;
+  /* Tmavší odstín sekundární barvy */
+  --accent: #8b5cf6;
+  /* Akcentová barva (fialová) */
+  --accent-light: #a78bfa;
+  /* Světlejší odstín akcentové barvy */
+
+  /* Uživatelské rozhraní */
+  --card: #ffffff;
+  /* Barva karet a komponent */
+  --card-hover: #f1f5f9;
+  /* Barva při najetí myší */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --header-bg: #ffffff;
+  --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --border: #e2e8f0;
+  /* Barva okrajů a oddělovačů */
+
+  /* Typ značek spaloven */
+  --operational: #10b981;
+  /* V provozu - zelená */
+  --nonoperational: #ef4444;
+  /* Mimo provoz - červená */
+  --planned: #3b82f6;
+  /* Plánované - modrá */
 }
 
 /* Tmavý režim podle nastavení systému */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a; /* Barva pozadí (tmavý režim) */
-    --foreground: #ededed; /* Barva textu (tmavý režim) */
+    /* Tmavé tóny */
+    --background: #0f172a;
+    /* Tmavší pozadí (tmavý režim) */
+    --foreground: #e2e8f0;
+    /* Světlejší text (tmavý režim) */
+    --primary: #60a5fa;
+    /* Světlejší modrá pro tmavý režim */
+    --primary-light: #93c5fd;
+    /* Světlejší odstín primární barvy */
+    --primary-dark: #3b82f6;
+    /* Tmavší odstín primární barvy */
+    --secondary: #34d399;
+    /* Světlejší zelená pro tmavý režim */
+    --secondary-light: #6ee7b7;
+    /* Světlejší odstín sekundární barvy */
+    --secondary-dark: #10b981;
+    /* Tmavší odstín sekundární barvy */
+    --accent: #a78bfa;
+    /* Světlejší fialová pro tmavý režim */
+    --accent-light: #c4b5fd;
+    /* Světlejší odstín akcentové barvy */
+
+    /* Tmavé UI */
+    --card: #1e293b;
+    /* Tmavší karty pro tmavý režim */
+    --card-hover: #334155;
+    /* Barva při najetí myší */
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --header-bg: #1e293b;
+    --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --border: #334155;
+    /* Barva okrajů a oddělovačů */
+
+    /* Typ značek spaloven - tmavý režim */
+    --operational: #34d399;
+    /* V provozu - zelenější */
+    --nonoperational: #f87171;
+    /* Mimo provoz - červenější */
+    --planned: #60a5fa;
+    /* Plánované - modřejší */
   }
 }
 
 /* Základní styly pro tělo stránky */
 body {
-  background: var(--background); /* Použití proměnné pro pozadí */
-  color: var(--foreground); /* Použití proměnné pro text */
-  font-family: Arial, Helvetica, sans-serif; /* Výchozí písmo */
+  background: var(--background);
+  /* Použití proměnné pro pozadí */
+  color: var(--foreground);
+  /* Použití proměnné pro text */
+  min-height: 100vh;
+  font-size: 16px;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: system-ui, sans-serif;
+  /* Systémové písmo pro lepší výkon a moderní vzhled */
+  line-height: 1.6;
+  /* Lepší čitelnost */
+  min-height: 100vh;
+}
+
+/* Základní reset pro lepší konzistenci */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Vylepšení základních prvků */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
 }

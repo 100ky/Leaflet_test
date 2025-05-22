@@ -95,19 +95,6 @@ function ResetZoomControl({ defaultZoom }: { defaultZoom: number }) {
           className="reset-zoom-button"
           title="Zobrazit celou ČR"
           aria-label="Zobrazit celou ČR"
-          style={{
-            width: '30px',
-            height: '30px',
-            backgroundColor: 'white',
-            border: '1px solid #ccc',
-            borderRadius: '2px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            fontSize: '18px',
-            fontWeight: 'bold',
-          }}
         >
           ⟲
         </button>
@@ -312,9 +299,6 @@ const Map = ({ incinerators }: MapProps) => {
                       : (isPlanned ? 'Plánovaná výstavba' : 'Mimo provoz')
                   }</p>
                   <p>Založeno: {incinerator.yearEstablished || 'Neznámo'}</p>
-                  {currentZoom < DETAIL_ZOOM_THRESHOLD && incinerator.buildings && (
-                    <p><strong>Pro zobrazení areálu a budov přibližte mapu nad úroveň {DETAIL_ZOOM_THRESHOLD}</strong></p>
-                  )}
                 </div>
               </Popup>
             </MarkerWithDoubleClick>
@@ -324,8 +308,9 @@ const Map = ({ incinerators }: MapProps) => {
       </MapContainer>
 
       {/* Ukazatel aktuálního zoomu */}
-      <div className="absolute bottom-2 left-2 bg-white bg-opacity-70 px-2 py-1 rounded text-xs">
-        Zoom: {currentZoom}
+      <div className="absolute bottom-3 left-3 zoom-level-indicator">
+        <span className="zoom-indicator-icon">🔍</span>
+        <span>Přiblížení: {currentZoom.toFixed(1)}</span>
       </div>
     </div>
   );
