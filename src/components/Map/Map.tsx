@@ -115,7 +115,7 @@ function MarkerWithDoubleClick({ incinerator, icon, children }: { incinerator: I
 
   // Handler pro dvojklik
   const handleDoubleClick = () => {
-    map.setView([incinerator.location.lat, incinerator.location.lng], 15, { animate: true });
+    map.flyTo([incinerator.location.lat, incinerator.location.lng], 15, { animate: true, duration: 1.5 });
   };
 
   return (
