@@ -1,4 +1,45 @@
 /**
+ * Oficiální provozní informace o spalovně
+ */
+export interface IncineratorOfficialInfo {
+  operator: string;              // Provozovatel
+  owner?: string;                // Vlastník (pokud se liší od provozovatele)
+  licenseNumber?: string;        // Číslo povolení
+  website?: string;              // Oficiální webové stránky
+  phone?: string;                // Kontaktní telefon
+  email?: string;                // Kontaktní email
+
+  // Technické parametry
+  technology: string;            // Technologie spalování
+  numberOfLines: number;         // Počet linek
+  maxCapacityPerLine?: number;   // Max. kapacita na linku (t/rok)
+
+  // Energetické výstupy
+  electricalPowerMW?: number;    // Elektrický výkon (MW)
+  thermalPowerMW?: number;       // Tepelný výkon (MW)
+  steamProductionTh?: number;    // Produkce páry (t/h)
+
+  // Environmentální data
+  emissionLimits?: {
+    CO?: number;                 // Oxid uhelnatý (mg/m³)
+    NOx?: number;                // Oxidy dusíku (mg/m³)
+    SO2?: number;                // Oxid siřičitý (mg/m³)
+    dust?: number;               // Prach (mg/m³)
+    dioxins?: number;            // Dioxiny (ng/m³)
+  };
+
+  // Certifikace
+  certifications?: string[];     // ISO certifikace, environmentální značky atd.
+
+  // Zpracovávané odpady
+  wasteTypes: string[];          // Typy zpracovávaných odpadů
+
+  // Provozní údaje
+  operatingHours?: string;       // Provozní doba
+  maintenanceSchedule?: string;  // Plánované odstávky
+}
+
+/**
  * Reprezentace spalovny se všemi jejími atributy
  */
 export interface Incinerator {
@@ -15,6 +56,7 @@ export interface Incinerator {
   yearEstablished?: number;   // Rok založení
   propertyBoundary?: GeoJSONPolygon; // Hranice pozemku
   buildings?: Building[];     // Budovy a části
+  officialInfo?: IncineratorOfficialInfo; // Oficiální informace
 }
 
 /**

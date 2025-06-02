@@ -1,7 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import incineratorData from '@/data/incinerators';
+import { useState, useEffect } from 'react';
+import { IncineratorDataProvider } from '@/contexts/IncineratorDataContext';
 
 // Dynamický import komponenty mapy (Leaflet vyžaduje přístup k window objektu)
 const Map = dynamic(() => import('@/components/Map/Map'), {
@@ -13,6 +14,12 @@ const Map = dynamic(() => import('@/components/Map/Map'), {
  * Hlavní stránka aplikace - zobrazuje mapu spaloven v ČR
  */
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <>
       <header className="sticky top-0 z-10 w-full bg-header-bg dark:bg-header-bg shadow-md border-b border-border p-4 backdrop-blur-sm">
@@ -50,7 +57,9 @@ export default function Home() {
 
         {/* Kontejner pro mapu s vylepšeným vzhledem */}
         <div className="w-full max-w-5xl bg-card dark:bg-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-          <Map incinerators={incineratorData} />
+          <IncineratorDataProvider>
+            <Map />
+          </IncineratorDataProvider>
         </div>
 
         {/* Informační text pod mapou */}
@@ -68,13 +77,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </main>
-
-      {/* Patička */}
+      </main>      {/* Patička */}
       <footer className="w-full bg-card dark:bg-card p-6 mt-8 border-t border-border">
         <div className="container mx-auto text-center">
           <div className="text-foreground/70 text-sm">
-            &copy; {new Date().getFullYear()} Mapa spaloven ČR | Data: <a href="https://www.openstreetmap.org/copyright" className="underline hover:text-primary transition-colors">OpenStreetMap</a>
+            &copy; {mounted ? new Date().getFullYear() : 2025} Mapa spaloven ČR | Data: <a href="https://www.openstreetmap.org/copyright" className="underline hover:text-primary transition-colors">OpenStreetMap</a>
           </div>
         </div>
       </footer>

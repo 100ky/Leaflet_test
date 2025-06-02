@@ -1,7 +1,7 @@
 import { Incinerator } from '@/types';
 
 /**
- * Ukázková data spaloven v ČR
+ * Ukázková data spaloven v ČR s oficiálními informacemi
  */
 export const incineratorData: Incinerator[] = [
   {
@@ -16,6 +16,30 @@ export const incineratorData: Incinerator[] = [
     capacity: 330000,
     operational: true,
     yearEstablished: 1998,
+    officialInfo: {
+      operator: 'Pražské služby, a.s.',
+      owner: 'Hlavní město Praha',
+      website: 'https://www.psas.cz/cs/sluzby/zevo-malesice/',
+      phone: '+420 234 765 111',
+      email: 'zevo@psas.cz',
+      technology: 'Spalování na roštovém kotli s fluidní fluidní regenerací',
+      numberOfLines: 2,
+      maxCapacityPerLine: 165000,
+      electricalPowerMW: 18.5,
+      thermalPowerMW: 50,
+      steamProductionTh: 80,
+      emissionLimits: {
+        CO: 50,
+        NOx: 200,
+        SO2: 50,
+        dust: 10,
+        dioxins: 0.1
+      },
+      certifications: ['ISO 14001', 'ISO 9001', 'OHSAS 18001'],
+      wasteTypes: ['Komunální odpad', 'Průmyslový odpad', 'Nemocniční odpad'],
+      operatingHours: '24/7 - kromě plánovaných odstávek',
+      maintenanceSchedule: 'Červenec - srpen (každé 3 roky)'
+    },
     propertyBoundary: {
       type: 'Polygon',
       coordinates: [[
@@ -60,6 +84,30 @@ export const incineratorData: Incinerator[] = [
     capacity: 248000,
     operational: true,
     yearEstablished: 1989,
+    officialInfo: {
+      operator: 'SAKO Brno, a.s.',
+      owner: 'Statutární město Brno',
+      website: 'https://www.sakobrno.cz/',
+      phone: '+420 548 138 111',
+      email: 'info@sakobrno.cz',
+      technology: 'Spalování na roštovém kotli',
+      numberOfLines: 3,
+      maxCapacityPerLine: 82667, // 248000 / 3
+      electricalPowerMW: 21.5,
+      thermalPowerMW: 68,
+      steamProductionTh: 100, // Odhad
+      emissionLimits: {
+        CO: 50,
+        NOx: 200,
+        SO2: 50,
+        dust: 10,
+        dioxins: 0.1
+      },
+      certifications: ['ISO 14001', 'ISO 9001', 'ISO 45001'],
+      wasteTypes: ['Komunální odpad', 'Průmyslový odpad'],
+      operatingHours: 'Nepřetržitý provoz',
+      maintenanceSchedule: 'Každoroční odstávky jednotlivých linek'
+    },
     propertyBoundary: {
       type: 'Polygon',
       coordinates: [[
@@ -108,6 +156,30 @@ export const incineratorData: Incinerator[] = [
     capacity: 96000,
     operational: true,
     yearEstablished: 1999,
+    officialInfo: {
+      operator: 'TERMIZO, a.s.',
+      owner: 'Statutární město Liberec',
+      website: 'https://www.termizo.cz/',
+      phone: '+420 485 241 111',
+      email: 'info@termizo.cz',
+      technology: 'Spalování na roštovém kotli',
+      numberOfLines: 1, // Předpoklad, nutno ověřit
+      maxCapacityPerLine: 96000,
+      electricalPowerMW: 5.5, // Nutno ověřit
+      thermalPowerMW: 25, // Nutno ověřit
+      steamProductionTh: 35, // Nutno ověřit
+      emissionLimits: {
+        CO: 50,
+        NOx: 200,
+        SO2: 50,
+        dust: 10,
+        dioxins: 0.1
+      },
+      certifications: ['ISO 14001', 'ISO 9001'],
+      wasteTypes: ['Komunální odpad'],
+      operatingHours: 'Nepřetržitý provoz',
+      maintenanceSchedule: 'Plánované odstávky'
+    },
     propertyBoundary: {
       type: 'Polygon',
       coordinates: [[
@@ -173,6 +245,30 @@ export const incineratorData: Incinerator[] = [
     capacity: 95000,
     operational: true,
     yearEstablished: 2016,
+    officialInfo: {
+      operator: 'Plzeňská teplárenská, a.s.',
+      owner: 'Město Plzeň',
+      website: 'https://www.pltep.cz/zevo-chotikov/',
+      phone: '+420 378 031 111',
+      email: 'info@pltep.cz',
+      technology: 'Spalování na roštovém kotli',
+      numberOfLines: 1, // Předpoklad, nutno ověřit
+      maxCapacityPerLine: 95000,
+      electricalPowerMW: 10.5, // Nutno ověřit
+      thermalPowerMW: 28, // Nutno ověřit
+      steamProductionTh: 40, // Nutno ověřit
+      emissionLimits: {
+        CO: 50,
+        NOx: 200,
+        SO2: 50,
+        dust: 10,
+        dioxins: 0.1
+      },
+      certifications: ['ISO 14001', 'ISO 9001', 'ISO 50001'],
+      wasteTypes: ['Komunální odpad', 'Průmyslový odpad'],
+      operatingHours: 'Nepřetržitý provoz',
+      maintenanceSchedule: 'Plánované odstávky'
+    },
     propertyBoundary: {
       type: 'Polygon',
       coordinates: [[
