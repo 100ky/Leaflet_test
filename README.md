@@ -1,32 +1,70 @@
-# Leaflet_test2 - Mapa spaloven v ČR
+# 🗺️ Mapa spaloven v ČR
 
-Aplikace pro zobrazení spaloven odpadů v České republice s využitím Next.js, TypeScript a knihovny Leaflet.
+Responzivní webová aplikace pro zobrazení a správu dat spaloven v České republice. Využívá moderní technologie Next.js, TypeScript a knihovnu Leaflet pro interaktivní mapování.
 
-## O projektu
+## ✨ Klíčové funkce
 
-Tato aplikace zobrazuje mapu spaloven v České republice včetně základních informací o nich (kapacita, stav, rok založení). Spalovny jsou na mapě označeny vlastními ikonami podle jejich stavu.
+- **📍 Interaktivní mapa** s real-time zobrazením spaloven
+- **🔍 Dynamické načítání dat** podle aktuálního viewportu
+- **📱 Responzivní design** optimalizovaný pro všechna zařízení
+- **🏭 Detailní informace** o spalovnách včetně oficiálních údajů
+- **🌓 Podpora tmavého režimu** a moderní UI
+- **⚡ Vysoký výkon** s optimalizovaným cachingem
+- **🛠️ Debug nástroje** pro vývojáře a testování API
 
-## Technologie
+## 🛠️ Technologie
 
-- [Next.js](https://nextjs.org) - React framework pro vývoj webových aplikací
-- TypeScript - typovaný JavaScript pro bezpečnější kód
-- Leaflet - open-source knihovna pro interaktivní mapy
+- **[Next.js 14](https://nextjs.org)** - React framework s App Router
+- **[TypeScript](https://typescriptlang.org)** - typovaný JavaScript
+- **[Leaflet](https://leafletjs.com)** - open-source mapová knihovna  
+- **[Tailwind CSS](https://tailwindcss.com)** - utility-first CSS framework
+- **[React Leaflet](https://react-leaflet.js.org)** - React komponenty pro Leaflet
 
-## Getting Started
+## 🚀 Rychlý start
 
-First, run the development server:
+### Požadavky
+- Node.js 18+ 
+- npm, yarn, pnpm nebo bun
+
+### Instalace
 
 ```bash
+# Klonování repozitáře
+git clone https://github.com/100ky/Leaflet_test.git
+cd Leaflet_test
+
+# Instalace závislostí
+npm install
+
+# Spuštění vývojového serveru
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikace bude dostupná na [http://localhost:3000](http://localhost:3000)
+
+### Dostupné stránky
+
+- **/** - Hlavní mapa spaloven
+- **/test** - Testovací prostředí s debug nástroji
+
+## 📋 Struktura projektu
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   └── test/              # Testovací stránka
+├── components/            # React komponenty
+│   ├── Map/              # Mapové komponenty
+│   └── *.tsx             # Debug a UI komponenty
+├── contexts/             # React Contexts
+├── data/                 # Statická data spaloven
+├── hooks/                # Custom React hooks
+├── services/             # API služby
+├── styles/               # CSS styly
+├── types/                # TypeScript definice
+└── utils/                # Pomocné utility
+```
 
 ## Dokumentace
 

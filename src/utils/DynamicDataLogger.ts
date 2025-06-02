@@ -1,5 +1,10 @@
 /**
- * Logger pro dynamické načítání dat s emoji a barevnými zprávami
+ * DynamicDataLogger.ts - Pokročilý logging systém pro mapovou aplikaci
+ * Poskytuje structured logging s emoji, barvami a historií pro debug účely
+ */
+
+/**
+ * Singleton logger pro sledování API operací a mapových událostí
  */
 
 export class DynamicDataLogger {

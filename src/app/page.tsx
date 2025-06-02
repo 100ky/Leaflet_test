@@ -1,3 +1,8 @@
+/**
+ * HomePage - Hlavní stránka aplikace
+ * Zobrazuje interaktivní mapu spaloven v České republice
+ */
+
 'use client';
 
 import dynamic from 'next/dynamic';

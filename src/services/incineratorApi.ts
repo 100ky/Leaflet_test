@@ -1,12 +1,16 @@
 /**
- * API služba pro načítání dat spaloven
- * Simuluje vzdálené API ale používá lokální data pro testování
+ * incineratorApi.ts - API služba pro správu dat spaloven
+ * Poskytuje rozhraní pro načítání dat s podporou lokálního i vzdáleného API
+ * Zahrnuje simulaci latence a error handling
  */
 
 import { incineratorData } from '@/data/incinerators';
 import { Incinerator } from '@/types';
 import { dynamicLogger } from '@/utils/DynamicDataLogger';
 
+/**
+ * Typ pro mapové hranice (viewport)
+ */
 export interface MapBounds {
     north: number;
     south: number;
@@ -14,12 +18,18 @@ export interface MapBounds {
     west: number;
 }
 
+/**
+ * Typ pro API požadavek
+ */
 export interface ApiRequest {
     bounds: MapBounds;
     zoom: number;
     clustered?: boolean; // Pro budoucí clustering
 }
 
+/**
+ * Typ pro API odpověď
+ */
 export interface ApiResponse {
     incinerators: Incinerator[];
     totalCount: number;

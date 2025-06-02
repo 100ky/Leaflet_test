@@ -1,5 +1,6 @@
 /**
- * React hook pro správu dynamického načítání dat spaloven
+ * useIncineratorData.ts - React hook pro správu dat spaloven
+ * Poskytuje funkcionalitu pro dynamické načítání, caching a přepínání mezi API
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -18,6 +19,9 @@ import {
     testRemoteApiConnection
 } from '@/services/remoteApi';
 
+/**
+ * Props pro useIncineratorData hook
+ */
 interface UseIncineratorDataProps {
     initialBounds?: MapBounds;
     initialZoom?: number;
@@ -25,6 +29,9 @@ interface UseIncineratorDataProps {
     useRemoteApi?: boolean; // Nová možnost pro přepínání na vzdálené API
 }
 
+/**
+ * Return type pro useIncineratorData hook
+ */
 interface UseIncineratorDataReturn {
     incinerators: Incinerator[];
     loading: boolean;

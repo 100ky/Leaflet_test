@@ -1,5 +1,6 @@
 /**
- * React Context pro sdílení dat spaloven mezi komponentami
+ * IncineratorDataContext - React Context pro správu dat spaloven
+ * Poskytuje centralizované úložiště pro data spaloven, stav načítání a ovládání API
  */
 
 'use client';
@@ -8,6 +9,10 @@ import { createContext, useContext, ReactNode } from 'react';
 import { Incinerator } from '@/types';
 import { useIncineratorData } from '@/hooks/useIncineratorData';
 import { MapBounds } from '@/services/incineratorApi';
+
+/**
+ * Typ pro kontext dat spaloven
+ */
 
 interface IncineratorDataContextType {
     incinerators: Incinerator[];

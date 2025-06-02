@@ -1,5 +1,11 @@
 /**
+ * types/index.ts - Definice TypeScript typů pro aplikaci
+ * Obsahuje všechny interface a typy používané v celé aplikaci
+ */
+
+/**
  * Oficiální provozní informace o spalovně
+ * Obsahuje kompletní údaje o provozu, technologii a kontaktech
  */
 export interface IncineratorOfficialInfo {
   operator: string;              // Provozovatel

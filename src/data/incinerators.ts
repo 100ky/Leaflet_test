@@ -1,7 +1,13 @@
+/**
+ * incinerators.ts - Databáze spaloven v České republice
+ * Obsahuje kompletní údaje o všech spalovnách včetně oficiálních informací
+ */
+
 import { Incinerator } from '@/types';
 
 /**
- * Ukázková data spaloven v ČR s oficiálními informacemi
+ * Databáze spaloven v ČR s oficiálními informacemi
+ * Zahrnuje provozní údaje, technické specifikace a kontaktní informace
  */
 export const incineratorData: Incinerator[] = [
   {

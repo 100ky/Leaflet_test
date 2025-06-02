@@ -1,9 +1,14 @@
 /**
- * Registr pro správu reference na mapové instance
- * Umožňuje přístup k mapě z různých částí aplikace
+ * mapRegistry.ts - Centralizovaná správa mapových instancí
+ * Umožňuje globální přístup k mapovým objektům napříč aplikací
+ * Používá se pro flyToRegion a další operace vyžadující přímý přístup k mapě
  */
 
 import { Map as LeafletMap } from 'leaflet';
+
+/**
+ * Registr pro správu mapových instancí
+ */
 
 class MapRegistry {
     private mapInstances: Map<string, LeafletMap> = new Map();

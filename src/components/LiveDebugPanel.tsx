@@ -1,11 +1,16 @@
 /**
- * Komponenta pro zobrazení live logů z API
+ * LiveDebugPanel - Komponenta pro zobrazení live logů z API
+ * Poskytuje real-time monitoring API volání s možností auto-scrollu
  */
 
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { dynamicLogger } from '@/utils/DynamicDataLogger';
+
+/**
+ * Komponenta pro zobrazení live debug logů
+ */
 
 export const LiveDebugPanel: React.FC = () => {
     const [logs, setLogs] = useState<string[]>([]);

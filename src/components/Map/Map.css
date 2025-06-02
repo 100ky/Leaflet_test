@@ -1,6 +1,11 @@
-/* 
- * Styly pro komponentu mapy
+/**
+ * Styly pro Leaflet mapovou komponentu
+ * Obsahuje responzivní design, popup okna, ovládací prvky a tmavý režim
  */
+
+/* ========================================
+   ZÁKLADNÍ NASTAVENÍ MAPY
+   ======================================== */
 
 /* Skrytí nepotřebných ovládacích prvků */
 .leaflet-top.leaflet-right {
@@ -21,7 +26,11 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Ovládací prvky mapy */
+/* ========================================
+   OVLÁDACÍ PRVKY MAPY
+   ======================================== */
+
+/* Zoom ovládání */
 .leaflet-control-zoom {
     border: none !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
@@ -50,7 +59,11 @@
     color: var(--primary) !important;
 }
 
-/* Popup okna */
+/* ========================================
+   POPUP OKNA
+   ======================================== */
+
+/* Základní wrapper popup okna */
 .leaflet-popup-content-wrapper {
     border-radius: 8px !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;

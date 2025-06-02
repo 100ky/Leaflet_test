@@ -1,3 +1,8 @@
+/**
+ * Map - Hlavní komponenta pro zobrazení interaktivní mapy
+ * Obsahuje Leaflet mapu s markery spaloven, popup okna a ovládací prvky
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';

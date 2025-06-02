@@ -1,11 +1,15 @@
 /**
- * Debug panel pro monitorování API volání a stavu mapy
+ * DebugPanel - Pokročilý debug panel pro monitorování API a mapových operací
+ * Poskytuje real-time sledování volání, cachingu a chybových stavů
  */
 
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 
+/**
+ * Typ pro debug log záznam
+ */
 interface DebugLog {
     id: string;
     timestamp: Date;
@@ -14,9 +18,16 @@ interface DebugLog {
     data?: string;
 }
 
+/**
+ * Props pro DebugPanel komponentu
+ */
 interface DebugPanelProps {
     maxLogs?: number;
 }
+
+/**
+ * Debug panel komponenta
+ */
 
 export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
     const [logs, setLogs] = useState<DebugLog[]>([]);
