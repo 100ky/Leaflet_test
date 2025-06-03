@@ -5,6 +5,7 @@
  */
 
 import { Map as LeafletMap } from 'leaflet';
+import { logger } from './logger';
 
 /**
  * Registr pro správu mapových instancí
@@ -17,7 +18,7 @@ class MapRegistry {
      * Zaregistruje mapovou instanci
      */
     registerMap(id: string, map: LeafletMap) {
-        console.log(`Registering map instance: ${id}`);
+        logger.map(`Registering map instance: ${id}`);
         this.mapInstances.set(id, map);
     }
 
@@ -25,7 +26,7 @@ class MapRegistry {
      * Odregistruje mapovou instanci
      */
     unregisterMap(id: string) {
-        console.log(`Unregistering map instance: ${id}`);
+        logger.map(`Unregistering map instance: ${id}`);
         this.mapInstances.delete(id);
     }
 
@@ -42,27 +43,6 @@ class MapRegistry {
     getFirstMap(): LeafletMap | undefined {
         return this.mapInstances.values().next().value;
     }
-
-    /**
-     * Zkontroluje, zda je mapová instance zaregistrována
-     */
-    hasMap(id: string): boolean {
-        return this.mapInstances.has(id);
-    }
-
-    /**
-     * Provede akci na všech registrovaných mapách
-     */
-    executeOnAllMaps(action: (map: LeafletMap) => void) {
-        this.mapInstances.forEach(action);
-    }
-
-    /**
-     * Získá počet registrovaných map
-     */
-    getMapCount(): number {
-        return this.mapInstances.size;
-    }
 }
 
 // Singleton instance
@@ -78,7 +58,7 @@ export const flyToRegion = (bounds: { north: number; south: number; east: number
     const map = mapRegistry.getFirstMap();
 
     if (map) {
-        console.log('Flying to region:', bounds, 'zoom:', zoom);
+        logger.map('Flying to region:', bounds, 'zoom:', zoom);
 
         // Konverze bounds na Leaflet format
         const leafletBounds = [
@@ -92,6 +72,6 @@ export const flyToRegion = (bounds: { north: number; south: number; east: number
             padding: [20, 20]
         });
     } else {
-        console.warn('No map instance available for flyTo operation');
+        logger.warn('No map instance available for flyTo operation');
     }
 };

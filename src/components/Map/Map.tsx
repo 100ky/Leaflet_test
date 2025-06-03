@@ -24,19 +24,21 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
 import './Map.css';
-import { Incinerator, BuildingType } from '@/types';
+import { Incinerator } from '@/types';
 import { getIncineratorIcon } from './mapIcons';
 import { useIncineratorDataContext } from '@/contexts/IncineratorDataContext';
 import { MapBounds } from '@/services/incineratorApi';
 import { mapRegistry, DEFAULT_MAP_ID } from '@/utils/mapRegistry';
+import { logger } from '@/utils/logger';
+import {
+  getBuildingStyle,
+  getPropertyStyle,
+  createIncineratorPopupContent,
+  MAP_CONSTANTS
+} from '@/utils/mapHelpers';
 import L from 'leaflet';
 
-const mapStyle = {
-  height: '600px',
-  width: '100%',
-};
-
-const DEFAULT_ZOOM = 7.5;
+const mapStyle = MAP_CONSTANTS.MAP_STYLE;
 
 interface MapProps {
   // Prop incinerators je nyní volitelný, protože se načítají dynamicky
@@ -53,18 +55,28 @@ function MapRefManager() {
     if (map) {
       // Registrace mapy v globálním registru
       mapRegistry.registerMap(DEFAULT_MAP_ID, map);
-      console.log('Map registered in global registry');
+      logger.map('Map registered in global registry');
     }
 
     // Cleanup při unmount
     return () => {
       mapRegistry.unregisterMap(DEFAULT_MAP_ID);
-      console.log('Map unregistered from global registry');
+      logger.map('Map unregistered from global registry');
     };
   }, [map]);
 
   return null;
 }
+
+/**
+ * Pomocná funkce pro vytvoření MapBounds objektu z Leaflet bounds
+ */
+const createMapBounds = (bounds: L.LatLngBounds): MapBounds => ({
+  north: bounds.getNorth(),
+  south: bounds.getSouth(),
+  east: bounds.getEast(),
+  west: bounds.getWest()
+});
 
 /**
  * Komponenta pro sledování změn mapy a načítání dat
@@ -78,27 +90,13 @@ function MapDataLoader({
     moveend: () => {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-
-      const mapBounds: MapBounds = {
-        north: bounds.getNorth(),
-        south: bounds.getSouth(),
-        east: bounds.getEast(),
-        west: bounds.getWest()
-      };
-
+      const mapBounds = createMapBounds(bounds);
       onViewportChange(mapBounds, zoom);
     },
     zoomend: () => {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-
-      const mapBounds: MapBounds = {
-        north: bounds.getNorth(),
-        south: bounds.getSouth(),
-        east: bounds.getEast(),
-        west: bounds.getWest()
-      };
-
+      const mapBounds = createMapBounds(bounds);
       onViewportChange(mapBounds, zoom);
     }
   });
@@ -107,14 +105,7 @@ function MapDataLoader({
   useEffect(() => {
     const bounds = map.getBounds();
     const zoom = map.getZoom();
-
-    const mapBounds: MapBounds = {
-      north: bounds.getNorth(),
-      south: bounds.getSouth(),
-      east: bounds.getEast(),
-      west: bounds.getWest()
-    };
-
+    const mapBounds = createMapBounds(bounds);
     onViewportChange(mapBounds, zoom);
   }, [map, onViewportChange]);
   return null;
@@ -136,37 +127,6 @@ function ZoomTracker({ onZoomChange }: { onZoomChange: (zoom: number) => void })
 
   return null;
 }
-
-/**
- * Vrací styl polygonu podle typu budovy spalovny
- */
-const getBuildingStyle = (buildingType: BuildingType) => {
-  switch (buildingType) {
-    case BuildingType.MainBuilding:
-      return { color: '#ff0000', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#ff5555' };
-    case BuildingType.ChimneyStack:
-      return { color: '#555555', weight: 2, opacity: 0.8, fillOpacity: 0.6, fillColor: '#999999' };
-    case BuildingType.ProcessingUnit:
-      return { color: '#0000ff', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#5555ff' };
-    case BuildingType.StorageArea:
-      return { color: '#00ff00', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#55ff55' };
-    case BuildingType.WasteBunker:
-      return { color: '#ff9900', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#ffcc77' };
-    case BuildingType.AshStorage:
-      return { color: '#996633', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#cc9966' };
-    default:
-      return { color: '#333333', weight: 2, opacity: 0.8, fillOpacity: 0.3, fillColor: '#777777' };
-  }
-};
-
-// Styl pro celý areál spalovny
-const propertyStyle = {
-  color: '#ff0000',
-  weight: 4,
-  opacity: 1,
-  fillOpacity: 0.5,
-  fillColor: '#ff0000'
-};
 
 /**
  * Komponenta pro reset zoomu mapy na výchozí pohled
@@ -221,97 +181,23 @@ function MarkerWithDoubleClick({ incinerator, icon, children }: { incinerator: I
 function IncineratorPopup({ incinerator, usingRemoteApi }: { incinerator: Incinerator, usingRemoteApi: boolean }) {
   const map = useMap();
   const [currentZoom, setCurrentZoom] = useState(map.getZoom());
-  const DETAIL_ZOOM_THRESHOLD = 12;
+
   // Sledování změn zoomu
   useMapEvents({
     zoomend: () => {
       setCurrentZoom(map.getZoom());
     }
-  }); useEffect(() => {
+  });
+
+  useEffect(() => {
     setCurrentZoom(map.getZoom());
   }, [map]);
 
-  const isPlannedIncinerator = (incinerator: Incinerator): boolean => {
-    const currentYear = new Date().getFullYear();
-    return !incinerator.operational && incinerator.yearEstablished !== undefined &&
-      incinerator.yearEstablished > currentYear;
-  };
-
-  const isPlanned = isPlannedIncinerator(incinerator);
   return (
     <Popup maxWidth={350} minWidth={250}>
-      <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-        <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>{incinerator.name}</h3>
-        <p style={{ margin: '5px 0', fontSize: '14px' }}>{incinerator.description}</p>
-        <p style={{ margin: '5px 0', fontSize: '14px' }}><strong>Kapacita:</strong> {incinerator.capacity} tun/rok</p>
-        <p style={{ margin: '5px 0', fontSize: '14px' }}><strong>Stav:</strong> {
-          incinerator.operational
-            ? 'V provozu'
-            : (isPlanned ? 'Plánovaná výstavba' : 'Mimo provoz')
-        }</p>
-        <p style={{ margin: '5px 0', fontSize: '14px' }}><strong>Založeno:</strong> {incinerator.yearEstablished || 'Neznámo'}</p>        {/* Zobrazení oficiálních informací */}
-        {!usingRemoteApi && incinerator.officialInfo && (
-          <div style={{
-            marginTop: '10px',
-            borderTop: '1px solid #eee',
-            paddingTop: '10px'
-          }}>
-            <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#333' }}>Oficiální informace:</h4>
-            <div style={{ fontSize: '11px', color: '#666', marginBottom: '8px' }}>
-              <em>Aktuální zoom: {currentZoom.toFixed(1)} (detail od {DETAIL_ZOOM_THRESHOLD})</em>
-            </div>
-            {currentZoom >= DETAIL_ZOOM_THRESHOLD ? (
-              // Detailní zobrazení s kompaktním stylingem
-              <div style={{ fontSize: '13px', lineHeight: '1.4' }}>
-                <p style={{ margin: '4px 0' }}><strong>Provozovatel:</strong> {incinerator.officialInfo.operator}</p>
-                <p style={{ margin: '4px 0' }}><strong>Vlastník:</strong> {incinerator.officialInfo.owner}</p>
-                <p style={{ margin: '4px 0' }}><strong>Web:</strong> <a href={incinerator.officialInfo.website} target="_blank" rel="noopener noreferrer" style={{ wordBreak: 'break-all' }}>Odkaz</a></p>
-                <p style={{ margin: '4px 0' }}><strong>Telefon:</strong> {incinerator.officialInfo.phone}</p>
-                <p style={{ margin: '4px 0' }}><strong>Email:</strong> <span style={{ wordBreak: 'break-all' }}>{incinerator.officialInfo.email}</span></p>
-                <p style={{ margin: '4px 0' }}><strong>Technologie:</strong> {incinerator.officialInfo.technology}</p>
-                <p style={{ margin: '4px 0' }}><strong>Počet linek:</strong> {incinerator.officialInfo.numberOfLines}</p>
-                <p style={{ margin: '4px 0' }}><strong>Max. kapacita/linku:</strong> {incinerator.officialInfo.maxCapacityPerLine} t/rok</p>
-                <p style={{ margin: '4px 0' }}><strong>Elektrický výkon:</strong> {incinerator.officialInfo.electricalPowerMW} MW</p>
-                <p style={{ margin: '4px 0' }}><strong>Tepelný výkon:</strong> {incinerator.officialInfo.thermalPowerMW} MW</p>
-                <p style={{ margin: '4px 0' }}><strong>Produkce páry:</strong> {incinerator.officialInfo.steamProductionTh} t/h</p>
-
-                {incinerator.officialInfo.emissionLimits && (
-                  <div style={{ margin: '8px 0' }}>
-                    <p style={{ margin: '4px 0' }}><strong>Emisní limity (mg/m³):</strong></p>
-                    <ul style={{ margin: '4px 0 4px 20px', padding: 0, fontSize: '12px' }}>
-                      <li>CO: {incinerator.officialInfo.emissionLimits.CO}</li>
-                      <li>NOx: {incinerator.officialInfo.emissionLimits.NOx}</li>
-                      <li>SO2: {incinerator.officialInfo.emissionLimits.SO2}</li>
-                      <li>Prach: {incinerator.officialInfo.emissionLimits.dust}</li>
-                      <li>Dioxiny (ng/m³): {incinerator.officialInfo.emissionLimits.dioxins}</li>
-                    </ul>
-                  </div>
-                )}
-
-                {incinerator.officialInfo.certifications && incinerator.officialInfo.certifications.length > 0 && (
-                  <p style={{ margin: '4px 0' }}><strong>Certifikace:</strong> {incinerator.officialInfo.certifications.join(', ')}</p>
-                )}
-
-                {incinerator.officialInfo.wasteTypes && incinerator.officialInfo.wasteTypes.length > 0 && (
-                  <p style={{ margin: '4px 0' }}><strong>Typy odpadu:</strong> {incinerator.officialInfo.wasteTypes.join(', ')}</p>
-                )}
-
-                <p style={{ margin: '4px 0' }}><strong>Provozní doba:</strong> {incinerator.officialInfo.operatingHours}</p>
-                <p style={{ margin: '4px 0' }}><strong>Plán údržby:</strong> {incinerator.officialInfo.maintenanceSchedule}</p>
-              </div>
-            ) : (
-              // Stručné zobrazení
-              <div style={{ fontSize: '13px' }}>
-                <p style={{ margin: '4px 0' }}><strong>Provozovatel:</strong> {incinerator.officialInfo.operator}</p>
-                <p style={{ margin: '4px 0' }}><strong>Web:</strong> <a href={incinerator.officialInfo.website} target="_blank" rel="noopener noreferrer">Odkaz</a></p>
-                <p style={{ margin: '8px 0', fontStyle: 'italic', color: '#666', fontSize: '12px' }}>
-                  (Přibližte na zoom ≥ {DETAIL_ZOOM_THRESHOLD} pro více detailů)
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      <div dangerouslySetInnerHTML={{
+        __html: createIncineratorPopupContent(incinerator, currentZoom, usingRemoteApi)
+      }} />
     </Popup>
   );
 }
@@ -321,7 +207,7 @@ function IncineratorPopup({ incinerator, usingRemoteApi }: { incinerator: Incine
  */
 const Map = ({ incinerators: propIncinerators }: MapProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [currentZoom, setCurrentZoom] = useState(DEFAULT_ZOOM);
+  const [currentZoom, setCurrentZoom] = useState<number>(MAP_CONSTANTS.DEFAULT_ZOOM);
 
   // Získání dat z contextu
   const contextData = useIncineratorDataContext();
@@ -381,7 +267,7 @@ const Map = ({ incinerators: propIncinerators }: MapProps) => {
   // Použití vypočteného středu všech spaloven jako výchozí střed mapy
   const initialCenter: [number, number] = mapCenter as [number, number];
   // Výchozí přiblížení pro zobrazení celé ČR
-  const initialZoom = DEFAULT_ZOOM;
+  const initialZoom = MAP_CONSTANTS.DEFAULT_ZOOM;
 
   if (!isMounted) {
     return <div style={mapStyle}></div>;
@@ -469,7 +355,7 @@ const Map = ({ incinerators: propIncinerators }: MapProps) => {
         <MapRefManager />
 
         {/* Komponenta pro resetovací tlačítko */}
-        <ResetZoomControl defaultZoom={DEFAULT_ZOOM} />
+        <ResetZoomControl defaultZoom={MAP_CONSTANTS.DEFAULT_ZOOM} />
 
         {/* DŮLEŽITÉ: Pořadí prvků definuje pořadí vykreslování (pozdější překrývají dřívější) */}
 
@@ -491,7 +377,7 @@ const Map = ({ incinerators: propIncinerators }: MapProps) => {
                 key={`property-${incinerator.id}`}
                 data={geoJsonData as unknown as GeoJSON.Feature<GeoJSON.Geometry>}
                 style={{
-                  ...propertyStyle,
+                  ...getPropertyStyle(),
                   opacity: 1,
                   fillOpacity: 0.3,
                   weight: 3,
@@ -500,7 +386,7 @@ const Map = ({ incinerators: propIncinerators }: MapProps) => {
                 }}
                 eventHandlers={{
                   add: (e) => {
-                    console.log(`Polygon pro ${incinerator.name} byl přidán`, e);
+                    logger.debug(`Polygon pro ${incinerator.name} byl přidán`, e);
                   }
                 }}
               >

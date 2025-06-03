@@ -6,6 +6,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getLogColor, getLogIcon, type LogType } from '@/utils/statusHelpers';
 
 /**
  * Typ pro debug log záznam
@@ -13,7 +14,7 @@ import { useState, useEffect, useCallback } from 'react';
 interface DebugLog {
     id: string;
     timestamp: Date;
-    type: 'api' | 'viewport' | 'cache' | 'error' | 'loading';
+    type: LogType;
     message: string;
     data?: string;
 }
@@ -94,31 +95,11 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
         filter === 'all' || log.type === filter
     );
 
-    const getLogColor = (type: DebugLog['type']) => {
-        switch (type) {
-            case 'api': return 'text-blue-600';
-            case 'viewport': return 'text-green-600';
-            case 'cache': return 'text-purple-600';
-            case 'error': return 'text-red-600';
-            default: return 'text-gray-600';
-        }
-    };
-
-    const getLogIcon = (type: DebugLog['type']) => {
-        switch (type) {
-            case 'api': return '🌐';
-            case 'viewport': return '🗺️';
-            case 'cache': return '💾';
-            case 'error': return '❌';
-            default: return 'ℹ️';
-        }
-    };
-
     if (!isVisible) {
         return (
             <button
                 onClick={() => setIsVisible(true)}
-                className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
+                className="btn-base fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 p-3 rounded-full shadow-lg z-50"
                 title="Zobrazit debug panel"
             >
                 🐛
@@ -127,14 +108,14 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
     }
 
     return (
-        <div className="fixed bottom-4 right-4 w-96 max-h-80 bg-white border border-gray-300 rounded-lg shadow-lg z-50 overflow-hidden">
-            <div className="flex items-center justify-between p-3 bg-gray-100 border-b">
-                <h3 className="font-semibold text-gray-800">Debug Panel</h3>
-                <div className="flex items-center space-x-2">
+        <div className="panel-base fixed bottom-4 right-4 w-96 max-h-80 z-50 overflow-hidden">
+            <div className="flex-header bg-gray-100 border-b">
+                <h3 className="panel-title">Debug Panel</h3>
+                <div className="flex-buttons">
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        className="text-xs border rounded px-2 py-1"
+                        className="input-base text-xs"
                     >
                         <option value="all">Vše</option>
                         <option value="api">API</option>
@@ -144,14 +125,14 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
                     </select>
                     <button
                         onClick={() => setLogs([])}
-                        className="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
+                        className="btn-base text-xs bg-gray-200 hover:bg-gray-300"
                         title="Vymazat logy"
                     >
                         🗑️
                     </button>
                     <button
                         onClick={() => setIsVisible(false)}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="clickable-area text-gray-500 hover:text-gray-700"
                         title="Skrýt panel"
                     >
                         ✕
@@ -161,7 +142,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
 
             <div className="overflow-y-auto max-h-64 p-2">
                 {filteredLogs.length === 0 ? (
-                    <div className="text-gray-500 text-sm text-center py-4">
+                    <div className="text-helper text-center py-4">
                         Žádné logy k zobrazení
                     </div>
                 ) : (
@@ -173,15 +154,16 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
                                     <div className="flex-1">
                                         <div className={`font-mono ${getLogColor(log.type)}`}>
                                             {log.message}
-                                        </div>                                        <div className="text-gray-400 text-xs">
+                                        </div>
+                                        <div className="text-helper text-xs">
                                             {log.timestamp.toLocaleTimeString()}
                                         </div>
                                         {log.data && (
                                             <details className="mt-1">
-                                                <summary className="cursor-pointer text-gray-500">
+                                                <summary className="clickable-area text-helper">
                                                     Data
                                                 </summary>
-                                                <pre className="text-xs bg-gray-50 p-1 rounded mt-1 overflow-auto">
+                                                <pre className="mono-text bg-gray-50 p-1 rounded mt-1 overflow-auto">
                                                     {log.data}
                                                 </pre>
                                             </details>

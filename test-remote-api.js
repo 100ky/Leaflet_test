@@ -3,7 +3,6 @@
  */
 
 import { fetchRemoteIncinerators, testRemoteApiConnection } from '../src/services/remoteApi';
-import { dynamicLogger } from '../src/utils/DynamicDataLogger';
 
 async function testRemoteApiIntegration() {
     console.log('🚀 Testování integrace vzdáleného API...\n');

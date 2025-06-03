@@ -19,7 +19,6 @@
     overflow: hidden;
     box-shadow: var(--card-shadow);
     border: 1px solid var(--border);
-    transition: box-shadow 0.3s ease;
 }
 
 .map-container:hover {
@@ -36,7 +35,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     border-radius: 10px !important;
     overflow: hidden;
-    transition: all 0.2s ease !important;
 }
 
 .leaflet-control-zoom:hover {
@@ -46,7 +44,6 @@
 .leaflet-control-zoom a {
     background-color: var(--card) !important;
     color: var(--foreground) !important;
-    transition: all 0.2s ease;
     width: 32px !important;
     height: 32px !important;
     line-height: 32px !important;
@@ -71,7 +68,6 @@
     overflow: hidden;
     border: 1px solid var(--border) !important;
     background-color: var(--card) !important;
-    transition: all 0.3s ease !important;
 }
 
 .leaflet-popup-content {

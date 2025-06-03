@@ -1,0 +1,274 @@
+/**
+ * Dodatečné utility CSS třídy pro chybějící komponenty
+ */
+
+/* Loading komponenty */
+.loading-center {
+    @apply flex items-center justify-center py-6 sm:py-8;
+}
+
+.loading-text {
+    @apply ml-2 sm:ml-3 text-sm sm:text-base text-gray-600;
+}
+
+.loading-spinner {
+    @apply animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600;
+}
+
+/* Button varianty */
+.btn-blue {
+    @apply bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:opacity-50;
+}
+
+.btn-green {
+    @apply bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50;
+}
+
+.btn-red {
+    @apply bg-red-100 text-red-700 hover:bg-red-200 disabled:opacity-50;
+}
+
+/* Karty a boxy */
+.stat-card {
+    @apply p-2 sm:p-3 bg-blue-50 rounded-lg;
+}
+
+.stat-value {
+    @apply text-lg sm:text-2xl font-bold;
+}
+
+.stat-label {
+    @apply text-xs sm:text-sm;
+}
+
+.result-card {
+    @apply p-2 sm:p-3 rounded-lg border;
+}
+
+.success-card {
+    @apply bg-green-50 border-green-200;
+}
+
+.error-card {
+    @apply bg-red-50 border-red-200;
+}
+
+.error-box {
+    @apply bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4;
+}
+
+/* Detaily a seznamy */
+.detail-list {
+    @apply space-y-1 sm:space-y-2 text-xs sm:text-sm;
+}
+
+.detail-item {
+    @apply flex justify-between;
+}
+
+/* Progress bars */
+.progress-section {
+    @apply mt-3 sm:mt-4;
+}
+
+.progress-header {
+    @apply flex justify-between text-xs text-gray-600 mb-1;
+}
+
+.progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+    @apply h-2 rounded-full transition-all duration-300;
+}
+
+/* Page layout utilities */
+.page-header {
+    @apply sticky top-0 z-10 w-full bg-header-bg dark:bg-header-bg shadow-md border-b border-border p-4 backdrop-blur-sm;
+}
+
+.page-title {
+    @apply text-2xl font-bold text-primary;
+}
+
+.page-main {
+    @apply flex min-h-screen flex-col items-center py-8 px-4;
+}
+
+.page-intro {
+    @apply w-full max-w-5xl mb-6;
+}
+
+.page-intro-title {
+    @apply text-2xl font-semibold mb-3 text-foreground;
+}
+
+.page-intro-text {
+    @apply text-foreground opacity-80 mb-6 max-w-3xl;
+}
+
+/* Legend styles */
+.legend-container {
+    @apply w-full max-w-5xl mb-4 flex flex-wrap gap-4;
+}
+
+.legend-item {
+    @apply flex items-center gap-2;
+}
+
+.legend-dot {
+    @apply w-4 h-4 rounded-full;
+}
+
+.legend-text {
+    @apply text-sm text-foreground;
+}
+
+/* Map container */
+.map-container {
+    @apply w-full max-w-5xl bg-card dark:bg-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl;
+}
+
+/* Info sections */
+.info-section {
+    @apply w-full max-w-5xl mt-6 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 p-5 rounded-lg shadow-sm;
+}
+
+.info-header {
+    @apply flex items-start gap-3;
+}
+
+.info-icon {
+    @apply text-blue-500 text-xl;
+}
+
+.info-title {
+    @apply text-blue-700 dark:text-blue-300 font-medium mb-1;
+}
+
+.info-list {
+    @apply text-foreground/80 text-sm space-y-1 list-disc pl-4;
+}
+
+/* Footer */
+.page-footer {
+    @apply w-full bg-card dark:bg-card p-6 mt-8 border-t border-border;
+}
+
+.footer-content {
+    @apply container mx-auto text-center;
+}
+
+.footer-text {
+    @apply text-foreground/70 text-sm;
+}
+
+/* Test page utilities */
+.test-page-bg {
+    @apply min-h-screen bg-gray-50;
+}
+
+.test-header {
+    @apply bg-white shadow-sm border-b p-2 sm:p-3 lg:p-4;
+}
+
+.test-title {
+    @apply text-lg sm:text-xl lg:text-2xl font-bold text-gray-800;
+}
+
+.test-subtitle {
+    @apply text-gray-600 mt-1 text-xs sm:text-sm lg:text-base;
+}
+
+.test-main {
+    @apply container mx-auto py-2 sm:py-4 lg:py-6 px-2 sm:px-4;
+}
+
+/* Test grid layouts */
+.test-grid-responsive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-4;
+}
+
+.test-grid-two-col {
+    @apply grid grid-cols-1 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4;
+}
+
+/* Map section in test page */
+.test-map-section {
+    @apply lg:col-span-3 order-1;
+}
+
+.test-map-header {
+    @apply p-3 sm:p-4 border-b;
+}
+
+.test-map-title {
+    @apply text-base sm:text-lg font-semibold text-gray-800;
+}
+
+.test-map-subtitle {
+    @apply text-gray-600 text-xs sm:text-sm mt-1;
+}
+
+.test-map-controls {
+    @apply mt-2 flex flex-wrap items-center gap-2 text-sm;
+}
+
+.test-api-badge {
+    @apply px-2 py-1 rounded-full text-xs;
+}
+
+.test-refresh-btn {
+    @apply px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded transition-colors;
+}
+
+.test-map-container {
+    @apply relative;
+}
+
+/* Panel sections */
+.test-panel-section {
+    @apply lg:col-span-1 order-2 space-y-2 sm:space-y-3;
+}
+
+/* Documentation section */
+.test-docs-section {
+    @apply mt-3 sm:mt-4 lg:mt-6 bg-white rounded-lg shadow-lg p-2 sm:p-3 lg:p-4;
+}
+
+.test-docs-title {
+    @apply text-sm sm:text-base lg:text-lg font-bold text-gray-800 mb-2 sm:mb-3;
+}
+
+.test-docs-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 lg:gap-4;
+}
+
+.test-docs-section-title {
+    @apply font-semibold text-gray-700 mb-2;
+}
+
+.test-docs-list {
+    @apply text-gray-600 space-y-1 text-xs sm:text-sm list-disc pl-4 sm:pl-5;
+}
+
+/* Badges */
+.badge-blue {
+    @apply bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs;
+}
+
+.badge-green {
+    @apply bg-green-100 text-green-800 px-2 py-1 rounded text-xs;
+}
+
+.badge-red {
+    @apply bg-red-100 text-red-800 px-2 py-1 rounded text-xs;
+}
+
+/* Status indicators */
+.status-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}

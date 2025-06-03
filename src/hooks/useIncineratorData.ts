@@ -18,6 +18,7 @@ import {
     fetchRemoteIncineratorsByViewport,
     testRemoteApiConnection
 } from '@/services/remoteApi';
+import { logger } from '@/utils/logger';
 
 /**
  * Props pro useIncineratorData hook
@@ -76,7 +77,7 @@ export const useIncineratorData = ({
     const fetchData = useCallback(async (bounds: MapBounds, zoom: number, force = false) => {
         // Prevence duplicitních volání
         if (loadingRef.current && !force) {
-            console.log('Request already in progress, skipping...');
+            logger.debug('Request already in progress, skipping...');
             return;
         }
 
@@ -91,7 +92,7 @@ export const useIncineratorData = ({
                 clustered: zoom < 10
             };
 
-            console.log(`Fetching data for viewport using ${usingRemoteApi ? 'remote' : 'local'} API:`, request);
+            logger.api(`Fetching data for viewport using ${usingRemoteApi ? 'remote' : 'local'} API:`, request);
 
             let response: ApiResponse;
 
@@ -107,7 +108,7 @@ export const useIncineratorData = ({
             setTotalCount(response.totalCount);
             setClustered(response.clustered);
 
-            console.log(`Loaded ${response.incinerators.length} incinerators`);
+            logger.api(`Loaded ${response.incinerators.length} incinerators`);
 
             // Prediktivní načítání dat pro sousední oblasti (pouze pro lokální API)
             if (enablePrefetch && !usingRemoteApi) {
@@ -118,7 +119,7 @@ export const useIncineratorData = ({
 
                 prefetchTimeout.current = setTimeout(() => {
                     prefetchNearbyData(bounds, zoom).catch(err => {
-                        console.warn('Prefetch failed:', err);
+                        logger.warn('Prefetch failed:', err);
                     });
                 }, 2000);
             }
@@ -126,11 +127,11 @@ export const useIncineratorData = ({
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
             setError(errorMessage);
-            console.error('Error fetching incinerator data:', err);
+            logger.error('Error fetching incinerator data:', err);
 
             // Pokud vzdálené API selže, automaticky přepni na lokální
             if (usingRemoteApi) {
-                console.log('Remote API failed, switching to local data...');
+                logger.warn('Remote API failed, switching to local data...');
                 setUsingRemoteApi(false);
                 // Zkus znovu s lokálními daty
                 setTimeout(() => fetchData(bounds, zoom, true), 1000);
@@ -155,7 +156,7 @@ export const useIncineratorData = ({
         const zoomChanged = Math.abs(currentZoom.current - zoom) > 0.5;
 
         if (boundsChanged || zoomChanged) {
-            console.log('Viewport changed:', { bounds, zoom, boundsChanged, zoomChanged });
+            logger.map('Viewport changed:', { bounds, zoom, boundsChanged, zoomChanged });
 
             currentBounds.current = bounds;
             currentZoom.current = zoom;
@@ -170,7 +171,7 @@ export const useIncineratorData = ({
      * Přesune mapu na zadaný region
      */
     const flyToRegion = useCallback((bounds: MapBounds, zoom: number) => {
-        console.log('Flying to region via global registry:', bounds, zoom);
+        logger.map('Flying to region via global registry:', bounds, zoom);
         globalFlyToRegion(bounds, zoom);
     }, []);
 
@@ -185,7 +186,7 @@ export const useIncineratorData = ({
      * Přepne na vzdálené API
      */
     const switchToRemoteApi = useCallback(async () => {
-        console.log('🔄 Switching to remote API...');
+        logger.info('Switching to remote API...');
         setLoading(true);
         setError(null);
 
@@ -194,17 +195,17 @@ export const useIncineratorData = ({
             const connected = await testRemoteApiConnection();
 
             if (connected) {
-                console.log('✅ Remote API is accessible, switching...');
+                logger.info('Remote API is accessible, switching...');
                 setUsingRemoteApi(true);
                 setError(null);
 
                 // Znovu načti data s remote API
                 if (currentBounds.current) {
-                    console.log('🔄 Fetching data from remote API...');
+                    logger.api('Fetching data from remote API...');
                     await fetchData(currentBounds.current, currentZoom.current, true);
                 }
 
-                console.log('✅ Successfully switched to remote API');
+                logger.info('Successfully switched to remote API');
             } else {
                 throw new Error('Vzdálené API není dostupné nebo neodpovídá');
             }
@@ -220,20 +221,20 @@ export const useIncineratorData = ({
      * Přepne na lokální API
      */
     const switchToLocalApi = useCallback(() => {
-        console.log('🔄 Switching to local API...');
+        logger.info('Switching to local API...');
         setLoading(true);
         setUsingRemoteApi(false);
         setError(null);
 
         // Znovu načti data s lokálním API
         if (currentBounds.current) {
-            console.log('🔄 Fetching data from local API...');
+            logger.api('Fetching data from local API...');
             fetchData(currentBounds.current, currentZoom.current, true)
                 .then(() => {
-                    console.log('✅ Successfully switched to local API');
+                    logger.info('Successfully switched to local API');
                 })
                 .catch(err => {
-                    console.error('❌ Error loading local data:', err);
+                    logger.error('Error loading local data:', err);
                     setError('Chyba při načítání lokálních dat');
                 })
                 .finally(() => {

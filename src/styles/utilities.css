@@ -1,0 +1,342 @@
+/**
+ * Utility CSS třídy pro časté vzory v aplikaci
+ * Snižuje duplikaci kódu a zajišťuje konzistentní styling
+ */
+
+/* ===========================================
+   PANEL KOMPONENTY
+   =========================================== */
+
+/* Základní panel s bílým pozadím a stínem */
+.panel-base {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
+}
+
+/* Panel s velkým stínem pro hlavní obsahové oblasti */
+.panel-main {
+    @apply bg-white rounded-lg shadow-lg;
+}
+
+/* Panel s padding pro standardní obsah */
+.panel-content {
+    @apply p-3 sm:p-4;
+}
+
+/* Panel s rozšířeným paddingem pro hlavní oblasti */
+.panel-content-lg {
+    @apply p-4 sm:p-6;
+}
+
+/* ===========================================
+   TYPOGRAPHY UTILITIES
+   =========================================== */
+
+/* Malý šedý text pro pomocné informace */
+.text-helper {
+    @apply text-xs text-gray-500;
+}
+
+/* Malý tmavě šedý text pro popisky */
+.text-label {
+    @apply text-xs text-gray-600;
+}
+
+/* Základní velikost textu pro mobilní/desktop */
+.text-responsive {
+    @apply text-xs sm:text-sm;
+}
+
+/* Nadpisy panelů - responsive */
+.panel-title {
+    @apply text-sm sm:text-base font-semibold text-gray-800;
+}
+
+/* ===========================================
+   FLEXBOX UTILITIES
+   =========================================== */
+
+/* Flex kontejner pro header s justify-between */
+.flex-header {
+    @apply flex items-center justify-between;
+}
+
+/* Flex kontejner pro status indikátory */
+.flex-status {
+    @apply flex items-center space-x-1 sm:space-x-2;
+}
+
+/* Flex kontejner pro tlačítka */
+.flex-buttons {
+    @apply flex items-center space-x-2;
+}
+
+/* ===========================================
+   SPACING UTILITIES
+   =========================================== */
+
+/* Standardní spacing pro sekce */
+.section-spacing {
+    @apply space-y-4 sm:space-y-6;
+}
+
+/* Malé spacing pro kompaktní sekce */
+.section-spacing-sm {
+    @apply space-y-2 sm:space-y-3;
+}
+
+/* ===========================================
+   INTERACTIVE ELEMENTS
+   =========================================== */
+
+/* Klikatelná oblast s hover efektem */
+.clickable-area {
+    @apply cursor-pointer hover:bg-gray-50 transition-colors;
+}
+
+/* Základní styling pro tlačítka */
+.btn-base {
+    @apply px-3 py-1 text-xs rounded transition-colors;
+}
+
+/* Primární tlačítko */
+.btn-primary {
+    @apply bg-blue-500 text-white hover:bg-blue-600;
+}
+
+/* Sekundární tlačítko */
+.btn-secondary {
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+}
+
+/* Nebezpečné tlačítko */
+.btn-danger {
+    @apply bg-red-100 text-red-700 hover:bg-red-200;
+}
+
+/* Success tlačítko */
+.btn-success {
+    @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+/* ===========================================
+   STATUS INDICATORS
+   =========================================== */
+
+/* Základní kruhový indikátor */
+.status-dot {
+    @apply w-2 h-2 sm:w-3 sm:h-3 rounded-full;
+}
+
+/* Status indikátor - načítání */
+.status-loading {
+    @apply bg-orange-400 animate-pulse;
+}
+
+/* Status indikátor - úspěch */
+.status-success {
+    @apply bg-green-400;
+}
+
+/* Status indikátor - chyba */
+.status-error {
+    @apply bg-red-400;
+}
+
+/* ===========================================
+   GRID LAYOUTS
+   =========================================== */
+
+/* Responsive grid pro statistiky */
+.stats-grid {
+    @apply grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4;
+}
+
+/* Grid pro tlačítka v řadě */
+.button-grid {
+    @apply grid grid-cols-2 gap-2;
+}
+
+/* ===========================================
+   RESPONSIVE VISIBILITY
+   =========================================== */
+
+/* Skrýt na malých obrazovkách */
+.hidden-mobile {
+    @apply hidden sm:block;
+}
+
+/* Skrýt na velkých obrazovkách */
+.hidden-desktop {
+    @apply sm:hidden;
+}
+
+/* Inline na velkých, block na malých */
+.responsive-inline {
+    @apply hidden sm:inline;
+}
+
+/* ===========================================
+   SCROLL UTILITIES
+   =========================================== */
+
+/* Kontejner s omezenou výškou a scrollem */
+.scroll-container {
+    @apply max-h-40 overflow-y-auto;
+}
+
+/* Kontejner pro logy s vyšší výškou */
+.scroll-logs {
+    @apply h-48 sm:h-64 overflow-y-auto;
+}
+
+/* ===========================================
+   LOADING STATES
+   =========================================== */
+
+/* Centrovaný loading indikátor */
+.loading-center {
+    @apply flex items-center justify-center py-6 sm:py-8;
+}
+
+/* Loading text vedle spinneru */
+.loading-text {
+    @apply ml-2 sm:ml-3 text-sm sm:text-base text-gray-600;
+}
+
+/* Animace pro loading stav */
+.loading-spinner {
+    @apply animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600;
+}
+
+/* ===========================================
+   BUTTON VARIANTS
+   =========================================== */
+
+/* Modré tlačítko */
+.btn-blue {
+    @apply bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:opacity-50;
+}
+
+/* Zelené tlačítko */
+.btn-green {
+    @apply bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50;
+}
+
+/* ===========================================
+   CARDS & BOXES
+   =========================================== */
+
+/* Karta pro statistiky */
+.stat-card {
+    @apply p-2 sm:p-3 bg-blue-50 rounded-lg;
+}
+
+/* Hodnota ve statistice */
+.stat-value {
+    @apply text-lg sm:text-2xl font-bold;
+}
+
+/* Label ve statistice */
+.stat-label {
+    @apply text-xs sm:text-sm;
+}
+
+/* Výsledková karta */
+.result-card {
+    @apply p-2 sm:p-3 rounded-lg border;
+}
+
+/* Úspěšná karta */
+.success-card {
+    @apply bg-green-50 border-green-200;
+}
+
+/* Chybová karta */
+.error-card {
+    @apply bg-red-50 border-red-200;
+}
+
+/* Error box styling */
+.error-box {
+    @apply bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4;
+}
+
+/* ===========================================
+   LISTS & DETAILS
+   =========================================== */
+
+/* Seznam detailů */
+.detail-list {
+    @apply space-y-1 sm:space-y-2 text-xs sm:text-sm;
+}
+
+/* Položka detailu */
+.detail-item {
+    @apply flex justify-between;
+}
+
+/* ===========================================
+   PROGRESS BARS
+   =========================================== */
+
+/* Sekce s progress barem */
+.progress-section {
+    @apply mt-3 sm:mt-4;
+}
+
+/* Header progress baru */
+.progress-header {
+    @apply flex justify-between text-xs text-gray-600 mb-1;
+}
+
+/* Progress bar background */
+.progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+/* Progress bar fill */
+.progress-fill {
+    @apply h-2 rounded-full transition-all duration-300;
+}
+
+/* ===========================================
+   BUTTON GROUPS
+   =========================================== */
+
+/* Skupina tlačítek */
+.button-group {
+    @apply flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2;
+}
+
+/* ===========================================
+   INFO TEXT
+   =========================================== */
+
+/* Informační text */
+.info-text {
+    @apply text-xs text-gray-500 space-y-1;
+}
+
+/* ===========================================
+   SPECIAL PURPOSE
+   =========================================== */
+
+/* Terminal/console styling */
+.terminal-style {
+    @apply bg-black text-green-400 p-2 sm:p-4 rounded-lg font-mono text-xs sm:text-sm;
+}
+
+/* Info box styling */
+.info-box {
+    @apply p-3 bg-blue-50 border border-blue-200 rounded;
+}
+
+/* Warning box styling */
+.warning-box {
+    @apply p-3 bg-red-50 border border-red-200 rounded;
+}
+
+/* Monospace text for technical data */
+.mono-text {
+    @apply font-mono text-xs;
+}

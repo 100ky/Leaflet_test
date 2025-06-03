@@ -3,19 +3,20 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/utils/logger';
 
 const REMOTE_API_BASE_URL = 'https://combustion.radek18.com/api';
 
 export async function GET(request: NextRequest) {
     try {
-        console.log('🔗 Proxy: Forwarding request to remote API...');
+        logger.api('Proxy: Forwarding request to remote API...');
 
         // Získání zoom parametru z URL query
         const { searchParams } = new URL(request.url);
         const zoomParam = searchParams.get('zoom');
         const zoom = zoomParam ? parseFloat(zoomParam) : 0;
 
-        console.log(`📊 Proxy: Request with zoom level ${zoom}`);
+        logger.api(`Proxy: Request with zoom level ${zoom}`);
 
         // Vytvoření AbortController pro timeout
         const controller = new AbortController();
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-            console.error(`Remote API error: ${response.status} ${response.statusText}`);
+            logger.error(`Remote API error: ${response.status} ${response.statusText}`);
             return NextResponse.json(
                 { error: `Remote API returned ${response.status}: ${response.statusText}` },
                 { status: response.status }
@@ -42,12 +43,12 @@ export async function GET(request: NextRequest) {
 
         let data = await response.json();        // Filtrování polygon dat podle zoom úrovně
         if (zoom < 14) {
-            console.log(`🔍 Proxy: Filtering out polygon data for zoom ${zoom} (< 14)`);
+            logger.api(`Proxy: Filtering out polygon data for zoom ${zoom} (< 14)`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data = data.map((incinerator: any) => {
                 const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);
                 if (hasPolygons) {
-                    console.log(`   ⚡ Optimizing ${incinerator.name || `ID:${incinerator.id}`}: removing ${incinerator.propertyBoundary ? 'property boundary' : ''}${incinerator.propertyBoundary && incinerator.buildings?.length ? ' + ' : ''}${incinerator.buildings?.length ? `${incinerator.buildings.length} buildings` : ''}`);
+                    logger.debug(`   Optimizing ${incinerator.name || `ID:${incinerator.id}`}: removing ${incinerator.propertyBoundary ? 'property boundary' : ''}${incinerator.propertyBoundary && incinerator.buildings?.length ? ' + ' : ''}${incinerator.buildings?.length ? `${incinerator.buildings.length} buildings` : ''}`);
                 }
                 return {
                     ...incinerator,
@@ -56,19 +57,19 @@ export async function GET(request: NextRequest) {
                 };
             });
         } else {
-            console.log(`🏗️ Proxy: Including polygon data for zoom ${zoom} (>= 14)`);
+            logger.api(`Proxy: Including polygon data for zoom ${zoom} (>= 14)`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data.forEach((incinerator: any) => {
                 const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);
                 if (hasPolygons) {
-                    console.log(`   🏗️ Including ${incinerator.name || `ID:${incinerator.id}`}: ${incinerator.propertyBoundary ? 'property boundary' : ''}${incinerator.propertyBoundary && incinerator.buildings?.length ? ' + ' : ''}${incinerator.buildings?.length ? `${incinerator.buildings.length} buildings` : ''}`);
+                    logger.debug(`   Including ${incinerator.name || `ID:${incinerator.id}`}: ${incinerator.propertyBoundary ? 'property boundary' : ''}${incinerator.propertyBoundary && incinerator.buildings?.length ? ' + ' : ''}${incinerator.buildings?.length ? `${incinerator.buildings.length} buildings` : ''}`);
                 } else {
-                    console.log(`   📍 ${incinerator.name || `ID:${incinerator.id}`}: no polygon data available`);
+                    logger.debug(`   ${incinerator.name || `ID:${incinerator.id}`}: no polygon data available`);
                 }
             });
         }
 
-        console.log(`✅ Proxy: Successfully fetched ${data.length} records from remote API`);
+        logger.api(`Proxy: Successfully fetched ${data.length} records from remote API`);
 
         // Vrátíme data s CORS hlavičkami
         return NextResponse.json(data, {
@@ -80,7 +81,7 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('Proxy error:', error);
+        logger.error('Proxy error:', error);
 
         if (error instanceof Error && error.name === 'AbortError') {
             return NextResponse.json(

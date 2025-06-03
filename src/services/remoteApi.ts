@@ -6,7 +6,7 @@
 
 import { Incinerator } from '@/types';
 import { ApiRequest, ApiResponse } from './incineratorApi';
-import { dynamicLogger } from '@/utils/DynamicDataLogger';
+import { logger } from '@/utils/logger';
 
 // Místo přímého volání vzdáleného API používáme náš proxy endpoint kvůli CORS
 const REMOTE_API_BASE_URL = '/api'; // Náš Next.js API route proxy
@@ -18,8 +18,8 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
     const startTime = Date.now();
 
     try {
-        dynamicLogger.logConnectionTest('Načítání dat ze vzdáleného API...');
-        console.log(`Fetching data from remote API with zoom: ${zoom || 'default'}...`);
+        logger.logConnectionTest('Načítání dat ze vzdáleného API...');
+        logger.api(`Fetching data from remote API with zoom: ${zoom || 'default'}...`);
 
         // Vytvoření AbortController pro timeout
         const controller = new AbortController();
@@ -48,7 +48,7 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
             throw new Error('API nevrátilo pole dat');
         }
 
-        console.log(`Received ${rawData.length} records from remote API`);
+        logger.api(`Received ${rawData.length} records from remote API`);
 
         // Data jsou už v správném formátu, jen vyfiltrujeme záznamy s chybějícími souřadnicemi
         const validData = rawData.filter(item =>
@@ -61,7 +61,7 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
 
         const loadTime = Date.now() - startTime;
 
-        console.log(`Filtered to ${validData.length} valid incinerators`); dynamicLogger.logApiResponse(
+        console.log(`Filtered to ${validData.length} valid incinerators`); logger.logApiResponse(
             validData.length,
             rawData.length,
             loadTime,
@@ -76,15 +76,15 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
 
         if (error instanceof Error) {
             if (error.name === 'AbortError') {
-                dynamicLogger.logConnectionTest('Připojení k vzdálenému API vypršel časový limit', false);
+                logger.logConnectionTest('Připojení k vzdálenému API vypršel časový limit', false);
                 throw new Error('Připojení k vzdálenému API vypršel časový limit');
             } else if (error.message.includes('HTTP error')) {
-                dynamicLogger.logConnectionTest(`Vzdálené API vrátilo chybu: ${error.message}`, false);
+                logger.logConnectionTest(`Vzdálené API vrátilo chybu: ${error.message}`, false);
                 throw new Error(`Vzdálené API vrátilo chybu: ${error.message}`);
             }
         }
 
-        dynamicLogger.logError(`Nepodařilo se načíst data ze vzdáleného API po ${loadTime}ms`);
+        logger.error(`Nepodařilo se načíst data ze vzdáleného API po ${loadTime}ms`);
         throw new Error('Nepodařilo se načíst data ze vzdáleného API');
     }
 };
@@ -124,7 +124,7 @@ export const fetchRemoteIncineratorsByViewport = async (request: ApiRequest): Pr
  */
 export const testRemoteApiConnection = async (): Promise<boolean> => {
     try {
-        dynamicLogger.logConnectionTest('Testování připojení k vzdálenému API...');
+        logger.logConnectionTest('Testování připojení k vzdálenému API...');
         console.log('Testing remote API connection...');
 
         // Vytvoření AbortController pro timeout
@@ -145,11 +145,11 @@ export const testRemoteApiConnection = async (): Promise<boolean> => {
         console.log(`Remote API test result: ${response.ok} (status: ${response.status})`);
 
         if (response.ok) {
-            dynamicLogger.logConnectionTest('Vzdálené API je dostupné a funguje', true);
+            logger.logConnectionTest('Vzdálené API je dostupné a funguje', true);
             console.log('Remote API is accessible and returning data');
             return true;
         } else {
-            dynamicLogger.logConnectionTest(`Vzdálené API vrátilo chybu: ${response.status}`, false);
+            logger.logConnectionTest(`Vzdálené API vrátilo chybu: ${response.status}`, false);
             console.warn(`Remote API returned non-OK status: ${response.status}`);
             return false;
         }
@@ -158,10 +158,10 @@ export const testRemoteApiConnection = async (): Promise<boolean> => {
         console.warn('Remote API connection test failed:', error);
 
         if (error instanceof Error && error.name === 'AbortError') {
-            dynamicLogger.logConnectionTest('Vzdálené API - časový limit vypršel', false);
+            logger.logConnectionTest('Vzdálené API - časový limit vypršel', false);
             console.warn('Remote API request timed out');
         } else {
-            dynamicLogger.logConnectionTest(`Vzdálené API - chyba připojení: ${error instanceof Error ? error.message : 'Unknown error'}`, false);
+            logger.logConnectionTest(`Vzdálené API - chyba připojení: ${error instanceof Error ? error.message : 'Unknown error'}`, false);
         }
 
         return false;

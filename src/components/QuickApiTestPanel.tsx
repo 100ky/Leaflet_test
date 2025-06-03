@@ -7,6 +7,8 @@
 import { useState } from 'react';
 import { fetchRemoteIncinerators, testRemoteApiConnection } from '@/services/remoteApi';
 import { fetchIncineratorsWithCache } from '@/services/incineratorApi';
+import { logger } from '@/utils/logger';
+import { getApiSourceIcon, getApiSourceName } from '@/utils/statusHelpers';
 
 interface ApiComparisonResult {
     source: 'local' | 'remote';
@@ -86,45 +88,38 @@ export const QuickApiTestPanel: React.FC = () => {
         setTesting(true);
         try {
             const connected = await testRemoteApiConnection();
-            console.log(`Connection test result: ${connected}`);
+            logger.api(`Connection test result: ${connected}`);
         } catch (error) {
-            console.error('Connection test failed:', error);
+            logger.error('Connection test failed:', error);
         } finally {
             setTesting(false);
         }
     };
 
-    const getSourceIcon = (source: 'local' | 'remote') => {
-        return source === 'remote' ? '🌐' : '🏠';
-    };
-
-    const getSourceName = (source: 'local' | 'remote') => {
-        return source === 'remote' ? 'Vzdálené API' : 'Lokální API';
-    };
-
-    return (<div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+    return (<div className="panel-base">
         <div
-            className="p-3 sm:p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            className="panel-content clickable-area"
             onClick={() => setExpanded(!expanded)}
         >
-            <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-800 flex items-center text-sm sm:text-base">
-                    ⚡ <span className="hidden sm:inline">Rychlé testování API</span>
-                    <span className="sm:hidden">API Test</span>
+            <div className="flex-header">
+                <h3 className="panel-title flex items-center">
+                    ⚡ <span className="responsive-inline">Rychlé testování API</span>
+                    <span className="hidden-desktop">API Test</span>
                 </h3>
                 <span className="text-gray-400">
                     {expanded ? '▼' : '▶'}
                 </span>
             </div>
-        </div>            {expanded && (
-            <div className="border-t border-gray-200 p-3 sm:p-4 bg-gray-50">
-                <div className="space-y-3 sm:space-y-4">
+        </div>
+        {expanded && (
+            <div className="border-t border-gray-200 panel-content bg-gray-50">
+                <div className="section-spacing">
                     {/* Test buttons */}
-                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <div className="button-group">
                         <button
                             onClick={testBothApis}
                             disabled={testing}
-                            className="px-3 py-2 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 disabled:opacity-50 transition-colors"
+                            className="btn-base btn-blue"
                         >
                             {testing ? '🔄' : '🚀'}
                             <span className="ml-1">
@@ -139,7 +134,7 @@ export const QuickApiTestPanel: React.FC = () => {
                         <button
                             onClick={testConnectionOnly}
                             disabled={testing}
-                            className="px-3 py-2 text-xs sm:text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 disabled:opacity-50 transition-colors"
+                            className="btn-base btn-green"
                         >
                             {testing ? '🔄' : '🔗'}
                             <span className="ml-1">
@@ -155,55 +150,55 @@ export const QuickApiTestPanel: React.FC = () => {
 
                     {/* Results */}
                     {results.length > 0 && (
-                        <div className="space-y-2">
-                            <h4 className="text-xs sm:text-sm font-medium text-gray-700">
-                                <span className="hidden sm:inline">Výsledky posledního testu:</span>
-                                <span className="sm:hidden">Výsledky:</span>
+                        <div className="section-spacing-sm">
+                            <h4 className="text-label text-gray-700">
+                                <span className="hidden-mobile">Výsledky posledního testu:</span>
+                                <span className="hidden-desktop">Výsledky:</span>
                             </h4>
                             {results.map((result, index) => (
                                 <div
                                     key={index}
-                                    className={`p-2 sm:p-3 rounded-lg border ${result.success
-                                        ? 'bg-green-50 border-green-200'
-                                        : 'bg-red-50 border-red-200'
+                                    className={`result-card ${result.success
+                                        ? 'success-card'
+                                        : 'error-card'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <span>{getSourceIcon(result.source)}</span>
-                                            <span className="font-medium text-xs sm:text-sm">
-                                                <span className="hidden sm:inline">
-                                                    {getSourceName(result.source)}
+                                    <div className="flex-header">
+                                        <div className="flex items-center gap-2">
+                                            <span>{getApiSourceIcon(result.source)}</span>
+                                            <span className="text-label font-medium">
+                                                <span className="hidden-mobile">
+                                                    {getApiSourceName(result.source)}
                                                 </span>
-                                                <span className="sm:hidden">
+                                                <span className="hidden-desktop">
                                                     {result.source === 'remote' ? 'Remote' : 'Local'}
                                                 </span>
                                             </span>
                                         </div>
-                                        <div className="text-xs text-gray-500 hidden sm:block">
+                                        <div className="text-helper hidden-mobile">
                                             {result.timestamp.toLocaleTimeString('cs-CZ')}
                                         </div>
                                     </div>
 
                                     {result.success ? (
-                                        <div className="mt-1 sm:mt-2 text-xs sm:text-sm">
-                                            <div className="flex justify-between">
+                                        <div className="detail-list">
+                                            <div className="detail-item">
                                                 <span>
-                                                    <span className="hidden sm:inline">Počet záznamů:</span>
-                                                    <span className="sm:hidden">Počet:</span>
+                                                    <span className="hidden-mobile">Počet záznamů:</span>
+                                                    <span className="hidden-desktop">Počet:</span>
                                                 </span>
                                                 <span className="font-medium">{result.count}</span>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="detail-item">
                                                 <span>
-                                                    <span className="hidden sm:inline">Rychlost načítání:</span>
-                                                    <span className="sm:hidden">Čas:</span>
+                                                    <span className="hidden-mobile">Rychlost načítání:</span>
+                                                    <span className="hidden-desktop">Čas:</span>
                                                 </span>
                                                 <span className="font-medium">{result.loadTime}ms</span>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-700">
+                                        <div className="text-label text-red-700">
                                             <strong>Chyba:</strong> {result.error}
                                         </div>
                                     )}
@@ -214,13 +209,13 @@ export const QuickApiTestPanel: React.FC = () => {
 
                     {/* Comparison */}
                     {results.length === 2 && results.every(r => r.success) && (
-                        <div className="p-2 sm:p-3 bg-blue-50 rounded-lg">
-                            <h4 className="text-xs sm:text-sm font-medium text-blue-800 mb-1 sm:mb-2">Porovnání:</h4>
-                            <div className="text-xs sm:text-sm space-y-1">
+                        <div className="info-box">
+                            <h4 className="text-label font-medium text-blue-800 mb-2">Porovnání:</h4>
+                            <div className="text-responsive info-text">
                                 <div>
                                     📊 <strong>
-                                        <span className="hidden sm:inline">Počet dat:</span>
-                                        <span className="sm:hidden">Data:</span>
+                                        <span className="hidden-mobile">Počet dat:</span>
+                                        <span className="hidden-desktop">Data:</span>
                                     </strong> Lokální {results.find(r => r.source === 'local')?.count} vs Vzdálené {results.find(r => r.source === 'remote')?.count}
                                 </div>
                                 <div>
@@ -231,7 +226,7 @@ export const QuickApiTestPanel: React.FC = () => {
                     )}
 
                     {/* Info */}
-                    <div className="text-xs text-gray-500 hidden sm:block">
+                    <div className="info-text hidden-mobile">
                         💡 <strong>Tip:</strong> Tento test načte všechna dostupná data z obou zdrojů pro porovnání rychlosti a počtu záznamů.
                     </div>
                 </div>

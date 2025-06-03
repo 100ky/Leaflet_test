@@ -4,11 +4,21 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import { useState } fr                    {presets.map((preset) => (
+                        <button
+                            key={preset.name}
+                            onClick={() => updateViewport(preset.bounds, preset.zoom)}
+                            disabled={loading}
+                            className="btn-base btn-secondary"
+                        >
+                            {preset.name}
+                        </button>
+                    ))};
 import { useIncineratorData } from '@/hooks/useIncineratorData';
 import { MapBounds } from '@/services/incineratorApi';
+import { TEST_REGIONS } from '@/constants/regions';
 
-export const ApiTestPanel: React.FC = () => {
+export const ApiTestPanel = () => {
     const [testBounds, setTestBounds] = useState<MapBounds>({
         north: 50.5,
         south: 49.5,
@@ -35,56 +45,33 @@ export const ApiTestPanel: React.FC = () => {
 
     const handleTestViewport = () => {
         updateViewport(testBounds, testZoom);
-    };
-
-    const predefinedBounds = [
-        {
-            name: 'Praha oblast',
-            bounds: { north: 50.2, south: 49.9, east: 14.7, west: 14.2 },
-            zoom: 11
-        },
-        {
-            name: 'Brno oblast',
-            bounds: { north: 49.3, south: 49.1, east: 16.8, west: 16.5 },
-            zoom: 11
-        },
-        {
-            name: 'Celá ČR',
-            bounds: { north: 51.1, south: 48.5, east: 18.9, west: 12.1 },
-            zoom: 7
-        },
-        {
-            name: 'Severní Čechy',
-            bounds: { north: 50.9, south: 50.4, east: 15.2, west: 13.8 },
-            zoom: 9
-        }
-    ]; return (
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-800">API Test Panel</h2>
+    }; return (
+        <div className="panel-base panel-main">
+            <h2 className="panel-title">API Test Panel</h2>
 
             {/* Status */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="stats-grid">
                 <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-xs sm:text-sm text-gray-600">Stav</div>
-                    <div className={`font-medium text-sm sm:text-base ${loading ? 'text-orange-600' : 'text-green-600'}`}>
+                    <div className="text-label">Stav</div>
+                    <div className={`font-medium ${loading ? 'text-orange-600' : 'text-green-600'}`}>
                         {loading ? 'Načítá...' : 'Připraven'}
                     </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-xs sm:text-sm text-gray-600">Zdroj dat</div>
-                    <div className={`font-medium text-sm sm:text-base ${usingRemoteApi ? 'text-blue-600' : 'text-purple-600'}`}>
+                    <div className="text-label">Zdroj dat</div>
+                    <div className={`font-medium ${usingRemoteApi ? 'text-blue-600' : 'text-purple-600'}`}>
                         {usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}
                     </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-xs sm:text-sm text-gray-600">Spalovny</div>
-                    <div className="font-medium text-sm sm:text-base text-gray-800">
+                    <div className="text-label">Spalovny</div>
+                    <div className="font-medium text-gray-800">
                         {incinerators.length} / {totalCount}
                     </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-xs sm:text-sm text-gray-600">Clustering</div>
-                    <div className={`font-medium text-sm sm:text-base ${clustered ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <div className="text-label">Clustering</div>
+                    <div className={`font-medium ${clustered ? 'text-blue-600' : 'text-gray-400'}`}>
                         {clustered ? 'Aktivní' : 'Neaktivní'}
                     </div>
                 </div>
@@ -101,25 +88,25 @@ export const ApiTestPanel: React.FC = () => {
             {/* API controls */}
             <div className="space-y-3">
                 <h3 className="font-medium text-gray-700">Ovládání API</h3>
-                <div className="flex space-x-3">
+                <div className="flex-buttons">
                     <button
                         onClick={switchToLocalApi}
                         disabled={loading || !usingRemoteApi}
-                        className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50"
+                        className="btn-base bg-purple-500 hover:bg-purple-600 disabled:opacity-50"
                     >
                         Lokální data
                     </button>
                     <button
                         onClick={switchToRemoteApi}
                         disabled={loading || usingRemoteApi}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                        className="btn-base bg-blue-500 hover:bg-blue-600 disabled:opacity-50"
                     >
                         Vzdálené API
                     </button>
                     <button
                         onClick={refetch}
                         disabled={loading}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
+                        className="btn-base bg-green-500 hover:bg-green-600 disabled:opacity-50"
                     >
                         Obnovit
                     </button>
@@ -131,13 +118,13 @@ export const ApiTestPanel: React.FC = () => {
                 <h3 className="font-medium text-gray-700">Testování viewport</h3>
 
                 {/* Predefined bounds */}
-                <div className="grid grid-cols-2 gap-2">
-                    {predefinedBounds.map((preset) => (
+                <div className="button-grid">
+                    {TEST_REGIONS.map((preset) => (
                         <button
                             key={preset.name}
                             onClick={() => updateViewport(preset.bounds, preset.zoom)}
                             disabled={loading}
-                            className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50"
+                            className="btn-base btn-secondary"
                         >
                             {preset.name}
                         </button>
@@ -154,7 +141,7 @@ export const ApiTestPanel: React.FC = () => {
                                 step="0.1"
                                 value={testBounds.north}
                                 onChange={(e) => setTestBounds(prev => ({ ...prev, north: parseFloat(e.target.value) }))}
-                                className="w-full px-2 py-1 border rounded text-sm"
+                                className="input-base"
                             />
                         </div>
                         <div>
@@ -164,7 +151,7 @@ export const ApiTestPanel: React.FC = () => {
                                 step="0.1"
                                 value={testBounds.south}
                                 onChange={(e) => setTestBounds(prev => ({ ...prev, south: parseFloat(e.target.value) }))}
-                                className="w-full px-2 py-1 border rounded text-sm"
+                                className="input-base"
                             />
                         </div>
                         <div>
@@ -174,7 +161,7 @@ export const ApiTestPanel: React.FC = () => {
                                 step="0.1"
                                 value={testBounds.east}
                                 onChange={(e) => setTestBounds(prev => ({ ...prev, east: parseFloat(e.target.value) }))}
-                                className="w-full px-2 py-1 border rounded text-sm"
+                                className="input-base"
                             />
                         </div>
                         <div>
@@ -184,7 +171,7 @@ export const ApiTestPanel: React.FC = () => {
                                 step="0.1"
                                 value={testBounds.west}
                                 onChange={(e) => setTestBounds(prev => ({ ...prev, west: parseFloat(e.target.value) }))}
-                                className="w-full px-2 py-1 border rounded text-sm"
+                                className="input-base"
                             />
                         </div>
                     </div>
@@ -196,13 +183,13 @@ export const ApiTestPanel: React.FC = () => {
                             max="18"
                             value={testZoom}
                             onChange={(e) => setTestZoom(parseInt(e.target.value))}
-                            className="w-full px-2 py-1 border rounded text-sm"
+                            className="input-base"
                         />
                     </div>
                     <button
                         onClick={handleTestViewport}
                         disabled={loading}
-                        className="mt-2 w-full px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:opacity-50"
+                        className="btn-base btn-primary w-full mt-2"
                     >
                         Test viewport
                     </button>
