@@ -67,19 +67,19 @@ export const RegionDemo: React.FC<RegionDemoProps> = ({ onRegionSelect }) => {
                                     </div>
                                     <div className="mt-1 sm:mt-2 section-spacing-sm">
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-gray-500">Loading:</span>
+                                            <span className="text-gray-700">Loading:</span>
                                             <span className="mono-text text-orange-600">
                                                 {region.expectedLoadTime}
                                             </span>
                                         </div>
                                         <div className="flex justify-between text-xs hidden-mobile">
-                                            <span className="text-gray-500">Data:</span>
+                                            <span className="text-gray-700">Data:</span>
                                             <span className="mono-text text-blue-600">
                                                 {region.dataAmount}
                                             </span>
                                         </div>
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-gray-500">Zoom:</span>
+                                            <span className="text-gray-700">Zoom:</span>
                                             <span className="mono-text text-purple-600">
                                                 {region.zoom}
                                             </span>

@@ -19,6 +19,10 @@
     overflow: hidden;
     box-shadow: var(--card-shadow);
     border: 1px solid var(--border);
+    /* Stabilizace výšky a šířky */
+    min-height: 400px;
+    transition: none;
+    /* Vypnutí animací které mohou způsobit skákání */
 }
 
 .map-container:hover {
@@ -35,6 +39,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     border-radius: 10px !important;
     overflow: hidden;
+    transition: none !important;
 }
 
 .leaflet-control-zoom:hover {
@@ -68,6 +73,7 @@
     overflow: hidden;
     border: 1px solid var(--border) !important;
     background-color: var(--card) !important;
+    transition: none !important;
 }
 
 .leaflet-popup-content {
@@ -146,28 +152,105 @@
     font-size: 14px;
 }
 
-/* Stylizace resetovacího tlačítka */
+/* Stylizace resetovacího tlačítka - sladěno se zoom ovládáním */
+.reset-zoom-control {
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    transition: none !important;
+    margin-top: 10px !important;
+}
+
+.reset-zoom-control:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
 .reset-zoom-button {
     background-color: var(--card) !important;
     color: var(--foreground) !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 20px !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 18px !important;
     font-weight: bold !important;
+    border: none !important;
     cursor: pointer !important;
-    transition: all 0.2s ease !important;
+    transition: none !important;
+    display: block !important;
+    text-align: center !important;
+    text-decoration: none !important;
 }
 
 .reset-zoom-button:hover {
     background-color: var(--card-hover) !important;
     color: var(--primary) !important;
-    transform: scale(1.05);
+}
+
+/* ========================================
+   OPTIMALIZACE PROTI SKÁKÁNÍ MAPY
+   ======================================== */
+
+/* Stabilizace rozložení - předcházení změnám velikosti při loading */
+.map-container {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    /* Stabilizace výšky a šířky */
+    min-height: 400px;
+    transition: none;
+    /* Vypnutí animací které mohou způsobit skákání */
+}
+
+/* Stabilizace overlay panelů */
+.map-container>div[class*="absolute"] {
+    /* Pevné pozicování overlay prvků */
+    transform: translateZ(0);
+    /* Hardware acceleration */
+    will-change: auto;
+    backface-visibility: hidden;
+}
+
+/* Optimalizace pro Leaflet kontejner */
+.leaflet-container {
+    background: var(--bg-secondary, #f8f9fa);
+    transition: none !important;
+    /* Vypnutí plynulých přechodů které mohou způsobit skákání */
+}
+
+/* Optimalizace loading indikátorů */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Stabilizace popup oken */
+.leaflet-popup-content-wrapper {
+    transition: none !important;
+}
+
+/* Optimalizace markerů a geometrií */
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+    transition: none !important;
+    transform: translateZ(0);
+    /* Hardware acceleration */
+}
+
+/* Stabilizace zoom ovládacích prvků */
+.leaflet-control-zoom {
+    transition: none !important;
 }
 
 /* Tmavý režim pro mapu */

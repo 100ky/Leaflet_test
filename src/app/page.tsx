@@ -1,5 +1,5 @@
 /**
- * HomePage - Hlavní stránka aplikace
+ * HomePage - Hlavní stránka aplikace ve stylu OpenStreetMap
  * Zobrazuje interaktivní mapu spaloven v České republice
  */
 
@@ -8,10 +8,11 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { IncineratorDataProvider } from '@/contexts/IncineratorDataContext';
+import Navigation from '@/components/ui/Navigation';
 
 // Dynamický import komponenty mapy (Leaflet vyžaduje přístup k window objektu)
-const Map = dynamic(() => import('@/components/Map/Map'), {
-  loading: () => <p>Načítání mapy...</p>,
+const Map = dynamic(() => import('@/components/map/Map'), {
+  loading: () => <div className="map-loading">Načítání mapy...</div>,
   ssr: false // Vypnutí server-side renderingu
 });
 

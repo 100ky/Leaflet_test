@@ -12,9 +12,10 @@ import {
     getApiStatusColor,
     getButtonLoadingIcon,
     getButtonLoadingText,
-    getTestResultIcon,
     type ApiStatusState
 } from '@/utils/statusHelpers';
+import { Panel } from '../ui/Panel';
+import { TestResultItem } from '../ui/TestResultItem';
 
 interface RemoteApiStatusPanelProps {
     usingRemoteApi: boolean;
@@ -65,26 +66,36 @@ export const RemoteApiStatusPanel: React.FC<RemoteApiStatusPanelProps> = ({
 
     const apiState: ApiStatusState = { loading, error, usingRemoteApi };
 
+    const panelTitle = (
+        <>
+            <span className="mr-2">{getApiStatusIcon(apiState)}</span>
+            <span className="hidden-mobile">API Status Panel</span>
+            <span className="hidden-desktop">API Status</span>
+        </>
+    );
+
+    const panelHeaderContent = (
+        <div className={`text-responsive font-medium ${getApiStatusColor(apiState)}`}>
+            <span className="hidden-mobile">{getApiStatusText(apiState)}</span>
+            <span className="hidden-desktop">{getApiStatusIcon(apiState)}</span>
+        </div>
+    );
+
     return (
-        <div className="panel-base panel-main">
-            <div className="flex-header">
-                <h3 className="panel-title flex items-center">
-                    <span className="mr-2">{getApiStatusIcon(apiState)}</span>
-                    <span className="hidden-mobile">API Status Panel</span>
-                    <span className="hidden-desktop">API Status</span>
-                </h3>
-                <div className={`text-responsive font-medium ${getApiStatusColor(apiState)}`}>
-                    <span className="hidden-mobile">{getApiStatusText(apiState)}</span>
-                    <span className="hidden-desktop">{getApiStatusIcon(apiState)}</span>
-                </div>
-            </div>            {/* Aktuální stav */}
+        <Panel
+            title={panelTitle}
+            headerContent={panelHeaderContent}
+            className="panel-main"
+            isCollapsible={false}
+        >
+            {/* Aktuální stav */}
             <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-gray-50 rounded-lg">
                 <div className="text-label mb-2">Aktuální konfigurace:</div>
                 <div className="flex items-center justify-between">
                     <span className="font-medium text-sm">
                         {usingRemoteApi ? '🌐 Vzdálené API' : '🏠 Lokální API'}
                     </span>
-                    <span className="text-xs text-gray-500 hidden sm:inline">
+                    <span className="text-xs text-gray-700 hidden sm:inline">
                         {usingRemoteApi ? 'https://combustion.radek18.com' : 'Local simulation'}
                     </span>
                 </div>
@@ -103,8 +114,8 @@ export const RemoteApiStatusPanel: React.FC<RemoteApiStatusPanelProps> = ({
             <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-blue-50 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-xs sm:text-sm font-medium text-blue-800">
-                        <span className="hidden sm:inline">Test připojení</span>
-                        <span className="sm:hidden">Test</span>
+                        <span className="hidden sm:inline">Test připojení k API</span>
+                        <span className="sm:hidden">Test API</span>
                     </span>
                     <button
                         onClick={testConnection}
@@ -113,23 +124,22 @@ export const RemoteApiStatusPanel: React.FC<RemoteApiStatusPanelProps> = ({
                     >
                         {getButtonLoadingIcon(testingConnection)}
                         <span className="hidden sm:inline ml-1">
-                            {getButtonLoadingText(testingConnection, 'Test připojení')}
+                            {getButtonLoadingText(testingConnection, 'Testovat')}
+                        </span>
+                        <span className="sm:hidden ml-1">
+                            {getButtonLoadingText(testingConnection, 'Test')}
                         </span>
                     </button>
                 </div>
 
                 {lastTestResult && (
-                    <div className="text-xs text-gray-600">
-                        <div className="flex items-center justify-between">
-                            <span>
-                                {getTestResultIcon(lastTestResult.success)}
-                            </span>
-                            <span>{lastTestResult.duration}ms</span>
-                        </div>
-                        <div className="text-gray-500 mt-1">
-                            {lastTestResult.timestamp.toLocaleTimeString('cs-CZ')}
-                        </div>
-                    </div>
+                    <TestResultItem
+                        title="Výsledek testu"
+                        status={lastTestResult.success ? 'success' : 'error'}
+                        timestamp={lastTestResult.timestamp}
+                        details={<>Trvání: {lastTestResult.duration}ms</>}
+                        className="mt-2" // Přidána třída pro odsazení
+                    />
                 )}
             </div>
 
@@ -152,10 +162,10 @@ export const RemoteApiStatusPanel: React.FC<RemoteApiStatusPanelProps> = ({
             </div>
 
             {/* API Info */}
-            <div className="mt-3 sm:mt-4 text-xs text-gray-500 space-y-1 hidden sm:block">
+            <div className="mt-3 sm:mt-4 text-xs text-gray-700 space-y-1 hidden sm:block">
                 <div><strong>Lokální API:</strong> Simulovaná data s regionálními loading charakteristikami</div>
                 <div><strong>Vzdálené API:</strong> Skutečná data ze serveru combustion.radek18.com</div>
             </div>
-        </div>
+        </Panel>
     );
 };

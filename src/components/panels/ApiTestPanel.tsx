@@ -4,19 +4,12 @@
 
 'use client';
 
-import { useState } fr                    {presets.map((preset) => (
-                        <button
-                            key={preset.name}
-                            onClick={() => updateViewport(preset.bounds, preset.zoom)}
-                            disabled={loading}
-                            className="btn-base btn-secondary"
-                        >
-                            {preset.name}
-                        </button>
-                    ))};
+import { useState } from 'react';
 import { useIncineratorData } from '@/hooks/useIncineratorData';
 import { MapBounds } from '@/services/incineratorApi';
 import { TEST_REGIONS } from '@/constants/regions';
+import { Panel } from '../ui/Panel';
+import { InfoBlock } from '../ui/InfoBlock';
 
 export const ApiTestPanel = () => {
     const [testBounds, setTestBounds] = useState<MapBounds>({
@@ -45,36 +38,40 @@ export const ApiTestPanel = () => {
 
     const handleTestViewport = () => {
         updateViewport(testBounds, testZoom);
-    }; return (
-        <div className="panel-base panel-main">
-            <h2 className="panel-title">API Test Panel</h2>
+    };
 
+    return (
+        <Panel
+            title="API Test Panel"
+            className="panel-main" // Zachování původní třídy
+            isCollapsible={false} // Tento panel není ve výchozím stavu rozbalovací
+        >
             {/* Status */}
             <div className="stats-grid">
-                <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-label">Stav</div>
-                    <div className={`font-medium ${loading ? 'text-orange-600' : 'text-green-600'}`}>
-                        {loading ? 'Načítá...' : 'Připraven'}
-                    </div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-label">Zdroj dat</div>
-                    <div className={`font-medium ${usingRemoteApi ? 'text-blue-600' : 'text-purple-600'}`}>
-                        {usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}
-                    </div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-label">Spalovny</div>
-                    <div className="font-medium text-gray-800">
-                        {incinerators.length} / {totalCount}
-                    </div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-label">Clustering</div>
-                    <div className={`font-medium ${clustered ? 'text-blue-600' : 'text-gray-400'}`}>
-                        {clustered ? 'Aktivní' : 'Neaktivní'}
-                    </div>
-                </div>
+                <InfoBlock
+                    label="Stav"
+                    value={loading ? 'Načítá...' : 'Připraven'}
+                    valueClassName={loading ? 'text-orange-600' : 'text-green-600'}
+                    className="bg-gray-50 p-3 rounded"
+                />
+                <InfoBlock
+                    label="Zdroj dat"
+                    value={usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}
+                    valueClassName={usingRemoteApi ? 'text-blue-600' : 'text-purple-600'}
+                    className="bg-gray-50 p-3 rounded"
+                />
+                <InfoBlock
+                    label="Spalovny"
+                    value={`${incinerators.length} / ${totalCount}`}
+                    valueClassName="text-gray-800"
+                    className="bg-gray-50 p-3 rounded"
+                />
+                <InfoBlock
+                    label="Clustering"
+                    value={clustered ? 'Aktivní' : 'Neaktivní'}
+                    valueClassName={clustered ? 'text-blue-600' : 'text-gray-600'}
+                    className="bg-gray-50 p-3 rounded"
+                />
             </div>
 
             {/* Error display */}
@@ -133,19 +130,18 @@ export const ApiTestPanel = () => {
 
                 {/* Custom bounds */}
                 <div className="border-t pt-3">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3">                    <div>
+                        <label className="block text-sm text-gray-700 font-medium">Sever</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            value={testBounds.north}
+                            onChange={(e) => setTestBounds(prev => ({ ...prev, north: parseFloat(e.target.value) }))}
+                            className="input-base"
+                        />
+                    </div>
                         <div>
-                            <label className="block text-sm text-gray-600">Sever</label>
-                            <input
-                                type="number"
-                                step="0.1"
-                                value={testBounds.north}
-                                onChange={(e) => setTestBounds(prev => ({ ...prev, north: parseFloat(e.target.value) }))}
-                                className="input-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm text-gray-600">Jih</label>
+                            <label className="block text-sm text-gray-700 font-medium">Jih</label>
                             <input
                                 type="number"
                                 step="0.1"
@@ -155,7 +151,7 @@ export const ApiTestPanel = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-gray-600">Východ</label>
+                            <label className="block text-sm text-gray-700 font-medium">Východ</label>
                             <input
                                 type="number"
                                 step="0.1"
@@ -165,7 +161,7 @@ export const ApiTestPanel = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-gray-600">Západ</label>
+                            <label className="block text-sm text-gray-700 font-medium">Západ</label>
                             <input
                                 type="number"
                                 step="0.1"
@@ -176,7 +172,7 @@ export const ApiTestPanel = () => {
                         </div>
                     </div>
                     <div className="mt-2">
-                        <label className="block text-sm text-gray-600">Zoom</label>
+                        <label className="block text-sm text-gray-700 font-medium">Zoom</label>
                         <input
                             type="number"
                             min="1"
@@ -202,14 +198,14 @@ export const ApiTestPanel = () => {
                 <div className="max-h-40 overflow-y-auto space-y-1">
                     {incinerators.map((inc) => (
                         <div key={inc.id} className="text-sm bg-gray-50 p-2 rounded">
-                            <div className="font-medium">{inc.name}</div>
-                            <div className="text-gray-600">
+                            <div className="font-medium text-gray-800">{inc.name}</div>
+                            <div className="text-gray-700">
                                 {inc.location.lat.toFixed(4)}, {inc.location.lng.toFixed(4)}
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-        </div>
+        </Panel>
     );
 };

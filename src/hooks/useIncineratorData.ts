@@ -19,6 +19,7 @@ import {
     testRemoteApiConnection
 } from '@/services/remoteApi';
 import { logger } from '@/utils/logger';
+import { classifyError, logErrorWithContext } from '@/utils/errorHandling';
 
 /**
  * Props pro useIncineratorData hook
@@ -125,16 +126,37 @@ export const useIncineratorData = ({
             }
 
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-            setError(errorMessage);
-            logger.error('Error fetching incinerator data:', err);
+            const appError = classifyError(err as Error);
+            logErrorWithContext(err as Error, 'useIncineratorData.fetchData', { bounds, zoom });
 
-            // Pokud vzdálené API selže, automaticky přepni na lokální
-            if (usingRemoteApi) {
-                logger.warn('Remote API failed, switching to local data...');
-                setUsingRemoteApi(false);
-                // Zkus znovu s lokálními daty
-                setTimeout(() => fetchData(bounds, zoom, true), 1000);
+            // Nastavení user-friendly zprávy
+            setError(appError.userFriendlyMessage);
+
+            // Handling podle typu chyby
+            if (appError.retryable) {
+                if (appError.type === 'simulated_api_error') {
+                    // Pro simulované chyby krátký retry
+                    setTimeout(() => {
+                        setError(null);
+                        fetchData(bounds, zoom, false);
+                    }, 1500);
+                } else {
+                    // Pro ostatní retryable chyby delší čekání
+                    setTimeout(() => {
+                        setError(null);
+                        fetchData(bounds, zoom, false);
+                    }, 3000);
+                }
+            } else {
+                // Pro non-retryable chyby zkus fallback na lokální API
+                if (usingRemoteApi) {
+                    logger.warn('Remote API failed with non-retryable error, switching to local data...');
+                    setUsingRemoteApi(false);
+                    setTimeout(() => {
+                        setError(null);
+                        fetchData(bounds, zoom, true);
+                    }, 1000);
+                }
             }
         } finally {
             setLoading(false);
@@ -246,13 +268,18 @@ export const useIncineratorData = ({
     }, [fetchData]);
 
     /**
-     * Iniciální načtení dat
+     * Iniciální načtení dat - pouze pokud jsou explicitně poskytnuty initialBounds
+     * Jinak čekáme na první updateViewport volání z mapy
      */
     useEffect(() => {
+        // Načti data pouze pokud jsou explicitně poskytnuty initialBounds
         if (initialBounds) {
+            logger.info('Loading initial data with provided bounds', initialBounds);
             fetchData(initialBounds, initialZoom);
+        } else {
+            logger.info('No initial bounds provided - waiting for first updateViewport call from map');
         }
-    }, [initialBounds, initialZoom, fetchData]);
+    }, []); // Prázdné pole závislostí - spustí se pouze jednou při mount
 
     /**
      * Cleanup prefetch timeout

@@ -3,6 +3,7 @@
 
 /* Import utility tříd */
 @import "../styles/utilities.css";
+@import "../styles/additional-utilities.css";
 
 /* 
  * Barevné proměnné - světlý režim

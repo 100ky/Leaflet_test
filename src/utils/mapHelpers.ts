@@ -75,10 +75,10 @@ export const createIncineratorPopupContent = (
     currentZoom: number,
     usingRemoteApi: boolean,
     detailThreshold: number = 12
-) => {
+): string => {
     const isPlanned = isPlannedIncinerator(incinerator);
 
-    return {
+    const content = {
         title: incinerator.name,
         description: incinerator.description,
         capacity: `${incinerator.capacity} tun/rok`,
@@ -91,6 +91,8 @@ export const createIncineratorPopupContent = (
         currentZoom,
         detailThreshold
     };
+
+    return generatePopupHTML(content);
 };
 
 /**
@@ -200,9 +202,9 @@ export const MAP_CONSTANTS = {
  */
 export const MAP_CLASSES = {
     mapContainer: 'map-container relative',
-    controlPanel: 'absolute top-3 left-3 bg-white bg-opacity-95 rounded-lg p-3 shadow-lg z-[1000]',
-    loadingIndicator: 'absolute top-3 right-3 bg-blue-100 border border-blue-400 text-blue-700 px-3 py-2 rounded z-[1000]',
-    errorIndicator: 'absolute top-3 right-3 bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded z-[1000]',
+    controlPanel: 'absolute top-3 right-3 bg-white bg-opacity-95 rounded-lg p-3 shadow-lg z-[1000]',
+    loadingIndicator: 'absolute top-3 right-20 bg-blue-100 border border-blue-400 text-blue-700 px-3 py-2 rounded z-[1000]',
+    errorIndicator: 'absolute top-3 right-20 bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded z-[1000]',
     infoPanel: 'absolute bottom-3 left-3 bg-white bg-opacity-90 rounded-lg p-3 shadow-lg',
     resetButton: 'leaflet-top leaflet-left',
     resetButtonInner: 'leaflet-control leaflet-bar',

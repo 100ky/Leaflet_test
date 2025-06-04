@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
         }
 
         let data = await response.json();        // Filtrování polygon dat podle zoom úrovně
-        if (zoom < 14) {
-            logger.api(`Proxy: Filtering out polygon data for zoom ${zoom} (< 14)`);
+        if (zoom < 12) {
+            logger.api(`Proxy: Filtering out polygon data for zoom ${zoom} (< 12)`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data = data.map((incinerator: any) => {
                 const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
                 };
             });
         } else {
-            logger.api(`Proxy: Including polygon data for zoom ${zoom} (>= 14)`);
+            logger.api(`Proxy: Including polygon data for zoom ${zoom} (>= 12)`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data.forEach((incinerator: any) => {
                 const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);

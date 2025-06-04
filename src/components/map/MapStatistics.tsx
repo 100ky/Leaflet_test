@@ -54,11 +54,11 @@ const MapStatistics: React.FC<MapStatisticsProps> = ({
                         {/* Status indikátor */}
                         <div className="flex-status">
                             <div className={`status-dot ${getLoadingStateClass(loading, error)}`}></div>
-                            <span className="text-responsive">
+                            <span className="text-responsive text-gray-700">
                                 {getLoadingStateText(loading, error)}
                             </span>
                         </div>
-                        <span className="text-helper">
+                        <span className="text-helper text-gray-700">
                             {getExpandIcon(expanded)}
                         </span>
                     </div>
@@ -68,21 +68,21 @@ const MapStatistics: React.FC<MapStatisticsProps> = ({
                 <div className="stats-grid mt-2">
                     <div className="stat-card text-center">
                         <div className="stat-value text-blue-600">{incineratorsCount}</div>
-                        <div className="text-helper">Zobrazené</div>
+                        <div className="text-helper text-gray-700">Zobrazené</div>
                     </div>
                     <div className="stat-card text-center">
                         <div className="stat-value text-green-600">{totalCount}</div>
-                        <div className="text-helper">V oblasti</div>
+                        <div className="text-helper text-gray-700">V oblasti</div>
                     </div>
                     <div className="stat-card text-center">
                         <div className="text-responsive font-medium text-purple-600 break-words">{region}</div>
-                        <div className="text-helper">Region</div>
+                        <div className="text-helper text-gray-700">Region</div>
                     </div>
                     <div className="stat-card text-center">
                         <div className="text-responsive font-medium text-orange-600">
                             {clustered ? 'Aktivní' : 'Neaktivní'}
                         </div>
-                        <div className="text-helper">Clustering</div>
+                        <div className="text-helper text-gray-700">Clustering</div>
                     </div>
                 </div>
             </div>
@@ -92,20 +92,20 @@ const MapStatistics: React.FC<MapStatisticsProps> = ({
                 <div className="panel-content border-t bg-gray-50">
                     <div className="section-spacing-sm text-sm">
                         <div className="flex justify-between">
-                            <span>Aktuální region:</span>
+                            <span className="text-gray-700">Aktuální region:</span>
                             <span className="font-mono text-indigo-600">{region}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Zobrazené spalovny:</span>
+                            <span className="text-gray-700">Zobrazené spalovny:</span>
                             <span className="font-mono text-blue-600">{incineratorsCount}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Spalovny v oblasti:</span>
+                            <span className="text-gray-700">Spalovny v oblasti:</span>
                             <span className="font-mono text-green-600">{totalCount}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Clustering:</span>
-                            <span className={`font-mono ${clustered ? 'text-blue-600' : 'text-gray-400'}`}>
+                            <span className="text-gray-700">Clustering:</span>
+                            <span className={`font-mono ${clustered ? 'text-blue-600' : 'text-gray-600'}`}>
                                 {clustered ? 'Aktivní' : 'Neaktivní'}
                             </span>
                         </div>
@@ -133,4 +133,5 @@ const MapStatistics: React.FC<MapStatisticsProps> = ({
     );
 };
 
+export { MapStatistics };
 export default MapStatistics;

@@ -100,26 +100,52 @@ export const getApiSourceName = (source: 'local' | 'remote'): string => {
 };
 
 /**
- * Debug log utilities
+ * Log type utilities
  */
-export type LogType = 'api' | 'viewport' | 'cache' | 'error' | 'loading';
-
-export const getLogColor = (type: LogType): string => {
-    switch (type) {
-        case 'api': return 'text-blue-600';
-        case 'viewport': return 'text-green-600';
-        case 'cache': return 'text-purple-600';
-        case 'error': return 'text-red-600';
-        default: return 'text-gray-600';
-    }
-};
+export type LogType = 'info' | 'success' | 'warning' | 'error' | 'debug' | 'api' | 'system' | 'loading';
 
 export const getLogIcon = (type: LogType): string => {
     switch (type) {
-        case 'api': return '🌐';
-        case 'viewport': return '🗺️';
-        case 'cache': return '💾';
-        case 'error': return '❌';
-        default: return 'ℹ️';
+        case 'info':
+            return 'ℹ️';
+        case 'success':
+            return '✅';
+        case 'warning':
+            return '⚠️';
+        case 'error':
+            return '❌';
+        case 'debug':
+            return '🔍';
+        case 'api':
+            return '📡';
+        case 'system':
+            return '⚙️';
+        case 'loading':
+            return '⏳';
+        default:
+            return '💬'; // Defaultní ikona pro neznámé typy
+    }
+};
+
+export const getLogColor = (type: LogType): string => {
+    switch (type) {
+        case 'info':
+            return 'text-blue-500';
+        case 'success':
+            return 'text-green-500';
+        case 'warning':
+            return 'text-yellow-500';
+        case 'error':
+            return 'text-red-500';
+        case 'debug':
+            return 'text-gray-500'; // Šedá pro debug, aby nebyla příliš výrazná
+        case 'api':
+            return 'text-purple-500';
+        case 'system':
+            return 'text-gray-700';
+        case 'loading':
+            return 'text-blue-400';
+        default:
+            return 'text-black'; // Defaultní barva
     }
 };

@@ -43,6 +43,17 @@ export interface ApiResponse {
 const API_DELAY = 1200; // ms - prodlouženo pro lepší viditelnost loading stavu
 
 /**
+ * Konfigurace pro simulace API chyb a latence
+ */
+const API_SIMULATION_CONFIG = {
+    // Vypnutí simulovaných chyb pro stabilní testování
+    ENABLE_ERROR_SIMULATION: false, // Změněno z true na false
+    ERROR_RATE: 0.02, // 2% šance na chybu
+    SLOW_REQUEST_RATE: 0.05, // 5% šance na pomalý request
+    SLOW_REQUEST_MULTIPLIER: 2, // Kolik krát pomalejší bude pomalý request
+};
+
+/**
  * Geografické regiony pro simulaci dynamického načítání
  * Přesunuty do centralizovaného souboru /constants/regions.ts
  */
@@ -57,17 +68,18 @@ const simulateApiCall = async <T>(data: T, regionName: string, customDelay?: num
     const variability = Math.random() * 0.4 + 0.8; // 80-120% base delay
     const finalDelay = Math.floor(baseDelay * variability);
 
-    // Simulace občasných pomalých requestů (5% šance)
-    if (Math.random() < 0.05) {
-        const slowDelay = finalDelay * 2;
+    // Simulace občasných pomalých requestů
+    if (Math.random() < API_SIMULATION_CONFIG.SLOW_REQUEST_RATE) {
+        const slowDelay = finalDelay * API_SIMULATION_CONFIG.SLOW_REQUEST_MULTIPLIER;
         logger.logSlowRequest(slowDelay, finalDelay);
         await new Promise(resolve => setTimeout(resolve, slowDelay));
     } else {
         await new Promise(resolve => setTimeout(resolve, finalDelay));
     }
 
-    // Simulace občasných chyb (2% šance)
-    if (Math.random() < 0.02) {
+    // Simulace občasných chyb - pouze pokud je povolena
+    if (API_SIMULATION_CONFIG.ENABLE_ERROR_SIMULATION && Math.random() < API_SIMULATION_CONFIG.ERROR_RATE) {
+        logger.error('API simulation error triggered');
         throw new Error('Simulovaná chyba API - server dočasně nedostupný');
     }
 
@@ -92,8 +104,8 @@ const filterIncineratorsByBounds = (incinerators: Incinerator[], bounds: MapBoun
             lng >= bounds.west &&
             lng <= bounds.east;
     });    // Optimalizace pro nízké zoom úrovně - odstraníme polygon data
-    if (zoom < 14) {
-        logger.api(`Local API: Filtering out polygon data for zoom ${zoom} (< 14)`);
+    if (zoom < 12) {
+        logger.api(`Local API: Filtering out polygon data for zoom ${zoom} (< 12)`);
         const optimizedData = filtered.map(incinerator => {
             const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);
             if (hasPolygons) {
@@ -107,7 +119,7 @@ const filterIncineratorsByBounds = (incinerators: Incinerator[], bounds: MapBoun
         });
         return optimizedData;
     } else {
-        logger.api(`Local API: Including polygon data for zoom ${zoom} (>= 14)`);
+        logger.api(`Local API: Including polygon data for zoom ${zoom} (>= 12)`);
         filtered.forEach(incinerator => {
             const hasPolygons = incinerator.propertyBoundary || (incinerator.buildings && incinerator.buildings.length > 0);
             if (hasPolygons) {
@@ -299,3 +311,13 @@ export const fetchIncineratorsWithCache = async (request: ApiRequest): Promise<A
 
     return data;
 };
+
+/**
+ * Funkce pro vývojářské a testovací účely
+ */
+export const toggleErrorSimulation = (enabled: boolean) => {
+    API_SIMULATION_CONFIG.ENABLE_ERROR_SIMULATION = enabled;
+    logger.info(`API error simulation ${enabled ? 'enabled' : 'disabled'}`);
+};
+
+export const getApiSimulationConfig = () => ({ ...API_SIMULATION_CONFIG });

@@ -38,9 +38,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs">
+    <html lang="cs" style={{ scrollBehavior: 'auto' }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ scrollBehavior: 'auto' }}
       >
         {children}
       </body>

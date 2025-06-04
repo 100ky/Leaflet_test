@@ -6,24 +6,31 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { ApiTestPanel } from '@/components/ApiTestPanel';
-import { DebugPanel } from '@/components/DebugPanel';
-import MapStatistics from '@/components/MapStatistics';
-import { LiveDebugPanel } from '@/components/LiveDebugPanel';
-import { RegionDemo } from '@/components/RegionDemo';
-import { RemoteApiStatusPanel } from '@/components/RemoteApiStatusPanel';
-import { DataInfoPanel } from '@/components/DataInfoPanel';
-import { QuickApiTestPanel } from '@/components/QuickApiTestPanel';
+import {
+    ApiTestPanel,
+    DebugPanel,
+    LiveDebugPanel,
+    RegionDemo,
+    RemoteApiStatusPanel,
+    DataInfoPanel,
+    QuickApiTestPanel,
+    MapStatistics
+} from '@/components';
 import { IncineratorDataProvider, useIncineratorDataContext } from '@/contexts/IncineratorDataContext';
 import { flyToRegion } from '@/utils/mapRegistry';
 
 // Dynamický import komponenty mapy (pro SSR optimalizaci)
-const Map = dynamic(() => import('@/components/Map/Map'), {
+const Map = dynamic(() => import('@/components/map/Map'), {
     loading: () => (
         <div className="loading-center bg-gray-100 rounded-lg">
             <div className="text-gray-600">Načítání mapy...</div>
         </div>
     ),
+    ssr: false
+});
+
+// Dynamický import DeveloperPanel
+const DeveloperPanel = dynamic(() => import('@/components/panels/DeveloperPanel'), {
     ssr: false
 });
 
@@ -46,7 +53,7 @@ function TestPageContent() {
     } = useIncineratorDataContext();
 
     return (
-        <div className="test-page-bg">
+        <div className="test-page-bg test-page-stable">
             <header className="test-header">
                 <div className="container mx-auto">
                     <h1 className="test-title">
@@ -59,8 +66,9 @@ function TestPageContent() {
                 </div>
             </header>
 
-            <main className="test-main">{/* Statistiky a monitoring - optimalizovaný responsive grid s tablet landscape podporou */}
-                <div className="test-grid-responsive mb-3 sm:mb-4 lg:mb-6 test-grid-mobile test-grid-tablet-landscape">
+            <main className="test-main test-grid-stable">{/* Statistiky a monitoring - optimalizovaný responsive grid s tablet landscape podporou */}
+                <div className="test-grid-responsive mb-3 sm:mb-4 lg:mb-6 test-grid-mobile test-grid-tablet-landscape test-grid-stable"
+                    style={{ scrollBehavior: 'auto' }}>
                     {/* Hlavní statistiky - vždy nahoře na mobilu */}
                     <div className="md:col-span-1 lg:col-span-1">
                         <MapStatistics
@@ -109,9 +117,9 @@ function TestPageContent() {
                     </div>
                 </div>
 
-                {/* Hlavní obsah - optimalizovaný layout pro mobilní zařízení a tablet landscape */}
+                {/* Hlavní obsah - optimalizovaný layout s rozšířenou mapou */}
                 <div className="test-grid-two-col test-grid-mobile test-grid-tablet-landscape">
-                    {/* Mapa - plná šířka na mobilu, 3/4 na desktopu */}
+                    {/* Mapa - plná šířka */}
                     <div className="test-map-section">
                         <div className="panel-main overflow-hidden">
                             <div className="test-map-header">
@@ -136,21 +144,16 @@ function TestPageContent() {
                                 </div>
                             </div>
 
-                            <div className="test-map-container test-map-mobile test-map-ultra-mobile test-map-tablet-landscape" style={{ height: 'clamp(200px, 35vh, 400px)' }}>
+                            <div className="test-map-container test-map-mobile test-map-ultra-mobile test-map-tablet-landscape" style={{ height: 'clamp(400px, 70vh, 800px)' }}>
                                 <Map />
                             </div>
                         </div>
                     </div>
 
-                    {/* Test panely - optimalizované pro mobil a tablet landscape */}
+                    {/* Test panely - pod mapou */}
                     <div className="test-panel-section test-panel-mobile test-panel-tablet-landscape">
                         {/* API Test Panel je vždy viditelný */}
                         <ApiTestPanel />
-
-                        {/* Quick API Test - viditelný pouze na tabletu+ */}
-                        <div className="hidden md:block">
-                            <QuickApiTestPanel />
-                        </div>
 
                         {/* Mobile-only kompaktní region selector */}
                         <div className="block md:hidden">
@@ -264,6 +267,9 @@ function TestPageContent() {
 
             {/* Debug Panel */}
             <DebugPanel />
+
+            {/* Developer Panel */}
+            <DeveloperPanel />
         </div>
     );
 }

@@ -303,3 +303,33 @@
         min-height: 200px !important;
     }
 }
+
+/* ========================================
+   STABILIZACE LAYOUTU PRO DEBUG PANELY
+   ======================================== */
+
+/* Stabilizace testovací stránky proti skákání při rozbalování panelů */
+.test-page-stable {
+    contain: layout style;
+    will-change: auto;
+}
+
+/* Stabilizace grid kontejnerů */
+.test-grid-stable {
+    transition: none !important;
+    contain: layout;
+}
+
+/* Stabilizace pro live debug panel v hlavní stránce */
+.live-debug-container {
+    min-height: 120px;
+    max-height: 400px;
+    overflow: hidden;
+    transition: none !important;
+}
+
+/* Zabránění skákání při změně obsahu panelů */
+.panel-stable {
+    contain: layout style;
+    transition: none !important;
+}
