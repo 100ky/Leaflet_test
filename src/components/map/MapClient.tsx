@@ -10,7 +10,6 @@ import {
     MapContainer,
     TileLayer,
     Marker,
-    Popup,
     useMapEvents,
     GeoJSON,
     useMap
@@ -190,31 +189,10 @@ function ResetButton({ onReset }: { onReset: () => void }) {
 }
 
 // Pomocná komponenta pro Marker s podporou dvojkliku
-function MarkerWithDoubleClick({ incinerator, icon, children }: { incinerator: Incinerator, icon: L.Icon, children: React.ReactNode }) {
-    const map = useMap();
-
-    // Handler pro dvojklik
-    const handleDoubleClick = () => {
-        map.flyTo([incinerator.location.lat, incinerator.location.lng], 15, { animate: true, duration: 1.5 });
-    };
-
-    return (
-        <Marker
-            position={[incinerator.location.lat, incinerator.location.lng]}
-            icon={icon}
-            eventHandlers={{
-                dblclick: handleDoubleClick,
-            }}
-        >
-            {children}
-        </Marker>
-    );
-}
-
-// Komponenta pro pop-up s aktuálním zoom
-function IncineratorPopup({ incinerator, usingRemoteApi }: { incinerator: Incinerator, usingRemoteApi: boolean }) {
+function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinerator: Incinerator, icon: L.Icon, usingRemoteApi: boolean }) {
     const map = useMap();
     const [currentZoom, setCurrentZoom] = useState(map.getZoom());
+    const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
 
     // Sledování změn zoomu
     useMapEvents({
@@ -223,16 +201,94 @@ function IncineratorPopup({ incinerator, usingRemoteApi }: { incinerator: Incine
         }
     });
 
+    const handleClick = () => {
+        // Delay pro rozlišení mezi click a dblclick
+        const timeout = setTimeout(() => {
+            console.log('Simple click for:', incinerator.name);
+
+            // Zavři všechny existující popupy
+            map.closePopup();
+
+            const content = createIncineratorPopupContent(incinerator, currentZoom, usingRemoteApi);
+
+            L.popup({
+                maxWidth: 350,
+                minWidth: 250,
+                autoPan: true,
+                closeOnEscapeKey: true,
+                autoClose: false,
+                closeOnClick: false,
+                offset: [0, -40] // Posune popup nahoru od markeru
+            })
+                .setLatLng([incinerator.location.lat, incinerator.location.lng])
+                .setContent(content)
+                .openOn(map);
+
+            console.log('Popup opened for:', incinerator.name);
+        }, 200);
+
+        setClickTimeout(timeout);
+    };
+
+    const handleDoubleClick = () => {
+        // Zruš pending click event
+        if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            setClickTimeout(null);
+        }
+
+        console.log('Double-click for:', incinerator.name);
+
+        // Zavři všechny popupy
+        map.closePopup();
+
+        // Animace flyTo
+        map.flyTo([incinerator.location.lat, incinerator.location.lng], 15, {
+            animate: true,
+            duration: 1.5
+        });
+
+        // Po animaci otevři popup
+        map.once('moveend', () => {
+            setTimeout(() => {
+                const content = createIncineratorPopupContent(incinerator, map.getZoom(), usingRemoteApi);
+
+                L.popup({
+                    maxWidth: 350,
+                    minWidth: 250,
+                    autoPan: true,
+                    closeOnEscapeKey: true,
+                    autoClose: false,
+                    closeOnClick: false,
+                    offset: [0, -40] // Posune popup nahoru od markeru
+                })
+                    .setLatLng([incinerator.location.lat, incinerator.location.lng])
+                    .setContent(content)
+                    .openOn(map);
+
+                console.log('Double-click popup opened for:', incinerator.name);
+            }, 500);
+        });
+    };
+
+    // Cleanup timeout při unmount
     useEffect(() => {
-        setCurrentZoom(map.getZoom());
-    }, [map]);
+        return () => {
+            if (clickTimeout) {
+                clearTimeout(clickTimeout);
+            }
+        };
+    }, [clickTimeout]);
 
     return (
-        <Popup maxWidth={350} minWidth={250}>
-            <div dangerouslySetInnerHTML={{
-                __html: createIncineratorPopupContent(incinerator, currentZoom, usingRemoteApi)
-            }} />
-        </Popup>
+        <Marker
+            position={[incinerator.location.lat, incinerator.location.lng]}
+            icon={icon}
+            eventHandlers={{
+                click: handleClick,
+                dblclick: handleDoubleClick
+            }}
+        />
     );
 }
 
@@ -516,9 +572,8 @@ const MapClient = ({ incinerators: propIncinerators }: MapClientProps) => {
                                     key={`marker-${incinerator.id}`}
                                     incinerator={incinerator}
                                     icon={icon}
-                                >
-                                    <IncineratorPopup incinerator={incinerator} usingRemoteApi={usingRemoteApi} />
-                                </MarkerWithDoubleClick>
+                                    usingRemoteApi={usingRemoteApi}
+                                />
                             </div>
                         );
                     }
@@ -529,9 +584,8 @@ const MapClient = ({ incinerators: propIncinerators }: MapClientProps) => {
                             key={baseKey}
                             incinerator={incinerator}
                             icon={icon}
-                        >
-                            <IncineratorPopup incinerator={incinerator} usingRemoteApi={usingRemoteApi} />
-                        </MarkerWithDoubleClick>
+                            usingRemoteApi={usingRemoteApi}
+                        />
                     );
                 })}
 

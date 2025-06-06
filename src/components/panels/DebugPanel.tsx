@@ -57,8 +57,8 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ maxLogs = 100 }) => {
                 message.includes('📍') || message.includes('📊')) {
 
                 let type: LogType = 'api';
-                if (message.includes('Viewport') || message.includes('📍')) type = 'viewport';
-                if (message.includes('Cache')) type = 'cache';
+                if (message.includes('Viewport') || message.includes('📍')) type = 'debug';
+                if (message.includes('Cache')) type = 'system';
                 if (message.includes('🔄') || message.includes('Načítá')) type = 'loading';
 
                 addLog(type, message, args.length > 1 ? args[1] : undefined);

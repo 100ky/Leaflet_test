@@ -279,7 +279,7 @@ export const useIncineratorData = ({
         } else {
             logger.info('No initial bounds provided - waiting for first updateViewport call from map');
         }
-    }, []); // Prázdné pole závislostí - spustí se pouze jednou při mount
+    }, [fetchData, initialBounds, initialZoom]); // Přidáno všechny závislosti
 
     /**
      * Cleanup prefetch timeout

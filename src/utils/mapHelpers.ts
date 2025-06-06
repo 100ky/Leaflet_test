@@ -3,7 +3,7 @@
  * Konsoliduje duplicitní logiku pro práci s mapou a markery
  */
 
-import { Incinerator, BuildingType } from '@/types';
+import { Incinerator, IncineratorOfficialInfo, BuildingType } from '@/types';
 import L from 'leaflet';
 
 /**
@@ -68,6 +68,21 @@ export const getPropertyStyle = () => ({
 });
 
 /**
+ * Typ pro obsah popup okna
+ */
+type PopupContent = {
+    title: string;
+    description: string | undefined;
+    capacity: string;
+    status: string;
+    yearEstablished: string | number;
+    showDetails: boolean | IncineratorOfficialInfo | undefined;
+    officialInfo: IncineratorOfficialInfo | undefined;
+    currentZoom: number;
+    detailThreshold: number;
+};
+
+/**
  * Vytvoří popup obsah pro spalovnu podle úrovně detailu
  */
 export const createIncineratorPopupContent = (
@@ -98,7 +113,7 @@ export const createIncineratorPopupContent = (
 /**
  * Generuje HTML obsah pro popup spalovny
  */
-export const generatePopupHTML = (content: ReturnType<typeof createIncineratorPopupContent>) => {
+export const generatePopupHTML = (content: PopupContent): string => {
     let html = `
     <div style="max-height: 400px; overflow-y: auto;">
       <h3 style="margin: 0 0 10px 0; font-size: 16px;">${content.title}</h3>

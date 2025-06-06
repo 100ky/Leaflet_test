@@ -295,3 +295,66 @@
         max-height: 250px !important;
     }
 }
+
+/* ========================================
+   POPUP STYLY PRO DVOJKLIK
+   ======================================== */
+
+/* Speciální styly pro popup vytvořený po dvojkliku */
+.leaflet-popup.double-click-popup {
+    z-index: 999999 !important;
+}
+
+.leaflet-popup.double-click-popup .leaflet-popup-content-wrapper {
+    background: var(--card) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+.leaflet-popup.double-click-popup .leaflet-popup-tip {
+    background: var(--card) !important;
+    border: 2px solid var(--primary) !important;
+    border-top: none !important;
+    border-right: none !important;
+}
+
+/* Force visibility for double-click popup */
+.leaflet-popup.double-click-popup,
+.leaflet-popup.double-click-popup .leaflet-popup-content-wrapper,
+.leaflet-popup.double-click-popup .leaflet-popup-content {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+/* ========================================
+   POPUP STYLY PRO JEDNOKLIK
+   ======================================== */
+
+/* Styly pro popup při jednokliku */
+.leaflet-popup.single-click-popup .leaflet-popup-content-wrapper {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-popup.single-click-popup .leaflet-popup-tip {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-top: none !important;
+    border-right: none !important;
+}
+
+/* Zajištění viditelnosti popupu při jednokliku */
+.leaflet-popup.single-click-popup,
+.leaflet-popup.single-click-popup .leaflet-popup-content-wrapper,
+.leaflet-popup.single-click-popup .leaflet-popup-content {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
