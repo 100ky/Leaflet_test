@@ -1,6 +1,11 @@
 /**
- * MapClient - Klientská část mapy s Leaflet komponentami
- * Tato komponenta se načítá dynamicky pouze na klientu
+ * Klientská mapová komponenta pro zobrazení spaloven v České republice
+ * 
+ * Obsahuje veškerou interaktivní funkcionalitu včetně:
+ * - Načítání a zobrazení dat spaloven
+ * - Interakce s markery a popup okny
+ * - Správa stavu mapy a filtrů
+ * - Optimalizace výkonu pro velká datová sady
  */
 
 'use client';
@@ -16,7 +21,7 @@ import {
 } from 'react-leaflet';
 import L from 'leaflet';
 
-// Zablokování inicializace vyhledávacího panelu prohlížeče v mapě
+// Oprava inicializace ikon pro kompatibilitu s Leaflet v Next.js SSR
 // @see https://github.com/Leaflet/Leaflet/issues/7255
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -39,10 +44,9 @@ import {
 } from '@/utils/mapHelpers';
 
 const mapStyle = {
-    ...MAP_CONSTANTS.MAP_STYLE,
-    // Stabilizace rozložení - předcházení změnám velikosti při loading
+    ...MAP_CONSTANTS.MAP_STYLE,    // Stabilizace rozložení - předcházení změnám velikosti při načítání
     minHeight: MAP_CONSTANTS.MAP_STYLE.height,
-    overflow: 'hidden' // Zabránění posunu obsahu při změnách
+    overflow: 'hidden' // Zabránění posunu obsahu při změnách velikosti
 };
 
 interface MapClientProps {
@@ -199,12 +203,10 @@ function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinera
         zoomend: () => {
             setCurrentZoom(map.getZoom());
         }
-    });
-
-    const handleClick = () => {
+    }); const handleClick = () => {
         // Delay pro rozlišení mezi click a dblclick
         const timeout = setTimeout(() => {
-            console.log('Simple click for:', incinerator.name);
+            logger.debug(`Click event na spalovnu: ${incinerator.name}`);
 
             // Zavři všechny existující popupy
             map.closePopup();
@@ -220,11 +222,10 @@ function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinera
                 closeOnClick: false,
                 offset: [0, -40] // Posune popup nahoru od markeru
             })
-                .setLatLng([incinerator.location.lat, incinerator.location.lng])
-                .setContent(content)
+                .setLatLng([incinerator.location.lat, incinerator.location.lng]).setContent(content)
                 .openOn(map);
 
-            console.log('Popup opened for:', incinerator.name);
+            logger.debug(`Popup otevřen pro: ${incinerator.name}`);
         }, 200);
 
         setClickTimeout(timeout);
@@ -237,7 +238,7 @@ function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinera
             setClickTimeout(null);
         }
 
-        console.log('Double-click for:', incinerator.name);
+        logger.debug(`Double-click event na spalovnu: ${incinerator.name}`);
 
         // Zavři všechny popupy
         map.closePopup();
@@ -262,11 +263,10 @@ function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinera
                     closeOnClick: false,
                     offset: [0, -40] // Posune popup nahoru od markeru
                 })
-                    .setLatLng([incinerator.location.lat, incinerator.location.lng])
-                    .setContent(content)
+                    .setLatLng([incinerator.location.lat, incinerator.location.lng]).setContent(content)
                     .openOn(map);
 
-                console.log('Double-click popup opened for:', incinerator.name);
+                logger.debug(`Double-click popup otevřen pro: ${incinerator.name}`);
             }, 500);
         });
     };
@@ -295,7 +295,7 @@ function MarkerWithDoubleClick({ incinerator, icon, usingRemoteApi }: { incinera
 /**
  * Optimalizovaný ovládací panel s memo pro předcházení zbytečnému překreslování
  */
-const ControlPanel = memo(({
+const ControlPanel = memo(function ControlPanel({
     loading,
     usingRemoteApi,
     error,
@@ -309,74 +309,76 @@ const ControlPanel = memo(({
     switchToLocalApi: () => void;
     switchToRemoteApi: () => void;
     refetch: () => void;
-}) => (
-    <div className="absolute top-3 right-3 bg-white bg-opacity-95 rounded-lg shadow-lg z-[1000] w-40">
-        <div className="p-3 space-y-2">
-            <div className="text-sm font-medium text-gray-700">Zdroj dat:</div>
-            <div className="flex space-x-2">
+}) {
+    return (
+        <div className="absolute top-3 right-3 bg-white bg-opacity-95 rounded-lg shadow-lg z-[1000] w-40">
+            <div className="p-3 space-y-2">
+                <div className="text-sm font-medium text-gray-700">Zdroj dat:</div>
+                <div className="flex space-x-2">
+                    <button
+                        onClick={switchToLocalApi}
+                        disabled={loading}
+                        className={`flex-1 px-2 py-1 text-xs rounded transition-colors ${!usingRemoteApi
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        Lokální
+                    </button>
+                    <button
+                        onClick={switchToRemoteApi}
+                        disabled={loading}
+                        className={`flex-1 px-2 py-1 text-xs rounded transition-colors ${usingRemoteApi
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        Vzdálené
+                    </button>
+                </div>
                 <button
-                    onClick={switchToLocalApi}
+                    onClick={refetch}
                     disabled={loading}
-                    className={`flex-1 px-2 py-1 text-xs rounded transition-colors ${!usingRemoteApi
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full px-3 py-1 text-xs rounded transition-colors bg-orange-500 text-white hover:bg-orange-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
                 >
-                    Lokální
+                    <span className="inline-block w-16">
+                        {loading ? 'Načítá...' : 'Obnovit'}
+                    </span>
                 </button>
-                <button
-                    onClick={switchToRemoteApi}
-                    disabled={loading}
-                    className={`flex-1 px-2 py-1 text-xs rounded transition-colors ${usingRemoteApi
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                    Vzdálené
-                </button>
-            </div>
-            <button
-                onClick={refetch}
-                disabled={loading}
-                className={`w-full px-3 py-1 text-xs rounded transition-colors bg-orange-500 text-white hover:bg-orange-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-            >
-                <span className="inline-block w-16">
-                    {loading ? 'Načítá...' : 'Obnovit'}
-                </span>
-            </button>
-            {/* Vylepšený prostor pro chybové zprávy s automatickým mizením */}
-            <div className="min-h-[20px]">
-                {error && (
-                    <div className={`text-xs p-2 rounded transition-all duration-300 ${error.includes('opakuji požadavek')
-                        ? 'text-yellow-700 bg-yellow-50 border-l-2 border-yellow-400 animate-pulse'
-                        : error.includes('Server je dočasně nedostupný')
-                            ? 'text-orange-600 bg-orange-50 border-l-2 border-orange-400'
-                            : error.includes('Problém se sítí')
-                                ? 'text-blue-600 bg-blue-50 border-l-2 border-blue-400'
-                                : 'text-red-600 bg-red-50 border-l-2 border-red-400'
-                        }`}>
-                        <div className="flex items-start space-x-1">
-                            <span className="flex-shrink-0 mt-0.5">
-                                {error.includes('opakuji požadavek') ? '🔄' :
-                                    error.includes('dočasně nedostupný') ? '⚠️' :
-                                        error.includes('sítí') ? '🌐' : '❌'}
-                            </span>
-                            <span className="break-words">
-                                {error}
-                            </span>
+                {/* Vylepšený prostor pro chybové zprávy s automatickým mizením */}
+                <div className="min-h-[20px]">
+                    {error && (
+                        <div className={`text-xs p-2 rounded transition-all duration-300 ${error.includes('opakuji požadavek')
+                            ? 'text-yellow-700 bg-yellow-50 border-l-2 border-yellow-400 animate-pulse'
+                            : error.includes('Server je dočasně nedostupný')
+                                ? 'text-orange-600 bg-orange-50 border-l-2 border-orange-400'
+                                : error.includes('Problém se sítí')
+                                    ? 'text-blue-600 bg-blue-50 border-l-2 border-blue-400'
+                                    : 'text-red-600 bg-red-50 border-l-2 border-red-400'
+                            }`}>
+                            <div className="flex items-start space-x-1">
+                                <span className="flex-shrink-0 mt-0.5">
+                                    {error.includes('opakuji požadavek') ? '🔄' :
+                                        error.includes('dočasně nedostupný') ? '⚠️' :
+                                            error.includes('sítí') ? '🌐' : '❌'}
+                                </span>
+                                <span className="break-words">
+                                    {error}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
-    </div>
-));
+    );
+});
 
 /**
  * Optimalizovaný informační panel s memo pro předcházení zbytečnému překreslování
  */
-const InfoPanel = memo(({
+const InfoPanel = memo(function InfoPanel({
     currentZoom,
     incineratorsCount,
     totalCount,
@@ -392,51 +394,52 @@ const InfoPanel = memo(({
     clustered: boolean;
     loading: boolean;
     DETAIL_ZOOM_THRESHOLD: number;
-}) => (
-    <div className="absolute bottom-3 left-3 bg-white bg-opacity-90 rounded-lg shadow-lg w-60">
-        <div className="p-3 space-y-1 text-sm">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                    <span className="zoom-indicator-icon">🔍</span>
-                    <span>Zoom: {currentZoom.toFixed(1)}</span>
+}) {
+    return (
+        <div className="absolute bottom-3 left-3 bg-white bg-opacity-90 rounded-lg shadow-lg w-60">
+            <div className="p-3 space-y-1 text-sm">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                        <span className="zoom-indicator-icon">🔍</span>
+                        <span>Zoom: {currentZoom.toFixed(1)}</span>
+                    </div>
+                    {loading && (
+                        <div className="flex items-center space-x-1">
+                            <div className="animate-spin w-3 h-3 border border-gray-400 border-t-transparent rounded-full"></div>
+                            <span className="text-xs text-gray-700">Načítá</span>
+                        </div>
+                    )}
                 </div>
-                {loading && (
-                    <div className="flex items-center space-x-1">
-                        <div className="animate-spin w-3 h-3 border border-gray-400 border-t-transparent rounded-full"></div>
-                        <span className="text-xs text-gray-700">Načítá</span>
-                    </div>
-                )}
-            </div>
-            <div className="flex items-center space-x-2">
-                <span>📍</span>
-                <span>Spalovny: {incineratorsCount}</span>
-                {totalCount > 0 && totalCount !== incineratorsCount && (
-                    <span className="text-gray-700">/ {totalCount} celkem</span>
-                )}
-            </div>
-            <div className="flex items-center space-x-2">
-                <span>🔗</span>
-                <span className={usingRemoteApi ? 'text-green-600' : 'text-blue-600'}>
-                    {usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}
-                </span>
-            </div>
-            <div className="flex items-center space-x-4">
-                {clustered && (
-                    <div className="flex items-center space-x-1 text-blue-600">
-                        <span>🔄</span>
-                        <span className="text-xs">Seskupeno</span>
-                    </div>
-                )}
-                {currentZoom >= DETAIL_ZOOM_THRESHOLD && (
-                    <div className="flex items-center space-x-1 text-purple-600">
-                        <span>🏗️</span>
-                        <span className="text-xs">Detailní pohled</span>
-                    </div>
-                )}
+                <div className="flex items-center space-x-2">
+                    <span>📍</span>
+                    <span>Spalovny: {incineratorsCount}</span>
+                    {totalCount > 0 && totalCount !== incineratorsCount && (
+                        <span className="text-gray-700">/ {totalCount} celkem</span>
+                    )}
+                </div>
+                <div className="flex items-center space-x-2">
+                    <span>🔗</span>
+                    <span className={usingRemoteApi ? 'text-green-600' : 'text-blue-600'}>
+                        {usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}
+                    </span>
+                </div>
+                <div className="flex items-center space-x-4">
+                    {clustered && (
+                        <div className="flex items-center space-x-1 text-blue-600">
+                            <span>🔄</span>
+                            <span className="text-xs">Seskupeno</span>
+                        </div>
+                    )}
+                    {currentZoom >= DETAIL_ZOOM_THRESHOLD && (
+                        <div className="flex items-center space-x-1 text-purple-600">
+                            <span>🏗️</span>
+                            <span className="text-xs">Detailní pohled</span>
+                        </div>
+                    )}            </div>
             </div>
         </div>
-    </div>
-));
+    );
+});
 
 /**
  * Klientská komponenta MapClient zobrazující interaktivní mapu spaloven s dynamickým načítáním dat

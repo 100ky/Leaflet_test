@@ -1,12 +1,16 @@
 /**
- * Utility CSS třídy pro časté vzory v aplikaci
- * Snižuje duplikaci kódu a zajišťuje konzistentní styling
- * Refaktorováno pro kompatibilitu s Tailwind CSS v4 + Turbopack
+ * Utility CSS třídy pro aplikaci České spalovny
+ * 
+ * Obsahuje často používané styly pro:
+ * - Panel komponenty a jejich rozložení
+ * - Interaktivní prvky a tlačítka
+ * - Responzivní chování a animace
+ * - Konzistentní typografii a spacing
+ * 
+ * Optimalizováno pro kompatibilitu s Tailwind CSS v4 + Turbopack
  */
 
-/* ===========================================
-   PANEL KOMPONENTY
-   =========================================== */
+/* ===== KOMPONENTY PANELŮ ===== */
 
 /* Základní panel s bílým pozadím a stínem */
 .panel-base {
@@ -51,9 +55,7 @@
     }
 }
 
-/* ===========================================
-   TYPOGRAPHY UTILITIES
-   =========================================== */
+/* ===== TYPOGRAFIE A TEXT ===== */
 
 /* Malý šedý text pro pomocné informace */
 .text-helper {
@@ -91,9 +93,7 @@
     }
 }
 
-/* ===========================================
-   FLEXBOX UTILITIES
-   =========================================== */
+/* ===== FLEXBOX ROZLOŽENÍ ===== */
 
 /* Flex kontejner pro header s justify-between */
 .flex-header {
@@ -122,9 +122,7 @@
     gap: 0.5rem;
 }
 
-/* ===========================================
-   SPACING UTILITIES
-   =========================================== */
+/* ===== ROZESTUPY A SPACING ===== */
 
 /* Standardní spacing pro sekce */
 .section-spacing>*+* {
@@ -148,9 +146,7 @@
     }
 }
 
-/* ===========================================
-   INTERACTIVE ELEMENTS
-   =========================================== */
+/* ===== INTERAKTIVNÍ PRVKY ===== */
 
 /* Klikatelná oblast s hover efektem */
 .clickable-area {
@@ -253,9 +249,7 @@
     cursor: not-allowed;
 }
 
-/* ===========================================
-   STATUS INDICATORS
-   =========================================== */
+/* ===== INDIKÁTORY STAVU ===== */
 
 /* Základní kruhový indikátor */
 .status-dot {
@@ -299,9 +293,7 @@
     background-color: #f87171;
 }
 
-/* ===========================================
-   GRID LAYOUTS
-   =========================================== */
+/* ===== GRID ROZLOŽENÍ ===== */
 
 /* Responsive grid pro statistiky */
 .stats-grid {
@@ -330,9 +322,7 @@
     gap: 0.5rem;
 }
 
-/* ===========================================
-   RESPONSIVE VISIBILITY
-   =========================================== */
+/* ===== VIDITELNOST PRVKŮ ===== */
 
 /* Skrýt na malých obrazovkách */
 .hidden-mobile {
@@ -367,9 +357,7 @@
     }
 }
 
-/* ===========================================
-   SCROLL UTILITIES
-   =========================================== */
+/* ===== POSUVNÍKY A SCROLL ===== */
 
 /* Kontejner s omezenou výškou a scrollem */
 .scroll-container {
@@ -389,9 +377,7 @@
     }
 }
 
-/* ===========================================
-   LOADING STATES
-   =========================================== */
+/* ===== NAČÍTACÍ STAVY ===== */
 
 /* Centrovaný loading indikátor */
 .loading-center {
@@ -450,9 +436,7 @@
     }
 }
 
-/* ===========================================
-   CARDS & BOXES
-   =========================================== */
+/* ===== KARTY A BOXY ===== */
 
 /* Karta pro statistiky */
 .stat-card {
@@ -531,9 +515,7 @@
     }
 }
 
-/* ===========================================
-   LISTS & DETAILS
-   =========================================== */
+/* ===== SEZNAMY A DETAILY ===== */
 
 /* Seznam detailů */
 .detail-list {
@@ -560,9 +542,7 @@
     justify-content: space-between;
 }
 
-/* ===========================================
-   PROGRESS BARS
-   =========================================== */
+/* ===== UKAZATELE PRŮBĚHU ===== */
 
 /* Sekce s progress barem */
 .progress-section {
@@ -599,9 +579,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-/* ===========================================
-   BADGES
-   =========================================== */
+/* ===== ODZNAKY A ŠTÍTKY ===== */
 
 .badge-blue {
     background-color: #dbeafe;
@@ -627,9 +605,7 @@
     font-size: 0.75rem;
 }
 
-/* ===========================================
-   BUTTON GROUPS
-   =========================================== */
+/* ===== SKUPINY TLAČÍTEK ===== */
 
 /* Skupina tlačítek */
 .button-group {

@@ -1,15 +1,27 @@
+/**
+ * Univerzální Panel komponenta
+ * 
+ * Poskytuje základní UI panel s možností sbalení/rozbalení.
+ * Podporuje vlastní hlavičku, obsah a styling.
+ * Využívá se pro všechny panely v aplikaci České spalovny.
+ * 
+ * @component
+ */
 'use client';
 
 import { useState, type ReactNode } from 'react';
 
+/**
+ * Props pro Panel komponentu
+ */
 interface PanelProps {
     title: ReactNode;
     children: ReactNode;
     className?: string;
     isCollapsible?: boolean;
     initiallyExpanded?: boolean;
-    headerContent?: ReactNode; // Pro přidání obsahu do hlavičky vedle titulku
-    onToggle?: (expanded: boolean) => void; // Callback pro změnu stavu
+    headerContent?: ReactNode; // Obsah hlavičky vedle titulku
+    onToggle?: (expanded: boolean) => void; // Callback při změně stavu sbalení/rozbalení
 }
 
 export const Panel: React.FC<PanelProps> = ({

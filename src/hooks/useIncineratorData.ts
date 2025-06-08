@@ -1,6 +1,15 @@
 /**
- * useIncineratorData.ts - React hook pro správu dat spaloven
- * Poskytuje funkcionalitu pro dynamické načítání, caching a přepínání mezi API
+ * React hook pro správu dat spaloven
+ * 
+ * Poskytuje kompletní funkcionalita pro práci s daty spaloven:
+ * - Dynamické načítání podle map viewport
+ * - Automatické cache management
+ * - Přepínání mezi lokálním a vzdáleným API
+ * - Optimalizované re-fetching při změnách bounds
+ * - Error handling a retry logika
+ * - Integration s mapovým registrem
+ * 
+ * @hook
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -233,7 +242,7 @@ export const useIncineratorData = ({
             }
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Chyba připojení k vzdálenému API';
-            console.error('❌ Failed to switch to remote API:', err);
+            logger.error(`Nepodařilo se přepnout na vzdálené API: ${err}`);
             setError(`Nepodařilo se přepnout na vzdálené API: ${errorMessage}`);
             setUsingRemoteApi(false); // Zůstáváme na lokálním API
         } finally {

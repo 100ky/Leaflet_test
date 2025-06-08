@@ -1,7 +1,15 @@
 /**
- * mapRegistry.ts - Centralizovaná správa mapových instancí
- * Umožňuje globální přístup k mapovým objektům napříč aplikací
- * Používá se pro flyToRegion a další operace vyžadující přímý přístup k mapě
+ * Centralizovaná správa mapových instancí
+ * 
+ * Poskytuje globální registr pro Leaflet mapy v aplikaci:
+ * - Registrace a správa mapových instancí
+ * - Globální přístup k mapovým operacím (flyTo, zoom, atd.)
+ * - Centralizované ovládání z různých komponentů
+ * - Memory management a cleanup mapových objektů
+ * 
+ * Využívá se pro komunikaci mezi komponentami bez prop drilling.
+ * 
+ * @module mapRegistry
  */
 
 import { Map as LeafletMap } from 'leaflet';

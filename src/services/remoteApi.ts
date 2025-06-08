@@ -1,14 +1,22 @@
 /**
  * Služba pro komunikaci se vzdáleným API spaloven
- * Používá Next.js API proxy route pro řešení CORS problémů
+ * 
+ * Poskytuje přístup k externímu API pomocí Next.js proxy route:
+ * - Řeší CORS problémy pomocí server-side proxy
+ * - Cachuje odpovědi pro optimalizaci výkonu
+ * - Implementuje retry logiku při selhání
+ * - Loguje všechny API operace pro monitoring
+ * 
  * Původní API: https://combustion.radek18.com/api/incinerators
+ * 
+ * @module remoteApi
  */
 
 import { Incinerator } from '@/types';
 import { ApiRequest, ApiResponse } from './incineratorApi';
 import { logger } from '@/utils/logger';
 
-// Místo přímého volání vzdáleného API používáme náš proxy endpoint kvůli CORS
+// Proxy endpoint místo přímého API kvůli CORS omezením
 const REMOTE_API_BASE_URL = '/api'; // Náš Next.js API route proxy
 
 /**
@@ -57,11 +65,9 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
             typeof item.location.lng === 'number' &&
             !isNaN(item.location.lat) &&
             !isNaN(item.location.lng)
-        );
+        ); const loadTime = Date.now() - startTime;
 
-        const loadTime = Date.now() - startTime;
-
-        console.log(`Filtered to ${validData.length} valid incinerators`); logger.logApiResponse(
+        logger.logApiResponse(
             validData.length,
             rawData.length,
             loadTime,
@@ -69,10 +75,9 @@ export const fetchRemoteIncinerators = async (zoom?: number): Promise<Incinerato
         );
 
         return validData;
-
     } catch (error) {
         const loadTime = Date.now() - startTime;
-        console.error('Error fetching remote data:', error);
+        logger.error(`Chyba při načítání vzdálených dat: ${error}`);
 
         if (error instanceof Error) {
             if (error.name === 'AbortError') {
@@ -112,9 +117,8 @@ export const fetchRemoteIncineratorsByViewport = async (request: ApiRequest): Pr
             totalCount: filteredIncinerators.length,
             clustered: request.zoom < 10
         };
-
     } catch (error) {
-        console.error('Error fetching remote viewport data:', error);
+        logger.error(`Chyba při načítání dat podle viewport: ${error}`);
         throw error;
     }
 };
@@ -125,7 +129,6 @@ export const fetchRemoteIncineratorsByViewport = async (request: ApiRequest): Pr
 export const testRemoteApiConnection = async (): Promise<boolean> => {
     try {
         logger.logConnectionTest('Testování připojení k vzdálenému API...');
-        console.log('Testing remote API connection...');
 
         // Vytvoření AbortController pro timeout
         const controller = new AbortController();
@@ -138,28 +141,22 @@ export const testRemoteApiConnection = async (): Promise<boolean> => {
                 'Content-Type': 'application/json',
             },
             signal: controller.signal
-        });
+        }); clearTimeout(timeoutId);
 
-        clearTimeout(timeoutId);
-
-        console.log(`Remote API test result: ${response.ok} (status: ${response.status})`);
+        logger.debug(`Test vzdáleného API: ${response.ok} (status: ${response.status})`);
 
         if (response.ok) {
             logger.logConnectionTest('Vzdálené API je dostupné a funguje', true);
-            console.log('Remote API is accessible and returning data');
             return true;
         } else {
             logger.logConnectionTest(`Vzdálené API vrátilo chybu: ${response.status}`, false);
-            console.warn(`Remote API returned non-OK status: ${response.status}`);
             return false;
         }
-
     } catch (error) {
-        console.warn('Remote API connection test failed:', error);
+        logger.warn(`Test připojení k vzdálenému API selhal: ${error}`);
 
         if (error instanceof Error && error.name === 'AbortError') {
             logger.logConnectionTest('Vzdálené API - časový limit vypršel', false);
-            console.warn('Remote API request timed out');
         } else {
             logger.logConnectionTest(`Vzdálené API - chyba připojení: ${error instanceof Error ? error.message : 'Unknown error'}`, false);
         }

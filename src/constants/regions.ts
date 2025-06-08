@@ -1,6 +1,14 @@
 /**
- * Centralizované definice regionů České republiky
- * Obsahuje všechny geografické oblasti používané v aplikaci
+ * Definice geografických regionů České republiky
+ * 
+ * Obsahuje kompletní sadu regionů pro aplikaci České spalovny:
+ * - Geografické bounds pro každý region
+ * - API charakteristiky (load delay, data multiplier)
+ * - Testovací regiony pro development
+ * - Utility funkce pro práci s regiony
+ * - Mapping mezi bounds a regionálními daty
+ * 
+ * @module regions
  */
 
 import { MapBounds } from '@/services/incineratorApi';

@@ -1,10 +1,18 @@
 /**
- * Shared utility functions for status indicators, icons, and common UI patterns
- * Consolidates repeated code across components
+ * Utility funkce pro status indikátory a UI vzory
+ * 
+ * Centralizuje opakující se logiku pro:
+ * - API status ikony a texty
+ * - Loading stavy a indikátory
+ * - Zdroj dat a připojení status
+ * - Barevné kódování stavů
+ * - Konzistentní UI patterny napříč komponentami
+ * 
+ * @module statusHelpers
  */
 
 /**
- * API Status utilities
+ * Utility funkce pro API status
  */
 export interface ApiStatusState {
     loading: boolean;

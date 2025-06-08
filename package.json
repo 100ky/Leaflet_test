@@ -1,7 +1,22 @@
 {
-  "name": "incinerator-map-app",
-  "version": "0.1.0",
+  "name": "ceske-spalovny",
+  "version": "1.0.0",
   "private": true,
+  "description": "Interaktivní mapa spaloven odpadů v České republice",
+  "author": "České spalovny projekt",
+  "license": "MIT",
+  "keywords": [
+    "mapa",
+    "spalovny",
+    "česká republika",
+    "leaflet",
+    "nextjs"
+  ],
+  "homepage": "https://github.com/100ky/Leaflet_test",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/100ky/Leaflet_test.git"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

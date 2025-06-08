@@ -1,11 +1,14 @@
 /**
- * Dodatečné utility CSS třídy pro specifické komponenty
- * Obsahuje pouze unikátní třídy, které nejsou v utilities.css
+ * Specializované utility CSS třídy pro aplikaci České spalovny
+ * 
+ * Obsahuje pokročilé styly pro:
+ * - Komplexní responzivní chování
+ * - Specializované animace a přechody
+ * - Mapové ovládací prvky
+ * - Debug nástroje a vývojářské utility
  */
 
-/* ===========================================
-   RESPONSIVE UTILITIES (pokročilejší)
-   =========================================== */
+/* ===== POKROČILÉ RESPONZIVNÍ UTILITY ===== */
 
 /* Responsive utility classes pro pokročilejší layouty */
 .responsive-flex-col-lg {
@@ -19,9 +22,80 @@
     }
 }
 
-/* ===========================================
-   SPECIALIZED ANIMATIONS
-   =========================================== */
+/* ===== RESPONZIVNÍ UTILITY ===== */
+
+/* Responzivní grid layout */
+.responsive-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (max-width: 640px) {
+    .responsive-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+/* Flexibilní responzivní kontejnery */
+.flex-responsive {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .flex-responsive {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* Text optimalizace pro dlouhé řetězce */
+.text-responsive {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Scrollable kontejnery s touch support */
+.scroll-touch {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.scroll-touch::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scroll-touch::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroll-touch::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 3px;
+}
+
+.scroll-touch::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.7);
+}
+
+/* Touch optimalizace pro mobilní zařízení */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Zabránění zoom při double-tap na iOS */
+.no-zoom {
+    touch-action: manipulation;
+}
+
+/* ===== SPECIALIZOVANÉ ANIMACE ===== */
 
 /* Fade-in animace pro dynamický obsah */
 .fade-in {
@@ -33,6 +107,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -49,15 +124,14 @@
         opacity: 0;
         transform: translateY(100%);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* ===========================================
-   SPECIALIZED STATUS CLASSES
-   =========================================== */
+/* ===== SPECIALIZOVANÉ STAVOVÉ TŘÍDY ===== */
 
 /* Rozšířené třídy pro specifické stavy API */
 .api-status-connecting {
@@ -76,9 +150,7 @@
     color: #065f46;
 }
 
-/* ===========================================
-   MAP SPECIFIC UTILITIES
-   =========================================== */
+/* ===== MAPOVÉ UTILITY ===== */
 
 /* Styling pro map controls */
 .map-control-button {
@@ -101,9 +173,7 @@
     background-color: #e5e7eb;
 }
 
-/* ===========================================
-   DEBUGGING UTILITIES
-   =========================================== */
+/* ===== DEBUG UTILITY ===== */
 
 /* Debugging borders pro layout - pouze pro development */
 .debug-border {
@@ -118,24 +188,22 @@
     border: 2px solid #10b981 !important;
 }
 
-/* ===========================================
-   PRINT STYLES
-   =========================================== */
+/* ===== TISKOVÉ STYLY ===== */
 
 /* Utility třídy pro tisk */
 @media print {
     .print-hidden {
         display: none !important;
     }
-    
+
     .print-visible {
         display: block !important;
     }
-    
+
     .print-break-before {
         page-break-before: always;
     }
-    
+
     .print-break-after {
         page-break-after: always;
     }
@@ -174,8 +242,92 @@
     .contrast-border {
         border: 2px solid;
     }
-    
+
     .contrast-text {
         font-weight: bold;
+    }
+}
+
+/* ===== TESTOVACÍ STRÁNKA OPTIMALIZACE ===== */
+
+/* Redukovaná mezera pro mobily */
+@media (max-width: 640px) {
+    .test-grid-mobile {
+        gap: 0.5rem !important;
+    }
+
+    .test-panel-mobile {
+        padding: 0.75rem !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .test-map-mobile {
+        height: 250px !important;
+        min-height: 250px !important;
+    }
+
+    .test-hide-mobile {
+        display: none !important;
+    }
+
+    .test-button-mobile {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .test-text-mobile {
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
+    }
+}
+
+/* Tablet landscape optimalizace */
+@media (min-width: 1025px) and (max-width: 1299px) {
+    .test-grid-tablet-landscape {
+        gap: 0.75rem !important;
+    }
+
+    .test-map-tablet-landscape {
+        height: clamp(320px, 40vh, 380px) !important;
+        min-height: 320px !important;
+        max-height: 380px !important;
+    }
+
+    .test-panel-tablet-landscape {
+        padding: 0.625rem !important;
+        margin-bottom: 0.625rem !important;
+    }
+
+    .test-text-tablet-landscape {
+        font-size: 0.8125rem !important;
+        line-height: 1.35 !important;
+    }
+}
+
+/* Ultra malé obrazovky */
+@media (max-width: 374px) {
+    .test-ultra-mobile {
+        font-size: 0.6875rem !important;
+        padding: 0.5rem !important;
+    }
+
+    .test-map-ultra-mobile {
+        height: 200px !important;
+        min-height: 200px !important;
+    }
+}
+
+/* Stabilizace layoutu pro debug panely */
+.test-grid-stable {
+    transition: none !important;
+    contain: layout;
+}
+
+/* Optimalizace pro animace (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

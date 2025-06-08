@@ -1,5 +1,13 @@
 /**
- * Komponenta pro zobrazení detailních informací o načtených datech
+ * Panel s informacemi o načtených datech spaloven
+ * 
+ * Zobrazuje statistiky a detaily o aktuálně načtených datech:
+ * - Počet spaloven podle stavu (provozní, mimo provoz, plánované)
+ * - Zdroj dat (lokální/vzdálené API)
+ * - Celkový počet záznamů a vybraný region
+ * - Status načítání a případné chyby
+ * 
+ * @component
  */
 
 'use client';
@@ -8,6 +16,9 @@ import { useEffect, useState } from 'react';
 import { Incinerator } from '@/types';
 import { getDataSourceIcon, getDataSourceText, type ApiStatusState } from '@/utils/statusHelpers';
 
+/**
+ * Props pro DataInfoPanel komponentu
+ */
 interface DataInfoPanelProps {
     incinerators: Incinerator[];
     loading: boolean;

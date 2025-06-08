@@ -1,6 +1,15 @@
 /**
- * MapStatistics - Komponenta pro zobrazení statistik mapy
- * Zobrazuje počet spaloven, region, clustering status a další užitečné informace
+ * Statistická komponenta pro mapové informace
+ * 
+ * Zobrazuje aktuální stav mapy a dat:
+ * - Počet zobrazených spaloven v aktuálním viewport
+ * - Status načítání dat a případné chyby
+ * - Informace o clustering a zoom úrovni
+ * - Region název a celkový počet spaloven
+ * 
+ * Komponenta je kompaktní a poskytuje rychlý přehled stavu.
+ * 
+ * @component
  */
 
 'use client';

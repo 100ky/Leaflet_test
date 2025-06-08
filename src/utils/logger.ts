@@ -1,6 +1,14 @@
 /**
- * Unified production-ready logging utility
- * Combines standard logging with structured logging capabilities and history tracking
+ * Jednotný systém logování pro aplikaci České spalovny
+ * 
+ * Poskytuje strukturované logování s možnostmi:
+ * - Různé úrovně logů (debug, info, warn, error)
+ * - Historie logů pro debugging
+ * - Development/production režim přepínání
+ * - Barevné výstupy v konzoli pro lepší čitelnost
+ * - Specializované metody pro API testy a připojení
+ * 
+ * @module logger
  */
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';

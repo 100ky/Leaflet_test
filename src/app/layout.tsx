@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "../styles/responsive.css";
-import "../styles/additional-utilities.css";
 
 // Fonty Geist
 const geistSans = Geist({
@@ -17,7 +15,7 @@ const geistMono = Geist_Mono({
 
 // Metadata aplikace
 export const metadata: Metadata = {
-  title: "Mapa Spaloven ČR",
+  title: "České spalovny",
   description: "Aplikace zobrazující spalovny v České republice",
 };
 

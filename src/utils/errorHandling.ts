@@ -1,6 +1,14 @@
 /**
- * errorHandling.ts - Centralizované zpracování chyb pro aplikaci
- * Poskytuje konzistentní způsob zpracování různých typů chyb
+ * Centralizované zpracování chyb aplikace
+ * 
+ * Poskytuje jednotný systém pro handling různých typů chyb:
+ * - API a network chyby s retry logikou
+ * - Validační chyby formulářů
+ * - Simulované chyby pro testování
+ * - Strukturované error reporty s kontextem
+ * - Integration s logging systémem
+ * 
+ * @module errorHandling
  */
 
 import { logger } from './logger';

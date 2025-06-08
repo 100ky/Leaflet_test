@@ -1,6 +1,11 @@
 /**
- * Pomocné funkce pro Map komponentu
- * Konsoliduje duplicitní logiku pro práci s mapou a markery
+ * Pomocné funkce pro mapové komponenty
+ * 
+ * Konsoliduje společnou logiku pro:
+ * - Výpočty geometrie a pozicování na mapě
+ * - Stylování markerů a polygonů spaloven
+ * - Generování obsahu popup oken
+ * - Detekci stavů spaloven a jejich kategorií
  */
 
 import { Incinerator, IncineratorOfficialInfo, BuildingType } from '@/types';
@@ -11,7 +16,7 @@ import L from 'leaflet';
  */
 export const calculateMapCenter = (incinerators: Incinerator[]): [number, number] => {
     if (!incinerators || incinerators.length === 0) {
-        // Výchozí střed ČR, pokud nejsou žádné spalovny
+        // Výchozí střed České republiky, pokud nejsou žádné spalovny
         return [49.8, 15.5];
     }
 

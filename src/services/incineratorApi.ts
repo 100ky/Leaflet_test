@@ -1,7 +1,16 @@
 /**
- * incineratorApi.ts - API služba pro správu dat spaloven
- * Poskytuje rozhraní pro načítání dat s podporou lokálního i vzdáleného API
- * Zahrnuje simulaci latence a error handling
+ * API služba pro správu dat spaloven
+ * 
+ * Poskytuje centralizované rozhraní pro načítání dat spaloven s podporou:
+ * - Lokálních statických dat pro development
+ * - Vzdáleného API pro produkční data
+ * - Simulace network latence a error stavů
+ * - Cache management a optimalizace
+ * - Filtrování podle map bounds a regionů
+ * 
+ * Služba automaticky detekuje dostupnost vzdáleného API.
+ * 
+ * @module incineratorApi
  */
 
 import { incineratorData } from '@/data/incinerators';

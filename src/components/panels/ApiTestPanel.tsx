@@ -1,5 +1,15 @@
 /**
- * Demonstrační komponenta pro testování dynamického načítání dat
+ * Panel pro testování API a načítání dat spaloven
+ * 
+ * Umožňuje vývojářům testovat:
+ * - Dynamické načítání dat podle map bounds
+ * - Přednastavené testovací regiony
+ * - Různé zoom úrovně a jejich vliv na data
+ * - API response časy a chování
+ * 
+ * Obsahuje ovládací prvky pro manuální testování API endpointů.
+ * 
+ * @component
  */
 
 'use client';

@@ -13,7 +13,7 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-6">
-              Kontakt <span className="text-green-400">EcoMap CZ</span>
+              Kontakt <span className="text-green-400">České spalovny</span>
             </h1>
             <p className="text-lg text-gray-300">
               Máte dotaz, návrh nebo jste našli chybu? Rádi se s vámi spojíme
@@ -38,9 +38,8 @@ export default function ContactPage() {
                   <div className="flex items-start space-x-3">
                     <span className="text-green-500 mt-1">📧</span>
                     <div>
-                      <div className="font-medium text-gray-900">Email</div>
-                      <a href="mailto:info@ecomap.cz" className="text-green-600 hover:text-green-700">
-                        info@ecomap.cz
+                      <div className="font-medium text-gray-900">Email</div>                      <a href="mailto:info@ceskespalovny.cz" className="text-green-600 hover:text-green-700">
+                        info@ceskespalovny.cz
                       </a>
                     </div>
                   </div>
@@ -60,7 +59,7 @@ export default function ContactPage() {
                     <div>
                       <div className="font-medium text-gray-900">Adresa</div>
                       <div className="text-gray-600">
-                        EcoMap CZ<br />
+                        České spalovny<br />
                         Příkladná 123<br />
                         110 00 Praha 1
                       </div>
@@ -167,7 +166,7 @@ export default function ContactPage() {
       <footer className="bg-gray-900 text-white py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center text-gray-400">
-            <p>&copy; 2025 EcoMap CZ | Projekt pro mapování spaloven v České republice</p>
+            <p>&copy; 2025 České spalovny | Projekt pro mapování spaloven v České republice</p>
           </div>
         </div>
       </footer>

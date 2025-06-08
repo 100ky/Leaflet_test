@@ -1,3 +1,12 @@
+/**
+ * Hlavní navigační komponenta aplikace
+ * 
+ * Zobrazuje horní menu s odkazy na jednotlivé stránky.
+ * Obsahuje logo aplikace České spalovny a responsivní hamburger menu.
+ * Automaticky označuje aktivní stránku podle aktuální URL.
+ * 
+ * @component
+ */
 'use client';
 
 import Link from 'next/link';
@@ -6,6 +15,7 @@ import { usePathname } from 'next/navigation';
 const Navigation = () => {
     const pathname = usePathname();
 
+    // Navigační položky v menu
     const navItems = [
         { href: '/', label: 'Mapa' },
         { href: '/incinerators', label: 'Spalovny' },
@@ -23,7 +33,7 @@ const Navigation = () => {
                             <span className="text-xl">🗺️</span>
                         </div>
                         <div>
-                            <div className="font-bold text-lg">EcoMap CZ</div>
+                            <div className="font-bold text-lg">České spalovny</div>
                             <div className="text-xs text-gray-300">Spalovny České republiky</div>
                         </div>
                     </Link>
@@ -35,8 +45,8 @@ const Navigation = () => {
                                 key={item.href}
                                 href={item.href}
                                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${pathname === item.href
-                                        ? 'bg-green-500 text-white'
-                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                    ? 'bg-green-500 text-white'
+                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                     }`}
                             >
                                 {item.label}
@@ -66,8 +76,8 @@ const Navigation = () => {
                                 key={item.href}
                                 href={item.href}
                                 className={`block px-3 py-2 rounded-lg text-base font-medium transition-colors ${pathname === item.href
-                                        ? 'bg-green-500 text-white'
-                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                    ? 'bg-green-500 text-white'
+                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                     }`}
                             >
                                 {item.label}

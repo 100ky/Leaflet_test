@@ -1,6 +1,16 @@
 /**
- * IncineratorDataContext - React Context pro správu dat spaloven
- * Poskytuje centralizované úložiště pro data spaloven, stav načítání a ovládání API
+ * React Context pro globální správu dat spaloven
+ * 
+ * Poskytuje centralizované state management pro:
+ * - Data spaloven a jejich stav načítání
+ * - API přepínání mezi lokálním/vzdáleným zdrojem
+ * - Synchronizaci mezi mapovými komponentami
+ * - Error handling a loading states
+ * - Cache management a optimalizace
+ * 
+ * Context eliminuje prop drilling a zajišťuje konzistentní stav.
+ * 
+ * @component
  */
 
 'use client';

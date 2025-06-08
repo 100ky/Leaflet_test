@@ -48,13 +48,6 @@ interface SidebarProps {
 
 // Nová responsivní sidebar komponenta  
 const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }: SidebarProps) => {
-    console.log('📱 ResponsiveSidebar render:', {
-        hasIncinerator: !!incinerator,
-        incineratorId: incinerator?.id,
-        incineratorName: incinerator?.name,
-        isOpen
-    });
-
     if (!isOpen) return null;
 
     return (
@@ -102,20 +95,20 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                             <h4 className="font-semibold text-gray-900 mb-2">Základní údaje</h4>
                             <div className="space-y-1 text-sm">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">ID:</span>
-                                    <span className="font-medium">{incinerator.id}</span>
+                                    <span className="text-gray-800">ID:</span>
+                                    <span className="font-medium text-gray-900">{incinerator.id}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Založeno:</span>
-                                    <span className="font-medium">{incinerator.yearEstablished || 'Neznámo'}</span>
+                                    <span className="text-gray-800">Založeno:</span>
+                                    <span className="font-medium text-gray-900">{incinerator.yearEstablished || 'Neznámo'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Šířka:</span>
-                                    <span className="font-medium">{incinerator.location.lat.toFixed(6)}</span>
+                                    <span className="text-gray-800">Šířka:</span>
+                                    <span className="font-medium text-gray-900">{incinerator.location.lat.toFixed(6)}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Délka:</span>
-                                    <span className="font-medium">{incinerator.location.lng.toFixed(6)}</span>
+                                    <span className="text-gray-800">Délka:</span>
+                                    <span className="font-medium text-gray-900">{incinerator.location.lng.toFixed(6)}</span>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +130,7 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                         {incinerator.description && (
                             <div className="bg-gray-50 rounded-lg p-3">
                                 <h4 className="font-semibold text-gray-900 mb-2">Popis</h4>
-                                <p className="text-gray-700 text-sm leading-relaxed">
+                                <p className="text-gray-800 text-sm leading-relaxed">
                                     {incinerator.description}
                                 </p>
                             </div>
@@ -169,16 +162,16 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                                 {/* Základní provozní údaje */}
                                 <div className="space-y-2 text-sm mb-4">
                                     <div className="flex justify-between">
-                                        <span className="text-gray-600">Provozovatel:</span>
-                                        <span className="font-medium text-right">{incinerator.officialInfo.operator}</span>
+                                        <span className="text-gray-800">Provozovatel:</span>
+                                        <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.operator}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-gray-600">Vlastník:</span>
-                                        <span className="font-medium text-right">{incinerator.officialInfo.owner}</span>
+                                        <span className="text-gray-800">Vlastník:</span>
+                                        <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.owner}</span>
                                     </div>
                                     {incinerator.officialInfo.website && (
                                         <div className="flex justify-between items-center">
-                                            <span className="text-gray-600">Web:</span>
+                                            <span className="text-gray-800">Web:</span>
                                             <a
                                                 href={incinerator.officialInfo.website}
                                                 target="_blank"
@@ -191,14 +184,14 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                                     )}
                                     {incinerator.officialInfo.phone && (
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Telefon:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.phone}</span>
+                                            <span className="text-gray-800">Telefon:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.phone}</span>
                                         </div>
                                     )}
                                     {incinerator.officialInfo.email && (
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Email:</span>
-                                            <span className="font-medium text-right text-xs break-all">{incinerator.officialInfo.email}</span>
+                                            <span className="text-gray-800">Email:</span>
+                                            <span className="font-medium text-gray-900 text-right text-xs break-all">{incinerator.officialInfo.email}</span>
                                         </div>
                                     )}
                                 </div>
@@ -211,28 +204,28 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                                     </h5>
                                     <div className="space-y-1 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Technologie:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.technology}</span>
+                                            <span className="text-gray-800">Technologie:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.technology}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Počet linek:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.numberOfLines}</span>
+                                            <span className="text-gray-800">Počet linek:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.numberOfLines}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Max. kapacita/linku:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.maxCapacityPerLine} t/rok</span>
+                                            <span className="text-gray-800">Max. kapacita/linku:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.maxCapacityPerLine} t/rok</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Elektrický výkon:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.electricalPowerMW} MW</span>
+                                            <span className="text-gray-800">Elektrický výkon:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.electricalPowerMW} MW</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Tepelný výkon:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.thermalPowerMW} MW</span>
+                                            <span className="text-gray-800">Tepelný výkon:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.thermalPowerMW} MW</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Produkce páry:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.steamProductionTh} t/h</span>
+                                            <span className="text-gray-800">Produkce páry:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.steamProductionTh} t/h</span>
                                         </div>
                                     </div>
                                 </div>
@@ -246,24 +239,24 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                                         </h5>
                                         <div className="grid grid-cols-2 gap-2 text-xs">
                                             <div className="flex justify-between">
-                                                <span className="text-gray-600">CO:</span>
-                                                <span className="font-medium">{incinerator.officialInfo.emissionLimits.CO} mg/m³</span>
+                                                <span className="text-gray-800">CO:</span>
+                                                <span className="font-medium text-gray-900">{incinerator.officialInfo.emissionLimits.CO} mg/m³</span>
                                             </div>
                                             <div className="flex justify-between">
-                                                <span className="text-gray-600">NOx:</span>
-                                                <span className="font-medium">{incinerator.officialInfo.emissionLimits.NOx} mg/m³</span>
+                                                <span className="text-gray-800">NOx:</span>
+                                                <span className="font-medium text-gray-900">{incinerator.officialInfo.emissionLimits.NOx} mg/m³</span>
                                             </div>
                                             <div className="flex justify-between">
-                                                <span className="text-gray-600">SO2:</span>
-                                                <span className="font-medium">{incinerator.officialInfo.emissionLimits.SO2} mg/m³</span>
+                                                <span className="text-gray-800">SO2:</span>
+                                                <span className="font-medium text-gray-900">{incinerator.officialInfo.emissionLimits.SO2} mg/m³</span>
                                             </div>
                                             <div className="flex justify-between">
-                                                <span className="text-gray-600">Prach:</span>
-                                                <span className="font-medium">{incinerator.officialInfo.emissionLimits.dust} mg/m³</span>
+                                                <span className="text-gray-800">Prach:</span>
+                                                <span className="font-medium text-gray-900">{incinerator.officialInfo.emissionLimits.dust} mg/m³</span>
                                             </div>
                                             <div className="flex justify-between col-span-2">
-                                                <span className="text-gray-600">Dioxiny:</span>
-                                                <span className="font-medium">{incinerator.officialInfo.emissionLimits.dioxins} ng/m³</span>
+                                                <span className="text-gray-800">Dioxiny:</span>
+                                                <span className="font-medium text-gray-900">{incinerator.officialInfo.emissionLimits.dioxins} ng/m³</span>
                                             </div>
                                         </div>
                                     </div>
@@ -311,12 +304,12 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                                     </h5>
                                     <div className="space-y-1 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Provozní doba:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.operatingHours}</span>
+                                            <span className="text-gray-800">Provozní doba:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.operatingHours}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Plán údržby:</span>
-                                            <span className="font-medium text-right">{incinerator.officialInfo.maintenanceSchedule}</span>
+                                            <span className="text-gray-800">Plán údržby:</span>
+                                            <span className="font-medium text-gray-900 text-right">{incinerator.officialInfo.maintenanceSchedule}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -325,11 +318,11 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
 
                         {/* Zdroj dat */}
                         <div className="border-t pt-3">
-                            <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center text-xs text-gray-700">
                                 <span className="mr-2">🔗</span>
                                 <span>Zdroj: {usingRemoteApi ? 'Vzdálené API' : 'Lokální data'}</span>
                                 {!usingRemoteApi && incinerator.officialInfo && (
-                                    <span className="ml-2 text-green-600">
+                                    <span className="ml-2 text-green-700">
                                         (Rozšířené informace dostupné)
                                     </span>
                                 )}
@@ -337,7 +330,7 @@ const ResponsiveSidebar = memo(({ incinerator, isOpen, onClose, usingRemoteApi }
                         </div>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
+                    <div className="flex items-center justify-center h-full text-gray-700">
                         <p>Vyberte spalovnu pro zobrazení detailů</p>
                     </div>
                 )}
@@ -748,10 +741,8 @@ export default function ModernMapClient() {
         refetch,
         switchToRemoteApi,
         switchToLocalApi
-    } = useIncineratorDataContext();
-
-    const handleDoubleClick = (incinerator: Incinerator) => {
-        console.log('🔥 Modern map: handleDoubleClick called for incinerator:', incinerator.id, incinerator.name);
+    } = useIncineratorDataContext(); const handleDoubleClick = (incinerator: Incinerator) => {
+        logger.debug(`Modern map double-click na spalovnu: ${incinerator.name} (ID: ${incinerator.id})`);
 
         // Zavřeme všechny popup okna před otevřením sidebaru
         if (window.closeAllPopups) {
@@ -760,7 +751,7 @@ export default function ModernMapClient() {
 
         setSelectedIncinerator(incinerator);
         setSidebarOpen(true);
-        console.log('📱 Modern map: Sidebar should now be open:', true);
+        logger.debug('Modern map: Sidebar otevřen');
     };
 
     const closeSidebar = () => {

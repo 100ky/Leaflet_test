@@ -1,5 +1,15 @@
 /**
- * Komponenta pro zobrazení stavu vzdáleného API a možností přepínání
+ * Panel pro správu vzdáleného API připojení
+ * 
+ * Zobrazuje aktuální stav připojení ke vzdálenému API a umožňuje:
+ * - Testování dostupnosti API
+ * - Přepínání mezi lokálními a vzdálenými daty
+ * - Monitoring latence a response časů
+ * - Zobrazení podrobných informací o API stavu
+ * 
+ * Panel poskytuje vizuální indikátory stavu připojení.
+ * 
+ * @component
  */
 
 'use client';

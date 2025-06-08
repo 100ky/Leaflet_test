@@ -1,5 +1,13 @@
 /**
- * API proxy pro vzdálené API - řešení CORS problémů
+ * Next.js API proxy pro vzdálené API spaloven
+ * 
+ * Řeší CORS problémy a poskytuje:
+ * - Proxy přístup k externímu API
+ * - Filtrování polygon dat podle zoom úrovně
+ * - Timeout protection a error handling
+ * - CORS hlavičky pro frontend komunikaci
+ * 
+ * @api
  */
 
 import { NextRequest, NextResponse } from 'next/server';

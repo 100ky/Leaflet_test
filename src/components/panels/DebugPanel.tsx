@@ -1,6 +1,15 @@
 /**
- * DebugPanel - Pokročilý debug panel pro monitorování API a mapových operací
- * Poskytuje real-time sledování volání, cachingu a chybových stavů
+ * Pokročilý debug panel pro vývojářské monitorování
+ * 
+ * Poskytuje real-time sledování:
+ * - API volání a jejich stav
+ * - Cache operací a hit/miss statistik
+ * - Chybové stavy a warning hlášení
+ * - Mapové operace a události
+ * 
+ * Panel je primárně určen pro development a ladění aplikace.
+ * 
+ * @component
  */
 
 'use client';

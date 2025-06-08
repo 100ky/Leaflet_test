@@ -251,7 +251,7 @@ function IncineratorsContent() {
             <footer className="bg-gray-900 text-white py-8">
                 <div className="max-w-6xl mx-auto px-4">
                     <div className="text-center text-gray-400">
-                        <p>&copy; 2025 EcoMap CZ | Projekt pro mapování spaloven v České republice</p>
+                        <p>&copy; 2025 České spalovny | Projekt pro mapování spaloven v České republice</p>
                     </div>
                 </div>
             </footer>

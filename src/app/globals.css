@@ -1,13 +1,24 @@
-/* Globální styly aplikace */
+/**
+ * Globální styly aplikace České spalovny
+ * 
+ * Tento soubor obsahuje:
+ * - Import Tailwind CSS a utility stylů
+ * - CSS proměnné pro barevné palety (světlý/tmavý režim)
+ * - Základní utility třídy pro transitions
+ * - Reset stylů a základní typografii
+ * - Responsive design pro všechny velikosti obrazovek
+ */
 @import "tailwindcss";
 
-/* Import utility tříd */
+/* ===== IMPORT STYLŮ ===== */
 @import "../styles/utilities.css";
 @import "../styles/additional-utilities.css";
 
-/* 
- * Barevné proměnné - světlý režim
- * Definice barev pro celou aplikaci
+/* ===== BAREVNÉ PROMĚNNÉ - SVĚTLÝ REŽIM ===== */
+/**
+ * Definice CSS proměnných pro celou aplikaci
+ * Obsahuje základní, primární, sekundární a akcentové barvy
+ * Plus specifické barvy pro UI komponenty a značky spaloven
  */
 :root {
   /* Základní barvy */
@@ -45,8 +56,10 @@
   /* Plánované - modrá */
 }
 
-/* 
- * Tmavý režim podle nastavení systému 
+/* ===== BAREVNÉ PROMĚNNÉ - TMAVÝ REŽIM ===== */
+/**
+ * Automatické přepnutí na tmavý režim podle systémového nastavení
+ * Upravené barvy pro lepší čitelnost v tmavém prostředí
  */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -86,8 +99,11 @@
   }
 }
 
-/* 
- * Utility třídy pro optimalizaci transitions
+/* ===== UTILITY TŘÍDY PRO TRANSITIONS ===== */
+/**
+ * Připravené třídy pro plynulé animace
+ * Pokrývá rychlé, normální a pomalé přechody
+ * Plus specializované transitions pro stíny a barvy
  */
 .transition-fast {
   transition: all 0.2s ease;
@@ -109,8 +125,11 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 
- * Základní styly pro tělo stránky a typografii
+/* ===== ZÁKLADNÍ STYLY A TYPOGRAFIE ===== */
+/**
+ * Reset stylů pro konzistentní zobrazení napříč prohlížeči
+ * Základní nastavení písma, řádkování a barev
+ * Styly pro nadpisy a odkazy s hover efekty
  */
 body {
   background: var(--background);

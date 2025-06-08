@@ -1,6 +1,16 @@
 /**
- * incinerators.ts - Databáze spaloven v České republice
- * Obsahuje kompletní údaje o všech spalovnách včetně oficiálních informací
+ * Databáze spaloven České republiky
+ * 
+ * Obsahuje kompletní oficiální data o všech spalovnách v ČR:
+ * - Základní informace (název, lokace, adresa)
+ * - Technické specifikace (kapacita, typ technologie)
+ * - Provozní údaje (stav, rok spuštění, provozovatel)
+ * - Kontaktní informace (telefon, email, web)
+ * - Geografické souřadnice pro mapové zobrazení
+ * 
+ * Data slouží jako fallback při nedostupnosti vzdáleného API.
+ * 
+ * @module incineratorData
  */
 
 import { Incinerator } from '@/types';

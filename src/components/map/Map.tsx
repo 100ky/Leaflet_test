@@ -1,6 +1,15 @@
 /**
- * Map - Hlavní komponenta pro zobrazení interaktivní mapy
- * Obsahuje Leaflet mapu s markery spaloven, popup okna a ovládací prvky
+ * Hlavní mapová komponenta aplikace České spalovny
+ * 
+ * Zobrazuje interaktivní Leaflet mapu s následujícími funkcemi:
+ * - Markery spaloven s barevným rozlišením podle stavu
+ * - Popup okna s detailními informacemi o spalovně
+ * - Ovládací prvky pro zoom a navigaci
+ * - Dynamické načítání dat při změně viewport
+ * 
+ * Komponenta je SSR safe pomocí dynamic importu.
+ * 
+ * @component
  */
 
 'use client';
@@ -11,7 +20,7 @@ import './Map.css';
 import { Incinerator } from '@/types';
 import { MAP_CONSTANTS } from '@/utils/mapHelpers';
 
-// Dynamický import MapClient komponenty pro SSR compatibility
+// Dynamický import MapClient komponenty pro SSR kompatibilitu
 const MapClient = dynamic(() => import('./MapClient'), {
   ssr: false,
   loading: () => (

@@ -1,11 +1,18 @@
 /**
- * types/index.ts - Definice TypeScript typů pro aplikaci
- * Obsahuje všechny interface a typy používané v celé aplikaci
+ * Definice TypeScript typů pro aplikaci České spalovny
+ * 
+ * Obsahuje veškeré interface a typy používané napříč aplikací:
+ * - Datové modely spaloven a jejich komponent
+ * - Geografické a mapové typy
+ * - UI komponenty a jejich vlastnosti
+ * - API komunikace a stavy aplikace
  */
 
 /**
  * Oficiální provozní informace o spalovně
- * Obsahuje kompletní údaje o provozu, technologii a kontaktech
+ * 
+ * Obsahuje kompletní údaje o provozu, technických parametrech
+ * a kontaktních informacích spalovny
  */
 export interface IncineratorOfficialInfo {
   operator: string;              // Provozovatel

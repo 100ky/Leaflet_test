@@ -12,7 +12,7 @@ export default function AboutPage() {
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold mb-6">
-                            O projektu <span className="text-green-400">EcoMap CZ</span>
+                            O projektu <span className="text-green-400">České spalovny</span>
                         </h1>
                         <p className="text-lg text-gray-300">
                             Komplexní přehled spaloven odpadu v České republice s interaktivní mapou a detailními informacemi
@@ -30,7 +30,7 @@ export default function AboutPage() {
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Účel projektu</h2>
                                 <p className="text-gray-600 leading-relaxed">
-                                    EcoMap CZ je interaktivní mapa určená k vizualizaci a analýze spaloven komunálního odpadu
+                                    České spalovny je interaktivní mapa určená k vizualizaci a analýze spaloven komunálního odpadu
                                     na území České republiky. Poskytuje komplexní přehled o umístění, kapacitách a technologiích
                                     jednotlivých zařízení.
                                 </p>
@@ -136,7 +136,7 @@ export default function AboutPage() {
             <footer className="bg-gray-900 text-white py-8">
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="text-center text-gray-400">
-                        <p>&copy; 2025 EcoMap CZ | Projekt pro mapování spaloven v České republice</p>
+                        <p>&copy; 2025 České spalovny | Projekt pro mapování spaloven v České republice</p>
                     </div>
                 </div>
             </footer>

@@ -185,7 +185,7 @@ export default function Home() {
       <footer className="bg-gray-900 text-white py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center text-gray-400">
-            <p>&copy; {mounted ? new Date().getFullYear() : 2025} EcoMap CZ | Data: <a href="https://www.openstreetmap.org/copyright" className="text-green-400 hover:text-green-300 transition-colors">OpenStreetMap</a></p>
+            <p>&copy; {mounted ? new Date().getFullYear() : 2025} České spalovny | Data: <a href="https://www.openstreetmap.org/copyright" className="text-green-400 hover:text-green-300 transition-colors">OpenStreetMap</a></p>
           </div>
         </div>
       </footer>
