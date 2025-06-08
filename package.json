@@ -18,7 +18,7 @@
     "url": "https://github.com/100ky/Leaflet_test.git"
   },
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

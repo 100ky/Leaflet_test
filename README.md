@@ -56,6 +56,75 @@ npm run dev
 
 Aplikace bude dostupná na [http://localhost:3000](http://localhost:3000)
 
+### 📱 Přístup z telefonu/tabletu pomocí ngrok
+
+Pro testování aplikace na mobilních zařízeních nebo sdílení s ostatními můžete použít ngrok:
+
+#### 1. Instalace ngrok
+
+**Windows (Chocolatey):**
+```bash
+choco install ngrok
+```
+
+**Windows (Scoop):**
+```bash
+scoop bucket add extras
+scoop install ngrok
+```
+
+**macOS (Homebrew):**
+```bash
+brew install ngrok/ngrok/ngrok
+```
+
+**Linux (nebo ruční instalace):**
+```bash
+# Stáhnout z https://ngrok.com/download
+# Rozbalit a přidat do PATH
+```
+
+#### 2. Spuštění s ngrok
+
+```bash
+# 1. Spusťte vývojový server
+npm run dev
+
+# 2. V novém terminálu spusťte ngrok
+ngrok http 3000
+```
+
+#### 3. Použití
+
+Po spuštění ngrok vám poskytne veřejnou URL, například:
+```
+https://a442-2a02-830a-8400-9c00.ngrok-free.app
+```
+
+**Tuto URL můžete:**
+- 📱 Otevřít na telefonu nebo tabletu
+- 🌐 Sdílet s kolegy pro testování
+- 🔗 Používat z jakéhokoli místa s internetem
+
+#### 4. Výhody ngrok
+
+- ✅ **HTTPS automaticky** - bezpečné připojení
+- ✅ **Žádná konfigurace** firewallu nebo routeru
+- ✅ **Veřejně přístupné** - funguje odkudkoli
+- ✅ **Rychlé sdílení** - ideální pro demo a testování
+
+#### 5. Alternativní místní přístup
+
+Pokud chcete používat pouze lokální síť (bez ngrok):
+
+```bash
+# Spuštění serveru na všech síťových rozhraních
+npm run dev -- --hostname 0.0.0.0
+```
+
+Pak použijte lokální IP adresu na telefonu (musí být na stejné WiFi):
+- `http://192.168.x.x:3000` (zjistěte svou IP pomocí `ipconfig`)
+
 ### 🎯 Dostupné stránky
 
 - **/** - Klasická mapa spaloven (základní rozhraní)
@@ -217,6 +286,18 @@ Pro produkční monitoring doporučujeme:
 **Build chyby:**
 - Spusťte `npm run lint` pro kontrolu syntaxe
 - Zkontrolujte TypeScript chyby: `npx tsc --noEmit`
+
+**Přístup z telefonu nefunguje:**
+- Použijte ngrok pro jednoduché sdílení: `ngrok http 3000`
+- Pro lokální síť: ujistěte se, že firewall neblokuje port 3000
+- Zkontrolujte, že telefon je na stejné WiFi síti
+- Zkuste IP adresu místo localhost: `http://192.168.x.x:3000`
+
+**Ngrok problémy:**
+- Zkontrolujte, že je ngrok správně nainstalován: `ngrok version`
+- Ujistěte se, že Next.js server běží na portu 3000
+- Pro stabilnější URL použijte ngrok auth token (zdarma na ngrok.com)
+- Při problémech restartujte ngrok: `Ctrl+C` a znovu `ngrok http 3000`
 
 ### Debug režim
 
