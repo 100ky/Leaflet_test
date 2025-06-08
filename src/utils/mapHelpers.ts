@@ -138,7 +138,7 @@ export const generatePopupHTML = (content: PopupContent): string => {
         <div style="font-size: 13px; line-height: 1.4;">
           <p style="margin: 4px 0;"><strong>Provozovatel:</strong> ${content.officialInfo.operator}</p>
           <p style="margin: 4px 0;"><strong>Vlastník:</strong> ${content.officialInfo.owner}</p>
-          <p style="margin: 4px 0;"><strong>Web:</strong> <a href="${content.officialInfo.website}" target="_blank" rel="noopener noreferrer" style="word-break: break-all;">Odkaz</a></p>
+          <p style="margin: 4px 0;"><strong>Web:</strong> <a href="${content.officialInfo.website}" target="_blank" rel="noopener noreferrer" style="word-break: break-all; color: #3b82f6; text-decoration: underline; cursor: pointer;" onclick="window.open('${content.officialInfo.website}', '_blank', 'noopener,noreferrer'); return false;">Odkaz</a></p>
           <p style="margin: 4px 0;"><strong>Telefon:</strong> ${content.officialInfo.phone}</p>
           <p style="margin: 4px 0;"><strong>Email:</strong> <span style="word-break: break-all;">${content.officialInfo.email}</span></p>
           <p style="margin: 4px 0;"><strong>Technologie:</strong> ${content.officialInfo.technology}</p>

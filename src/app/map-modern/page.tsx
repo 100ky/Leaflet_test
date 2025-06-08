@@ -18,8 +18,8 @@ function NavItem({ href, label, isActive }: { href: string; label: string; isAct
         <Link
             href={href}
             className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${isActive
-                    ? 'bg-blue-500 text-white shadow-md transform scale-105'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm'
+                ? 'bg-blue-500 text-white shadow-md transform scale-105'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-sm'
                 }`}
         >
             {label}
@@ -34,8 +34,8 @@ function MobileNavItem({ href, label, isActive, onClick }: { href: string; label
             href={href}
             onClick={onClick}
             className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${isActive
-                    ? 'bg-blue-500 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'bg-blue-500 text-white shadow-md'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
         >
             {label}
@@ -57,15 +57,13 @@ export default function MapModernPage() {
         { href: '/incinerators', label: 'Seznam spaloven' },
         { href: '/about', label: 'O projektu' },
         { href: '/contact', label: 'Kontakt' },
-    ];
-
-    // Prevent hydration mismatch by not showing active states until mounted
+    ];    // Prevent hydration mismatch by not showing active states until mounted
     const getIsActive = (href: string) => mounted && pathname === href;
 
     return (
-        <div className="h-screen flex flex-col bg-gray-100">
-            {/* Profesionální navigační hlavička */}
-            <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200 h-20 flex-shrink-0 z-50 relative">
+        <div className="h-screen flex flex-col bg-gray-100 overflow-hidden">
+            {/* Profesionální navigační hlavička - pevná pozice */}
+            <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200 h-20 flex-shrink-0 z-50 fixed top-0 left-0 right-0">
                 <div className="max-w-7xl mx-auto h-full px-8 flex items-center">
                     {/* Logo vlevo */}
                     <div className="flex items-center">
@@ -128,7 +126,7 @@ export default function MapModernPage() {
 
                 {/* Mobilní menu rozbalené */}
                 {isMobileMenuOpen && (
-                    <div className="md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-xl">
+                    <div className="md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-xl z-40">
                         <div className="max-w-7xl mx-auto px-8 py-6 space-y-2">
                             {navItems.map((item) => (
                                 <MobileNavItem
@@ -144,8 +142,8 @@ export default function MapModernPage() {
                 )}
             </header>
 
-            {/* Mapa přes zbytek obrazovky */}
-            <div className="flex-1 relative">
+            {/* Mapa přes zbytek obrazovky - posun o výšku hlavičky */}
+            <div className="pt-20 h-screen">
                 <IncineratorDataProvider>
                     <ModernMapClient />
                 </IncineratorDataProvider>
