@@ -1,0 +1,14 @@
+{
+  "navigation": {
+    "home": "Home",
+    "map": "Map",
+    "incinerators": "Incinerators",
+    "about": "About"
+  },
+
+  "userPanel": {
+    "signIn": "Sign In",
+    "register": "Register",
+    "signOut": "Sign Out"
+  }
+}

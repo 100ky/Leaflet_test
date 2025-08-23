@@ -1,0 +1,1285 @@
+/**
+ * Utility CSS třídy pro aplikaci České spalovny
+ * 
+ * Obsahuje často používané styly pro:
+ * - Panel komponenty a jejich rozložení
+ * - Interaktivní prvky a tlačítka
+ * - Responzivní chování a animace
+ * - Konzistentní typografii a spacing
+ * 
+ * Optimalizováno pro kompatibilitu s Tailwind CSS v4 + Turbopack
+ */
+
+/* ===== KOMPONENTY PANELŮ ===== */
+
+/* Základní panel s bílým pozadím a stínem */
+.panel-base {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: none;
+    /* Vypnutí animací pro stabilitu */
+}
+
+/* Panel s velkým stínem pro hlavní obsahové oblasti */
+.panel-main {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: none;
+    /* Vypnutí animací pro stabilitu */
+}
+
+/* Panel s padding pro standardní obsah */
+.panel-content {
+    padding: 0.75rem;
+    transition: none;
+    /* Vypnutí animací pro stabilitu */
+}
+
+@media (min-width: 640px) {
+    .panel-content {
+        padding: 1rem;
+    }
+}
+
+/* Panel s rozšířeným paddingem pro hlavní oblasti */
+.panel-content-lg {
+    padding: 1rem;
+}
+
+@media (min-width: 640px) {
+    .panel-content-lg {
+        padding: 1.5rem;
+    }
+}
+
+/* ===== TYPOGRAFIE A TEXT ===== */
+
+/* Malý šedý text pro pomocné informace */
+.text-helper {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Malý tmavě šedý text pro popisky */
+.text-label {
+    font-size: 0.75rem;
+    color: #4b5563;
+}
+
+/* Základní velikost textu pro mobilní/desktop */
+.text-responsive {
+    font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .text-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Nadpisy panelů - responsive */
+.panel-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+@media (min-width: 640px) {
+    .panel-title {
+        font-size: 1rem;
+    }
+}
+
+/* ===== FLEXBOX ROZLOŽENÍ ===== */
+
+/* Flex kontejner pro header s justify-between */
+.flex-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Flex kontejner pro status indikátory */
+.flex-status {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .flex-status {
+        gap: 0.5rem;
+    }
+}
+
+/* Flex kontejner pro tlačítka */
+.flex-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ===== ROZESTUPY A SPACING ===== */
+
+/* Standardní spacing pro sekce */
+.section-spacing>*+* {
+    margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+    .section-spacing>*+* {
+        margin-top: 1.5rem;
+    }
+}
+
+/* Malé spacing pro kompaktní sekce */
+.section-spacing-sm>*+* {
+    margin-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .section-spacing-sm>*+* {
+        margin-top: 0.75rem;
+    }
+}
+
+/* ===== INTERAKTIVNÍ PRVKY ===== */
+
+/* Klikatelná oblast s hover efektem */
+.clickable-area {
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.clickable-area:hover {
+    background-color: #f9fafb;
+}
+
+/* Základní styling pro tlačítka */
+.btn-base {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    transition: all 0.15s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+/* Primární tlačítko */
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+/* Sekundární tlačítko */
+.btn-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background-color: #d1d5db;
+}
+
+/* Nebezpečné/červené tlačítko - sjednocené z .btn-danger a .btn-red */
+.btn-danger,
+.btn-red {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.btn-danger:hover,
+.btn-red:hover {
+    background-color: #fee2e2;
+}
+
+.btn-danger:disabled,
+.btn-red:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Success tlačítko */
+.btn-success {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+}
+
+/* Modré tlačítko */
+.btn-blue {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #93c5fd;
+}
+
+.btn-blue:hover {
+    background-color: #bfdbfe;
+}
+
+.btn-blue:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Zelené tlačítko */
+.btn-green {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.btn-green:hover {
+    background-color: #bbf7d0;
+}
+
+.btn-green:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===== INDIKÁTORY STAVU ===== */
+
+/* Základní kruhový indikátor */
+.status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+}
+
+@media (min-width: 640px) {
+    .status-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+}
+
+/* Status indikátor - načítání */
+.status-loading {
+    background-color: #fb923c;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+/* Status indikátor - úspěch */
+.status-success {
+    background-color: #4ade80;
+}
+
+/* Status indikátor - chyba */
+.status-error {
+    background-color: #f87171;
+}
+
+/* ===== GRID ROZLOŽENÍ ===== */
+
+/* Responsive grid pro statistiky */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 640px) {
+    .stats-grid {
+        gap: 1rem;
+    }
+}
+
+/* Grid pro tlačítka v řadě */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+/* ===== VIDITELNOST PRVKŮ ===== */
+
+/* Skrýt na malých obrazovkách */
+.hidden-mobile {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .hidden-mobile {
+        display: block;
+    }
+}
+
+/* Skrýt na velkých obrazovkách */
+.hidden-desktop {
+    display: block;
+}
+
+@media (min-width: 640px) {
+    .hidden-desktop {
+        display: none;
+    }
+}
+
+/* Inline na velkých, block na malých */
+.responsive-inline {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .responsive-inline {
+        display: inline;
+    }
+}
+
+/* ===== POSUVNÍKY A SCROLL ===== */
+
+/* Kontejner s omezenou výškou a scrollem */
+.scroll-container {
+    max-height: 10rem;
+    overflow-y: auto;
+}
+
+/* Kontejner pro logy s vyšší výškou */
+.scroll-logs {
+    height: 12rem;
+    overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+    .scroll-logs {
+        height: 16rem;
+    }
+}
+
+/* ===== NAČÍTACÍ STAVY ===== */
+
+/* Centrovaný loading indikátor */
+.loading-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+    .loading-center {
+        padding: 2rem 0;
+    }
+}
+
+/* Loading text vedle spinneru */
+.loading-text {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+@media (min-width: 640px) {
+    .loading-text {
+        margin-left: 0.75rem;
+        font-size: 1rem;
+    }
+}
+
+/* Animace pro loading stav */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    border-radius: 50%;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-bottom: 2px solid #2563eb;
+    border-top: 2px solid transparent;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+}
+
+@media (min-width: 640px) {
+    .loading-spinner {
+        height: 2rem;
+        width: 2rem;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== KARTY A BOXY ===== */
+
+/* Karta pro statistiky */
+.stat-card {
+    padding: 0.5rem;
+    background-color: #eff6ff;
+    border-radius: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .stat-card {
+        padding: 0.75rem;
+    }
+}
+
+/* Hodnota ve statistice */
+.stat-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+@media (min-width: 640px) {
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* Label ve statistice */
+.stat-label {
+    font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .stat-label {
+        font-size: 0.875rem;
+    }
+}
+
+/* Výsledková karta */
+.result-card {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+@media (min-width: 640px) {
+    .result-card {
+        padding: 0.75rem;
+    }
+}
+
+/* Úspěšná karta */
+.success-card {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+/* Chybová karta */
+.error-card {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+}
+
+/* Error box styling */
+.error-box {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .error-box {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* ===== SEZNAMY A DETAILY ===== */
+
+/* Seznam detailů */
+.detail-list {
+    font-size: 0.75rem;
+}
+
+.detail-list>*+* {
+    margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .detail-list {
+        font-size: 0.875rem;
+    }
+
+    .detail-list>*+* {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Položka detailu */
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ===== UKAZATELE PRŮBĚHU ===== */
+
+/* Sekce s progress barem */
+.progress-section {
+    margin-top: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .progress-section {
+        margin-top: 1rem;
+    }
+}
+
+/* Header progress baru */
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #4b5563;
+    margin-bottom: 0.25rem;
+}
+
+/* Progress bar background */
+.progress-bar {
+    width: 100%;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    height: 0.5rem;
+}
+
+/* Progress bar fill */
+.progress-fill {
+    height: 0.5rem;
+    border-radius: 9999px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* ===== ODZNAKY A ŠTÍTKY ===== */
+
+.badge-blue {
+    background-color: #dbeafe;
+    color: #1e40af;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.badge-green {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.badge-red {
+    background-color: #fef2f2;
+    color: #991b1b;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+/* ===== SKUPINY TLAČÍTEK ===== */
+
+/* Skupina tlačítek */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .button-group {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+}
+
+/* ===========================================
+   INFO TEXT
+   =========================================== */
+
+/* Informační text */
+.info-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.info-text>*+* {
+    margin-top: 0.25rem;
+}
+
+/* ===========================================
+   SPECIAL PURPOSE
+   =========================================== */
+
+/* Terminal/console styling */
+.terminal-style {
+    background-color: #000000;
+    color: #4ade80;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .terminal-style {
+        padding: 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Info box styling */
+.info-box {
+    padding: 0.75rem;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.25rem;
+}
+
+/* Warning box styling */
+.warning-box {
+    padding: 0.75rem;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.25rem;
+}
+
+/* Monospace text for technical data */
+.mono-text {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.75rem;
+}
+
+/* ===========================================
+   PAGE LAYOUT UTILITIES (z additional-utilities.css)
+   =========================================== */
+
+/* Page header - problematická třída byla vypuštěna */
+.page-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    background-color: var(--header-bg);
+    box-shadow: var(--header-shadow);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.page-main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.page-intro {
+    width: 100%;
+    max-width: 80rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-intro-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--foreground);
+}
+
+.page-intro-text {
+    color: var(--foreground);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    max-width: 48rem;
+}
+
+/* ===========================================
+   LEGEND STYLES
+   =========================================== */
+
+.legend-container {
+    width: 100%;
+    max-width: 80rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.legend-text {
+    font-size: 0.875rem;
+    color: var(--foreground);
+}
+
+/* ===========================================
+   MAP CONTAINER
+   =========================================== */
+
+.map-container {
+    width: 100%;
+    max-width: 80rem;
+    background-color: var(--card);
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.map-container:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ===========================================
+   INFO SECTIONS
+   =========================================== */
+
+.info-section {
+    width: 100%;
+    max-width: 80rem;
+    margin-top: 1.5rem;
+    background-color: rgba(239, 246, 255, 0.5);
+    border: 1px solid #bfdbfe;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+    .info-section {
+        background-color: rgba(30, 58, 138, 0.1);
+        border-color: #1e40af;
+    }
+}
+
+.info-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.info-icon {
+    color: #3b82f6;
+    font-size: 1.25rem;
+}
+
+.info-title {
+    color: #1d4ed8;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .info-title {
+        color: #93c5fd;
+    }
+}
+
+.info-list {
+    color: var(--foreground);
+    opacity: 0.8;
+    font-size: 0.875rem;
+    list-style-type: disc;
+    padding-left: 1rem;
+}
+
+.info-list>*+* {
+    margin-top: 0.25rem;
+}
+
+/* ===========================================
+   FOOTER
+   =========================================== */
+
+.page-footer {
+    width: 100%;
+    background-color: var(--card);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-text {
+    color: var(--foreground);
+    opacity: 0.7;
+    font-size: 0.875rem;
+}
+
+/* ===========================================
+   TEST PAGE UTILITIES
+   =========================================== */
+
+.test-page-bg {
+    min-height: 100vh;
+    background-color: #f9fafb;
+}
+
+.test-header {
+    background-color: white;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .test-header {
+        padding: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-header {
+        padding: 1rem;
+    }
+}
+
+.test-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+@media (min-width: 640px) {
+    .test-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-title {
+        font-size: 1.5rem;
+    }
+}
+
+.test-subtitle {
+    color: #4b5563;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .test-subtitle {
+        font-size: 0.875rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-subtitle {
+        font-size: 1rem;
+    }
+}
+
+.test-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .test-main {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-main {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* ===========================================
+   TEST GRID LAYOUTS
+   =========================================== */
+
+.test-grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .test-grid-responsive {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-grid-responsive {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .test-grid-responsive {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 640px) {
+    .test-grid-responsive {
+        gap: 0.75rem;
+    }
+}
+
+.test-grid-two-col {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .test-grid-two-col {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 640px) {
+    .test-grid-two-col {
+        gap: 0.75rem;
+    }
+}
+
+/* ===========================================
+   TEST MAP SECTION
+   =========================================== */
+
+.test-map-section {
+    order: 1;
+}
+
+@media (min-width: 1024px) {
+    .test-map-section {
+        grid-column: span 4 / span 4;
+    }
+}
+
+.test-map-header {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+@media (min-width: 640px) {
+    .test-map-header {
+        padding: 1rem;
+    }
+}
+
+.test-map-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+@media (min-width: 640px) {
+    .test-map-title {
+        font-size: 1.125rem;
+    }
+}
+
+.test-map-subtitle {
+    color: #4b5563;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .test-map-subtitle {
+        font-size: 0.875rem;
+    }
+}
+
+.test-map-controls {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.test-api-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+.test-refresh-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-radius: 0.25rem;
+    transition: background-color 0.15s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+.test-refresh-btn:hover {
+    background-color: #bfdbfe;
+}
+
+.test-map-container {
+    position: relative;
+}
+
+/* ===========================================
+   TEST PANEL SECTIONS
+   =========================================== */
+
+.test-panel-section {
+    order: 2;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .test-panel-section {
+        grid-column: span 4 / span 4;
+        margin-top: 2rem;
+    }
+}
+
+.test-panel-section>*+* {
+    margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+    .test-panel-section>*+* {
+        margin-top: 1.5rem;
+    }
+}
+
+/* ===========================================
+   TEST DOCUMENTATION SECTION
+   =========================================== */
+
+.test-docs-section {
+    margin-top: 0.75rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .test-docs-section {
+        margin-top: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-docs-section {
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+}
+
+.test-docs-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .test-docs-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-docs-title {
+        font-size: 1.125rem;
+    }
+}
+
+.test-docs-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .test-docs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (min-width: 640px) {
+    .test-docs-grid {
+        gap: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .test-docs-grid {
+        gap: 1rem;
+    }
+}
+
+.test-docs-section-title {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.test-docs-list {
+    color: #374151;
+    font-size: 0.75rem;
+    list-style-type: disc;
+    padding-left: 1rem;
+}
+
+.test-docs-list>*+* {
+    margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .test-docs-list {
+        font-size: 0.875rem;
+        padding-left: 1.25rem;
+    }
+}
+
+/* ===========================================
+   STABILIZACE PANELŮ
+   =========================================== */
+
+/* Třída pro vypnutí přechodů a animací */
+.transition-none {
+    transition: none !important;
+}
+
+/* Stabilizace pro live debug panel */
+.live-debug-stable {
+    min-height: 120px;
+    transition: none !important;
+}
+
+.live-debug-stable.expanded {
+    height: auto;
+    max-height: 400px;
+}
+
+/* Zabránění změnám rozložení při rozbalování panelů */
+.layout-stable {
+    contain: layout style;
+    will-change: auto;
+}
+
+/* Data Analysis Panel - stabilní rozměry */
+.data-analysis-panel {
+    min-width: 280px;
+    max-width: 320px;
+    width: 300px;
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 639px) {
+    .data-analysis-panel {
+        min-width: 260px;
+        max-width: 280px;
+        width: 270px;
+        min-height: 350px;
+    }
+}
+
+/* Kontejner pro obsah Data Analysis panelu */
+.data-content-container {
+    position: absolute;
+    top: 60px;
+    /* Prostor pro header */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .data-content-container {
+        top: 70px;
+        /* Více prostoru pro větší header */
+        padding: 0 1rem 1rem 1rem;
+    }
+}
+
+/* Loading a error stavy v Data Analysis panelu */
+.data-analysis-panel .loading-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+}
+
+.data-analysis-panel .error-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+    padding: 1rem;
+}
