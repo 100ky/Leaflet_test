@@ -1,0 +1,14 @@
+{
+  "navigation": {
+    "home": "Domů",
+    "map": "Mapa",
+    "incinerators": "Spalovny",
+    "about": "O projektu"
+  },
+
+  "userPanel": {
+    "signIn": "Přihlásit",
+    "register": "Registrovat",
+    "signOut": "Odhlásit"
+  }
+}
