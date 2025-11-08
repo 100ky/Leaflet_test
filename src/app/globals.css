@@ -1,172 +1,83 @@
-/**
- * Globální styly aplikace České spalovny
- * 
- * Tento soubor obsahuje:
- * - Import Tailwind CSS a utility stylů
- * - CSS proměnné pro barevné palety (světlý/tmavý režim)
- * - Základní utility třídy pro transitions
- * - Reset stylů a základní typografii
- * - Responsive design pro všechny velikosti obrazovek
- */
 @import "tailwindcss";
+@import "@tailwindcss/typography";
 
-/* ===== IMPORT STYLŮ ===== */
-@import "../styles/utilities.css";
-@import "../styles/additional-utilities.css";
-
-/* ===== BAREVNÉ PROMĚNNÉ - SVĚTLÝ REŽIM ===== */
-/**
- * Definice CSS proměnných pro celou aplikaci
- * Obsahuje základní, primární, sekundární a akcentové barvy
- * Plus specifické barvy pro UI komponenty a značky spaloven
- */
 :root {
-  /* Základní barvy */
-  --background: #f8fafc;
-  --foreground: #1e293b;
+  /* header */
+  --header-height: 4rem;
+  /* 64px */
 
-  /* Primární barevná paleta (modrá) */
-  --primary: #3b82f6;
-  --primary-light: #60a5fa;
-  --primary-dark: #2563eb;
+  /* light palette */
+  --palette-bg-light: #ffffff;
+  --palette-bg-muted-light: #f3f4f6;
+  --palette-fg-light: #212121;
+  --palette-fg-muted-light: #2c2c2c;
+  --palette-blue-light: #eff6ff;
+  --palette-primary-bg-light: #3b82f6;
+  --palette-primary-bg-hover-light: #2563eb;
+  --palette-primary-fg-light: #ffffff;
 
-  /* Sekundární barevná paleta (zelená) */
-  --secondary: #10b981;
-  --secondary-light: #34d399;
-  --secondary-dark: #059669;
+  /* dark palette */
+  --palette-bg-dark: #242424;
+  --palette-bg-muted-dark: #2c2c2c;
+  --palette-fg-dark: #a9a9a9;
+  --palette-fg-muted-dark: #868686;
+  --palette-blue-dark: #393c49;
+  --palette-primary-bg-dark: #3b82f6;
+  --palette-primary-bg-hover-dark: #60a5fa;
+  --palette-primary-fg-dark: #ffffff;
 
-  /* Akcentová barevná paleta (fialová) */
-  --accent: #8b5cf6;
-  --accent-light: #a78bfa;
-
-  /* UI komponenty */
-  --card: #ffffff;
-  --card-hover: #f1f5f9;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --header-bg: #ffffff;
-  --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --border: #e2e8f0;
-
-  /* Barvy značek spaloven */
-  --operational: #10b981;
-  /* Provozní - zelená */
-  --nonoperational: #ef4444;
-  /* Mimo provoz - červená */
-  --planned: #3b82f6;
-  /* Plánované - modrá */
+  /* default mapping (light mode) */
+  --background: var(--palette-bg-light);
+  --background-muted: var(--palette-bg-muted-light);
+  --foreground: var(--palette-fg-light);
+  --foreground-muted: var(--palette-fg-muted-light);
+  --blue: var(--palette-blue-light);
+  --primary-background: var(--palette-primary-bg-light);
+  --primary-background-hover: var(--palette-primary-bg-hover-light);
+  --primary-foreground: var(--palette-primary-fg-light);
 }
 
-/* ===== BAREVNÉ PROMĚNNÉ - TMAVÝ REŽIM ===== */
-/**
- * Automatické přepnutí na tmavý režim podle systémového nastavení
- * Upravené barvy pro lepší čitelnost v tmavém prostředí
- */
+/* auto dark mode based on user’s system preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Základní barvy */
-    --background: #0f172a;
-    --foreground: #e2e8f0;
-
-    /* Primární barevná paleta (modrá) */
-    --primary: #60a5fa;
-    --primary-light: #93c5fd;
-    --primary-dark: #3b82f6;
-
-    /* Sekundární barevná paleta (zelená) */
-    --secondary: #34d399;
-    --secondary-light: #6ee7b7;
-    --secondary-dark: #10b981;
-
-    /* Akcentová barevná paleta (fialová) */
-    --accent: #a78bfa;
-    --accent-light: #c4b5fd;
-
-    /* UI komponenty */
-    --card: #1e293b;
-    --card-hover: #334155;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --header-bg: #1e293b;
-    --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --border: #334155;
-
-    /* Barvy značek spaloven */
-    --operational: #34d399;
-    /* Provozní - zelenější */
-    --nonoperational: #f87171;
-    /* Mimo provoz - červenější */
-    --planned: #60a5fa;
-    /* Plánované - modřejší */
+    --background: var(--palette-bg-dark);
+    --background-muted: var(--palette-bg-muted-dark);
+    --foreground: var(--palette-fg-dark);
+    --foreground-muted: var(--palette-fg-muted-dark);
+    --blue: var(--palette-blue-dark);
+    --primary-background: var(--palette-primary-bg-dark);
+    --primary-background-hover: var(--palette-primary-bg-hover-dark);
+    --primary-foreground: var(--palette-primary-fg-dark);
+    color-scheme: dark;
   }
 }
 
-/* ===== UTILITY TŘÍDY PRO TRANSITIONS ===== */
-/**
- * Připravené třídy pro plynulé animace
- * Pokrývá rychlé, normální a pomalé přechody
- * Plus specializované transitions pro stíny a barvy
- */
-.transition-fast {
-  transition: all 0.2s ease;
-}
-
-.transition-normal {
-  transition: all 0.3s ease;
-}
-
-.transition-slow {
-  transition: all 0.5s ease;
-}
-
-.transition-shadow {
-  transition: box-shadow 0.3s ease;
-}
-
-.transition-colors {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* ===== ZÁKLADNÍ STYLY A TYPOGRAFIE ===== */
-/**
- * Reset stylů pro konzistentní zobrazení napříč prohlížeči
- * Základní nastavení písma, řádkování a barev
- * Styly pro nadpisy a odkazy s hover efekty
- */
 body {
   background: var(--background);
   color: var(--foreground);
-  min-height: 100vh;
-  font-size: 16px;
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Reset pro konzistentní zobrazení */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* manual override via attribute on <html> */
+:root[data-theme="light"] {
+  --background: var(--palette-bg-light);
+  --background-muted: var(--palette-bg-muted-light);
+  --foreground: var(--palette-fg-light);
+  --foreground-muted: var(--palette-fg-muted-light);
+  --blue: var(--palette-blue-light);
+  --primary-background: var(--palette-primary-bg-light);
+  --primary-background-hover: var(--palette-primary-bg-hover-light);
+  --primary-foreground: var(--palette-primary-fg-light);
+  color-scheme: light;
 }
 
-/* Základní typografie */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-}
-
-/* Styly odkazů */
-a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-a:hover {
-  text-decoration: underline;
+:root[data-theme="dark"] {
+  --background: var(--palette-bg-dark);
+  --background-muted: var(--palette-bg-muted-dark);
+  --foreground: var(--palette-fg-dark);
+  --foreground-muted: var(--palette-fg-muted-dark);
+  --blue: var(--palette-blue-dark);
+  --primary-background: var(--palette-primary-bg-dark);
+  --primary-background-hover: var(--palette-primary-bg-hover-dark);
+  --primary-foreground: var(--palette-primary-fg-dark);
+  color-scheme: dark;
 }
